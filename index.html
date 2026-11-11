@@ -222,6 +222,16 @@
     }
     
 </style>
+
+  <meta name="theme-color" content="#120C25">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tsega Tracker">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
 </head>
 <body>
 
@@ -562,6 +572,12 @@
     if(positiveWords) positiveWords.addEventListener('input', saveSpiritualNotes);
     loadSpiritualNotes();
     
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
 </script>
 
     <div class="copyright">© 2026 Tsega. All rights are reserved.</div>
