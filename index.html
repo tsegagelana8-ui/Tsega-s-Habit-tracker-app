@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#6C5CE7" />
+<meta name="description" content="Daily Focus — a modern habit, task, and productivity tracker." />
+<title>Daily Focus · Habit Tracker</title>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --primary:#8B6CFF; --primary-light:#B6A5FF; --secondary:#E9E2FF;
+    --secondary-dark:#F7F4FF; --accent:#2D2154; --accent-soft:#241A43;
+    --success:#48D597; --danger:#FF6B7A; --warning:#FFBE5C;
+    --text:#F7F4FF; --muted:#A9A0C5; --card:rgba(34,24,62,.82);
+    --panel:#241A43; --panel-2:#2A1E4D; --line:rgba(182,165,255,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:
+    radial-gradient(circle at 10% 0%,rgba(139,108,255,.20),transparent 32%),
+    radial-gradient(circle at 90% 10%,rgba(91,55,160,.18),transparent 28%),
+    linear-gradient(135deg,#120C25 0%,#1A1034 48%,#100A20 100%);
+    color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;padding:24px 16px 40px}
+  button,input,select,textarea{font:inherit}
+  button{cursor:pointer}
+  .container{max-width:1200px;margin:0 auto}
+  .glass-card{background:linear-gradient(145deg,rgba(42,30,77,.88),rgba(27,19,52,.88));
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--line);border-radius:22px;
+    box-shadow:0 14px 40px rgba(5,2,16,.34),inset 0 1px 0 rgba(255,255,255,.045);
+    padding:20px;position:relative;overflow:hidden}
+  .glass-card::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(120deg,rgba(139,108,255,.07),transparent 38%,rgba(255,255,255,.02));
+    border-radius:inherit}
+  .btn-primary{background:var(--primary);color:#fff;border:none;transition:.2s ease;font-weight:700}
+  .btn-primary:hover{background:var(--secondary);transform:translateY(-1px);box-shadow:0 6px 20px rgba(108,92,231,.35)}
+  .btn-secondary{background:#33265C;color:var(--secondary);border:1px solid var(--line);font-weight:700}
+  .btn-danger{background:rgba(255,107,122,.10);color:var(--danger);border:1px solid rgba(255,107,122,.24);font-weight:700}
+  .task-completed{text-decoration:line-through;opacity:.5}
+  .animate-in{animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{50%{box-shadow:0 0 0 7px rgba(108,92,231,.10)}}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:3px}
+  header{margin-bottom:20px}.header-row{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+  h1{font-size:30px;font-weight:800;color:var(--secondary);letter-spacing:-.5px;text-shadow:0 0 28px rgba(139,108,255,.18)}
+  .subtitle{font-size:14px;opacity:.72;color:var(--muted);margin-top:4px}
+  .header-actions{display:flex;gap:8px}.icon-btn{width:42px;height:42px;border-radius:13px;border:1px solid var(--line);
+    background:linear-gradient(145deg,#302254,#21173D);color:var(--primary-light);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 22px rgba(5,2,16,.24)}
+  .quote-card{display:flex;gap:14px;align-items:flex-start}.quote-icon{padding:10px;border-radius:12px;background:var(--accent);flex-shrink:0;display:flex;color:var(--primary)}
+  .quote-label{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--primary-light);margin-bottom:8px}
+  .quote-text{font-size:17px;font-weight:500;line-height:1.5;color:var(--secondary)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+  .stat-card{background:linear-gradient(145deg,rgba(43,31,78,.92),rgba(29,20,55,.92));border:1px solid var(--line);
+    border-radius:18px;padding:17px;text-align:center;box-shadow:0 12px 30px rgba(5,2,16,.25),inset 0 1px 0 rgba(255,255,255,.035);
+    transition:transform .2s,border-color .2s}.stat-card:hover{transform:translateY(-2px);border-color:rgba(182,165,255,.28)}
+  .stat-icon{margin-bottom:6px;display:inline-flex}.stat-value{font-size:25px;font-weight:800;color:var(--secondary)}.stat-label{font-size:11px;opacity:.7;color:var(--secondary);margin-top:2px}
+  .progress-wrap{margin-top:14px;background:linear-gradient(145deg,rgba(42,30,77,.9),rgba(27,19,52,.9))}
+  .progress-top{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--secondary);margin-bottom:6px}
+  .progress-track{height:9px;border-radius:99px;background:#171027;overflow:hidden;border:1px solid rgba(182,165,255,.08)}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:99px;transition:width .3s}
+  .quick-add{margin-top:16px;display:flex;flex-direction:column;gap:10px}.quick-add-row{display:grid;grid-template-columns:1fr auto auto;gap:10px}
+  .quick-add input{min-width:0;padding:14px 16px;border-radius:13px;border:1px solid var(--line);background:#1B1333;color:var(--secondary);font-size:15px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}.quick-add input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,108,255,.12)}
+  .quick-add select{padding:14px 16px;border-radius:13px;border:1px solid var(--line);background:#2B2050;color:var(--secondary);font-weight:700;outline:none}
+  .quick-add button{padding:14px 20px;border-radius:13px;border:none;color:#fff;font-weight:800}
+  .quick-add button{display:flex;align-items:center;justify-content:center;gap:8px}
+  .toolbar{margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:rgba(25,17,47,.72)}
+  .search{flex:1;min-width:190px;padding:11px 14px;border:1px solid var(--line);border-radius:11px;background:#1B1333;color:var(--secondary);outline:none}
+  .filter-select{padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:#2B2050;color:var(--secondary);outline:none}
+  .main-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:20px}.left-col{display:flex;flex-direction:column;gap:16px}.plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .task-header,.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.task-title,.cal-title{font-weight:700;color:var(--secondary);font-size:16px}.cal-title{font-size:15px}
+  .task-count{font-size:11px;font-weight:800;padding:5px 10px;border-radius:999px;background:rgba(139,108,255,.13);border:1px solid rgba(139,108,255,.18);color:var(--primary-light)}
+  .task-empty{font-size:13px;text-align:center;padding:26px 12px;opacity:.5;color:var(--muted)}
+  .task-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:13px;
+    background:linear-gradient(145deg,rgba(39,28,71,.82),rgba(28,20,51,.82));border:1px solid rgba(182,165,255,.07);
+    margin-bottom:8px;transition:.18s;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+  .task-item:hover{background:linear-gradient(145deg,rgba(52,39,91,.9),rgba(34,24,61,.9));border-color:rgba(182,165,255,.16);transform:translateX(2px)}
+  .check-btn{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:2px solid var(--primary-light);background:transparent;display:flex;align-items:center;justify-content:center;transition:.15s}.check-btn.checked{background:var(--primary);border-color:var(--primary)}
+  .task-text{flex:1;font-size:14px;color:var(--secondary);word-break:break-word}.task-badge{font-size:9px;font-weight:800;text-transform:uppercase;padding:3px 7px;border-radius:4px;background:var(--primary-light);color:white;display:flex;flex-shrink:0}
+  .task-date{font-size:10px;color:var(--muted);white-space:nowrap}.task-actions{display:flex;gap:2px}
+  .progress-btn,.delete-btn,.edit-btn{background:transparent;border:none;padding:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.progress-btn{color:var(--primary);opacity:.55}.progress-btn:hover{opacity:1}.delete-btn{color:var(--danger);opacity:0}.edit-btn{color:var(--secondary);opacity:.55}.task-item:hover .delete-btn{opacity:1}
+  .cal-nav{display:flex;gap:4px}.cal-nav button{padding:8px;border-radius:8px;border:none;background:var(--accent);display:flex;align-items:center;color:var(--primary)}
+  .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}.cal-weekdays div{text-align:center;font-size:11px;font-weight:800;color:var(--primary);padding:4px 0}
+  .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}.cal-day{aspect-ratio:1;border-radius:8px;font-size:12px;font-weight:600;background:transparent;border:none;color:var(--secondary);transition:.15s}.cal-day:hover{background:var(--accent)}.cal-day.other-month{opacity:.3}.cal-day.today{background:var(--primary-light);color:white}.cal-day.selected{background:var(--primary);color:white}.cal-day.has-tasks{position:relative}.cal-day.has-tasks:after{content:"";position:absolute;bottom:4px;left:50%;width:4px;height:4px;border-radius:50%;background:currentColor;transform:translateX(-50%)}
+  .cal-selected{margin-top:14px;padding:13px;border-radius:13px;background:rgba(27,19,51,.8);border:1px solid var(--line);font-size:13px;color:var(--secondary)}.cal-selected strong{font-weight:700}
+  .calendar-task-list{margin-top:10px;display:flex;flex-direction:column;gap:6px}.calendar-task{font-size:12px;padding:8px 10px;background:#fff;border-radius:9px;display:flex;justify-content:space-between;gap:8px}.calendar-task.done{text-decoration:line-through;opacity:.5}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(26,15,61,.38);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}.modal-backdrop.open{display:flex}
+  .modal{width:min(520px,100%);background:linear-gradient(145deg,#2B2050,#1C1435);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(5,2,16,.55)}.modal h2{color:var(--secondary);font-size:20px;margin-bottom:14px}.modal label{display:block;font-size:12px;font-weight:700;color:var(--secondary);margin:12px 0 6px}.modal input,.modal select{width:100%;padding:12px;border:1px solid #ddd7f6;border-radius:10px;outline:none;color:var(--secondary)}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.modal-actions button{padding:10px 15px;border-radius:10px;border:none}
+  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.setting-box{padding:14px;border:1px solid rgba(108,92,231,.12);border-radius:14px;background:var(--accent-soft)}.setting-box h3{font-size:13px;color:var(--secondary);margin-bottom:8px}.setting-box p{font-size:11px;color:var(--muted);line-height:1.5}
+  .backup-actions{display:flex;gap:8px;flex-wrap:wrap}.backup-actions button{padding:10px 13px;border-radius:10px;border:none}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);background:#33265C;border:1px solid var(--line);color:#fff;padding:11px 15px;border-radius:11px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 12px 30px rgba(5,2,16,.4)}.toast.show{opacity:1;transform:translate(-50%,0)}
+  footer{margin-top:40px;text-align:center;font-size:12px;opacity:.5;color:var(--muted)}
+  @media(max-width:1023px){.main-grid{grid-template-columns:1fr}}
+  @media(max-width:767px){body{padding:18px 12px 32px}.stats-grid{grid-template-columns:repeat(2,1fr)}.plans-grid{grid-template-columns:1fr}.quick-add-row{grid-template-columns:1fr}.quick-add select,.quick-add button{width:100%}.header-row{align-items:center}.header-actions{flex-shrink:0}.task-date{display:none}.delete-btn{opacity:.6}.settings-grid{grid-template-columns:1fr}}
+  @media(max-width:430px){h1{font-size:25px}.glass-card{padding:16px}.quote-text{font-size:15px}}
+
+    /* Bible verse corner cards */
+    .verse-corners{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin:0 0 18px;
+    }
+    .verse-corner{
+      position:relative;
+      padding:16px 18px;
+      border:1px solid rgba(182,165,255,.18);
+      border-radius:18px;
+      background:linear-gradient(145deg,rgba(48,35,86,.82),rgba(28,20,54,.88));
+      box-shadow:0 12px 30px rgba(5,2,16,.25),inset 0 1px 0 rgba(255,255,255,.04);
+      overflow:hidden;
+    }
+    .verse-corner::before{
+      content:"";
+      position:absolute;
+      width:90px;height:90px;
+      border-radius:50%;
+      background:rgba(139,108,255,.10);
+      filter:blur(2px);
+      top:-42px;
+      right:-30px;
+    }
+    .verse-corner .verse-ref{
+      display:block;
+      color:var(--primary-light);
+      font-size:.76rem;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:7px;
+    }
+    .verse-corner p{
+      margin:0;
+      color:var(--text);
+      font-size:.9rem;
+      line-height:1.55;
+      position:relative;
+      z-index:1;
+    }
+    .verse-right{text-align:right}
+    @media(max-width:700px){
+      .verse-corners{grid-template-columns:1fr;gap:12px}
+      .verse-right{text-align:left}
+    }
+
+    /* Daily Bible & Positive Words panel */
+    .daily-spiritual-panel{
+      margin-top:22px;
+    }
+    .spiritual-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:14px;
+    }
+    .spiritual-field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .spiritual-field label{
+      color:var(--primary-light);
+      font-size:.82rem;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+    .spiritual-field textarea{
+      width:100%;
+      min-height:145px;
+      resize:vertical;
+      box-sizing:border-box;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(15,9,31,.58);
+      color:var(--text);
+      padding:14px;
+      outline:none;
+      font:inherit;
+      line-height:1.55;
+      transition:.2s ease;
+    }
+    .spiritual-field textarea:focus{
+      border-color:rgba(139,108,255,.62);
+      box-shadow:0 0 0 4px rgba(139,108,255,.10);
+    }
+    .spiritual-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:12px;
+    }
+    .spiritual-save{
+      border:1px solid rgba(139,108,255,.35);
+      border-radius:12px;
+      background:linear-gradient(135deg,#8B6CFF,#6848D8);
+      color:white;
+      padding:10px 16px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(100,70,210,.22);
+    }
+    .spiritual-status{
+      color:var(--muted);
+      font-size:.78rem;
+      align-self:center;
+      margin-right:auto;
+    }
+    @media(max-width:700px){
+      .spiritual-grid{grid-template-columns:1fr}
+      .spiritual-actions{justify-content:stretch;flex-wrap:wrap}
+      .spiritual-save{width:100%}
+    }
+
+    /* Footer */
+    .copyright{
+      text-align:center;
+      margin-top:12px;
+      padding:18px 10px 24px;
+      color:var(--muted);
+      font-size:.78rem;
+      letter-spacing:.02em;
+    }
+    
+</style>
+</head>
+<body>
+
+    <section class="verse-corners" aria-label="Bible verses">
+      <div class="verse-corner verse-left">
+        <span class="verse-ref">Proverbs 16:3</span>
+        <p>Commit to the LORD whatever you do, and he will establish your plans.</p>
+      </div>
+      <div class="verse-corner verse-right">
+        <span class="verse-ref">Proverbs 12:24</span>
+        <p>The diligent will rule, but laziness ends in forced labor.</p>
+      </div>
+    </section>
+    
+
+<div class="container">
+  <header>
+    <div class="header-row">
+      <div>
+        <h1>Hey there 👋</h1>
+        <div class="subtitle" id="todayDate"></div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings"><i data-lucide="settings"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="glass-card animate-in">
+    <div class="quote-card">
+      <div class="quote-icon"><i data-lucide="sparkles" style="width:20px;height:20px;"></i></div>
+      <div><div class="quote-label">Today's Motivation</div><div class="quote-text" id="quoteText">Loading...</div></div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon"><i data-lucide="check-circle-2" style="width:20px;height:20px;color:var(--primary);"></i></div><div class="stat-value" id="statCompleted">0</div><div class="stat-label">Completed</div></div>
+    <div class="stat-card"><div class="stat-icon"><i data-lucide="clock" style="width:20px;height:20px;color:var(--primary-light);"></i></div><div class="stat-value" id="statProgress">0</div><div class="stat-label">In Progress</div></div>
+    <div class="stat-card"><div class="stat-icon"><i data-lucide="list-todo" style="width:20px;height:20px;color:var(--secondary);"></i></div><div class="stat-value" id="statPending">0</div><div class="stat-label">Pending</div></div>
+    <div class="stat-card"><div class="stat-icon"><i data-lucide="target" style="width:20px;height:20px;color:var(--success);"></i></div><div class="stat-value" id="statRate">0%</div><div class="stat-label">Completion Rate</div></div>
+  </div>
+
+  <div class="glass-card progress-wrap">
+    <div class="progress-top"><span>Today's focus</span><span id="progressText">0 of 0 completed</span></div>
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+
+  <div class="glass-card quick-add animate-in">
+    <div class="quick-add-row">
+      <input type="text" id="taskInput" placeholder="Type your task here..." maxlength="180" />
+      <select id="taskType">
+        <option value="daily">📅 Daily</option><option value="monthly">🗓️ Monthly</option><option value="yearly">📆 Yearly</option><option value="todo">✅ To-Do</option><option value="not-to-do">🚫 Not-To-Do</option>
+      </select>
+      <button class="btn-primary" id="addBtn"><i data-lucide="plus" style="width:16px;height:16px;"></i> Add</button>
+    </div>
+  </div>
+
+  <div class="glass-card toolbar">
+    <input class="search" id="searchInput" placeholder="Search tasks..." />
+    <select class="filter-select" id="statusFilter">
+      <option value="all">All statuses</option><option value="pending">Pending</option><option value="progress">In progress</option><option value="completed">Completed</option>
+    </select>
+    <select class="filter-select" id="sortSelect">
+      <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="alphabetical">A–Z</option>
+    </select>
+  </div>
+
+  <div class="main-grid">
+    <div class="left-col">
+      <div class="plans-grid">
+        <div class="glass-card animate-in" data-list="daily"><div class="task-header"><div class="task-title">📅 Daily Plans</div><div class="task-count" data-count="daily">0</div></div><div class="task-items" id="list-daily"></div></div>
+        <div class="glass-card animate-in" data-list="monthly"><div class="task-header"><div class="task-title">🗓️ Monthly Plans</div><div class="task-count" data-count="monthly">0</div></div><div class="task-items" id="list-monthly"></div></div>
+        <div class="glass-card animate-in" data-list="yearly"><div class="task-header"><div class="task-title">📆 Yearly Plans</div><div class="task-count" data-count="yearly">0</div></div><div class="task-items" id="list-yearly"></div></div>
+        <div class="glass-card animate-in" data-list="todo"><div class="task-header"><div class="task-title">✅ To-Do List</div><div class="task-count" data-count="todo">0</div></div><div class="task-items" id="list-todo"></div></div>
+      </div>
+
+      <div class="glass-card animate-in" data-list="not-to-do"><div class="task-header"><div class="task-title">🚫 Not-To-Do List</div><div class="task-count" data-count="not-to-do">0</div></div><div class="task-items" id="list-not-to-do"></div></div>
+
+      <div class="plans-grid">
+        <div class="glass-card animate-in"><div class="task-header"><div class="task-title">✅ Completed Tasks</div><div class="task-count" id="count-completed">0</div></div><div class="task-items" id="list-completed"></div></div>
+        <div class="glass-card animate-in"><div class="task-header"><div class="task-title">⏳ In Progress</div><div class="task-count" id="count-progress">0</div></div><div class="task-items" id="list-progress"></div></div>
+      </div>
+    </div>
+
+    <div class="glass-card animate-in">
+      <div class="cal-header"><div class="cal-title" id="calTitle"></div><div class="cal-nav"><button id="calPrev" aria-label="Previous month"><i data-lucide="chevron-left" style="width:16px;height:16px;"></i></button><button id="calNext" aria-label="Next month"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i></button></div></div>
+      <div class="cal-weekdays"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+      <div class="cal-days" id="calDays"></div>
+      <div class="cal-selected" id="calSelected"></div>
+    </div>
+  </div>
+
+  
+    <section class="glass-card daily-spiritual-panel" aria-label="Daily Bible verses and positive words">
+      <div class="section-heading">
+        <div>
+          <h2><i data-lucide="heart"></i> Daily Bible & Positive Words</h2>
+          <p class="muted">Write something meaningful to carry with you today.</p>
+        </div>
+      </div>
+
+      <div class="spiritual-grid">
+        <div class="spiritual-field">
+          <label for="dailyBibleVerse">📖 My Daily Bible Verse</label>
+          <textarea id="dailyBibleVerse" placeholder="Write your Bible verse, reference, or reflection here..."></textarea>
+        </div>
+        <div class="spiritual-field">
+          <label for="positiveWords">✨ My Positive Words</label>
+          <textarea id="positiveWords" placeholder="Write your positive words, affirmations, gratitude, or encouragement here..."></textarea>
+        </div>
+      </div>
+
+      <div class="spiritual-actions">
+        <span class="spiritual-status" id="spiritualStatus">Saved automatically on this device.</span>
+        <button class="spiritual-save" id="saveSpiritualBtn" type="button">
+          <i data-lucide="save"></i> Save
+        </button>
+      </div>
+    </section>
+    
+
+<footer>Built with 💜 · Stay consistent · Your data stays in this browser</footer>
+</div>
+
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <h2>Edit task</h2>
+    <label for="editText">Task</label><input id="editText" maxlength="180" />
+    <label for="editType">Category</label>
+    <select id="editType"><option value="daily">📅 Daily</option><option value="monthly">🗓️ Monthly</option><option value="yearly">📆 Yearly</option><option value="todo">✅ To-Do</option><option value="not-to-do">🚫 Not-To-Do</option></select>
+    <div class="modal-actions"><button class="btn-secondary" id="cancelEdit">Cancel</button><button class="btn-primary" id="saveEdit">Save changes</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2>Settings & Backup</h2>
+    <div class="settings-grid">
+      <div class="setting-box"><h3>Local storage</h3><p>Your tasks are saved automatically in this browser using localStorage. Clearing browser data can remove them.</p></div>
+      <div class="setting-box"><h3>Backup</h3><p>Export a JSON backup and import it later on this or another browser.</p></div>
+    </div>
+    <div class="backup-actions" style="margin-top:14px">
+      <button class="btn-primary" id="exportBtn"><i data-lucide="download" style="width:15px;height:15px;vertical-align:middle"></i> Export backup</button>
+      <button class="btn-secondary" id="importBtn"><i data-lucide="upload" style="width:15px;height:15px;vertical-align:middle"></i> Import backup</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden />
+      <button class="btn-danger" id="clearBtn">Clear all tasks</button>
+    </div>
+    <div class="modal-actions"><button class="btn-secondary" id="closeSettings">Close</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const QUOTES=[
+    "Small steps every day lead to big changes every year.","You don't have to be extreme, just consistent.",
+    "Discipline is choosing between what you want now and what you want most.","Progress, not perfection.",
+    "Your future is created by what you do today.","One task at a time. One day at a time.",
+    "Success is the sum of small efforts repeated daily.","Focus on the step in front of you, not the whole staircase.",
+    "The secret of getting ahead is getting started.","Consistency beats intensity.",
+    "You are what you repeatedly do.","Every action is a vote for the person you want to become.",
+    "Don't break the chain.","Do it now. Sometimes 'later' becomes 'never'.","Great things never come from comfort zones."
+  ];
+  const STORAGE_KEY='habit-tracker-tasks-v2';
+  let tasks=[],calCurrent=new Date(),calSelected=new Date(),editingId=null;
+
+  function loadTasks(){
+    try{
+      const v=localStorage.getItem(STORAGE_KEY)||localStorage.getItem('habit-tracker-tasks-v1')||'[]';
+      const data=JSON.parse(v);
+      return Array.isArray(data)?data.map(t=>({...t,id:String(t.id),createdAt:t.createdAt||new Date().toISOString(),completed:!!t.completed,inProgress:!!t.inProgress})):[] 
+    }catch{return []}
+  }
+  function saveTasks(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(tasks))}catch{showToast('Could not save data in this browser')}}
+  function formatDate(d,opts){return d.toLocaleDateString('en-US',opts)}
+  function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+  function isSameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+  function escapeHtml(str){return String(str).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+  function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>el.classList.remove('show'),2200)}
+  function filteredTasks(){
+    const q=document.getElementById('searchInput').value.trim().toLowerCase(), status=document.getElementById('statusFilter').value, sort=document.getElementById('sortSelect').value;
+    let out=tasks.filter(t=>!q||t.text.toLowerCase().includes(q));
+    if(status==='completed')out=out.filter(t=>t.completed);
+    if(status==='progress')out=out.filter(t=>t.inProgress&&!t.completed);
+    if(status==='pending')out=out.filter(t=>!t.completed&&!t.inProgress);
+    if(sort==='oldest')out.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+    else if(sort==='alphabetical')out.sort((a,b)=>a.text.localeCompare(b.text));
+    else out.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    return out;
+  }
+  function updateStats(){
+    const completed=tasks.filter(t=>t.completed).length,inProgress=tasks.filter(t=>t.inProgress&&!t.completed).length,pending=tasks.filter(t=>!t.completed&&!t.inProgress).length,total=tasks.length;
+    document.getElementById('statCompleted').textContent=completed;document.getElementById('statProgress').textContent=inProgress;document.getElementById('statPending').textContent=pending;
+    document.getElementById('statRate').textContent=total?Math.round(completed/total*100)+'%':'0%';
+    document.getElementById('count-completed').textContent=completed;document.getElementById('count-progress').textContent=inProgress;
+    document.getElementById('progressText').textContent=`${completed} of ${total} completed`;
+    document.getElementById('progressBar').style.width=(total?completed/total*100:0)+'%';
+  }
+  function renderTaskItem(task){
+    const div=document.createElement('div');div.className='task-item';
+    const created=new Date(task.createdAt);
+    div.innerHTML=`
+      <button class="check-btn ${task.completed?'checked':''}" data-action="complete" data-id="${escapeHtml(task.id)}" title="Mark complete" aria-label="Mark complete">
+        ${task.completed?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>':''}
+      </button>
+      <span class="task-text ${task.completed?'task-completed':''}">${escapeHtml(task.text)}</span>
+      ${task.inProgress&&!task.completed?'<span class="task-badge">⏳ Active</span>':''}
+      <span class="task-date">${formatDate(created,{month:'short',day:'numeric'})}</span>
+      <div class="task-actions">
+        <button class="edit-btn" data-action="edit" data-id="${escapeHtml(task.id)}" title="Edit"><i data-lucide="pencil" style="width:15px;height:15px"></i></button>
+        <button class="progress-btn" data-action="progress" data-id="${escapeHtml(task.id)}" title="Toggle in-progress"><i data-lucide="circle-play" style="width:16px;height:16px;${task.inProgress?'fill:currentColor':''}"></i></button>
+        <button class="delete-btn" data-action="delete" data-id="${escapeHtml(task.id)}" title="Delete"><i data-lucide="trash-2" style="width:16px;height:16px"></i></button>
+      </div>`;
+    return div;
+  }
+  function renderList(containerId,items,emptyMsg){
+    const container=document.getElementById(containerId);container.innerHTML='';
+    if(!items.length){const empty=document.createElement('div');empty.className='task-empty';empty.textContent=emptyMsg||'No tasks yet';container.appendChild(empty)}
+    else items.forEach(t=>container.appendChild(renderTaskItem(t)));
+  }
+  function renderAll(){
+    const visible=filteredTasks(),byType=type=>visible.filter(t=>t.type===type);
+    renderList('list-daily',byType('daily'),'Add your first daily task above');
+    renderList('list-monthly',byType('monthly'),'No monthly plans yet');
+    renderList('list-yearly',byType('yearly'),'No yearly plans yet');
+    renderList('list-todo',byType('todo'),'No tasks yet');
+    renderList('list-not-to-do',byType('not-to-do'),'Add things to avoid');
+    renderList('list-completed',visible.filter(t=>t.completed),'Nothing completed yet — you got this!');
+    renderList('list-progress',visible.filter(t=>t.inProgress&&!t.completed),'Click the circle-play icon to mark a task active');
+    ['daily','monthly','yearly','todo','not-to-do'].forEach(type=>document.querySelector(`[data-count="${type}"]`).textContent=visible.filter(t=>t.type===type).length);
+    updateStats();renderCalendar();if(window.lucide)lucide.createIcons();
+  }
+  function addTask(){
+    const input=document.getElementById('taskInput'),type=document.getElementById('taskType'),text=input.value.trim();if(!text)return;
+    tasks.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),text,type:type.value,completed:false,inProgress:false,createdAt:new Date().toISOString()});
+    input.value='';saveTasks();renderAll();input.focus();showToast('Task added');
+  }
+  function openEdit(id){
+    const t=tasks.find(x=>x.id===id);if(!t)return;editingId=id;document.getElementById('editText').value=t.text;document.getElementById('editType').value=t.type;document.getElementById('editModal').classList.add('open');setTimeout(()=>document.getElementById('editText').focus(),50)
+  }
+  function handleTaskClick(e){
+    const btn=e.target.closest('[data-action]');if(!btn)return;const id=btn.dataset.id,action=btn.dataset.action;
+    if(action==='complete')tasks=tasks.map(t=>t.id===id?{...t,completed:!t.completed,inProgress:false}:t);
+    else if(action==='progress')tasks=tasks.map(t=>t.id===id&&!t.completed?{...t,inProgress:!t.inProgress}:t);
+    else if(action==='delete'){tasks=tasks.filter(t=>t.id!==id);showToast('Task deleted')}
+    else if(action==='edit'){openEdit(id);return}
+    saveTasks();renderAll();
+  }
+  function renderCalendar(){
+    const titleEl=document.getElementById('calTitle');titleEl.textContent=formatDate(calCurrent,{month:'long',year:'numeric'});
+    const year=calCurrent.getFullYear(),month=calCurrent.getMonth(),firstDay=new Date(year,month,1),startDay=firstDay.getDay(),daysInMonth=new Date(year,month+1,0).getDate(),prevMonthDays=new Date(year,month,0).getDate();
+    const daysEl=document.getElementById('calDays');daysEl.innerHTML='';const today=new Date();
+    for(let i=startDay-1;i>=0;i--){const b=document.createElement('button');b.className='cal-day other-month';b.textContent=prevMonthDays-i;b.disabled=true;daysEl.appendChild(b)}
+    for(let d=1;d<=daysInMonth;d++){
+      const date=new Date(year,month,d),b=document.createElement('button');b.className='cal-day';b.textContent=d;
+      if(isSameDay(date,today))b.classList.add('today');if(isSameDay(date,calSelected))b.classList.add('selected');
+      if(tasks.some(t=>dateKey(new Date(t.createdAt))===dateKey(date)))b.classList.add('has-tasks');
+      b.addEventListener('click',()=>{calSelected=date;renderCalendar()});daysEl.appendChild(b)
+    }
+    const totalCells=startDay+daysInMonth,remaining=(7-totalCells%7)%7;for(let i=1;i<=remaining;i++){const b=document.createElement('button');b.className='cal-day other-month';b.textContent=i;b.disabled=true;daysEl.appendChild(b)}
+    const selectedTasks=tasks.filter(t=>dateKey(new Date(t.createdAt))===dateKey(calSelected));
+    document.getElementById('calSelected').innerHTML=`<strong>Selected:</strong> ${formatDate(calSelected,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+      <div class="calendar-task-list">${selectedTasks.length?selectedTasks.map(t=>`<div class="calendar-task ${t.completed?'done':''}"><span>${escapeHtml(t.text)}</span><span>${t.completed?'✓':'•'}</span></div>`).join(''):'<div style="font-size:11px;opacity:.55;margin-top:8px">No tasks created on this date.</div>'}</div>`;
+  }
+  function exportBackup(){
+    const payload={app:'Daily Focus Habit Tracker',version:2,exportedAt:new Date().toISOString(),tasks};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=`daily-focus-backup-${dateKey(new Date())}.json`;a.click();URL.revokeObjectURL(url);showToast('Backup exported');
+  }
+  function importBackup(file){
+    const reader=new FileReader();reader.onload=()=>{
+      try{
+        const data=JSON.parse(reader.result),incoming=Array.isArray(data)?data:data.tasks;
+        if(!Array.isArray(incoming))throw new Error();
+        if(!confirm('Import will replace your current tasks. Continue?'))return;
+        tasks=incoming.map(t=>({...t,id:String(t.id||Date.now()+Math.random()),createdAt:t.createdAt||new Date().toISOString(),completed:!!t.completed,inProgress:!!t.inProgress}));
+        saveTasks();renderAll();showToast('Backup imported');
+      }catch{showToast('Invalid backup file')}
+    };reader.readAsText(file);
+  }
+  function init(){
+    document.getElementById('todayDate').textContent=formatDate(new Date(),{weekday:'long',month:'long',day:'numeric',year:'numeric'})+" · Let's crush today";
+    const start=new Date(new Date().getFullYear(),0,0),dayOfYear=Math.floor((Date.now()-start.getTime())/86400000);
+    document.getElementById('quoteText').textContent='"'+QUOTES[dayOfYear%QUOTES.length]+'"';
+    tasks=loadTasks();renderAll();
+    document.getElementById('addBtn').addEventListener('click',addTask);
+    document.getElementById('taskInput').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
+    ['searchInput','statusFilter','sortSelect'].forEach(id=>document.getElementById(id).addEventListener('input',renderAll));
+    document.getElementById('calPrev').addEventListener('click',()=>{calCurrent=new Date(calCurrent.getFullYear(),calCurrent.getMonth()-1,1);renderCalendar()});
+    document.getElementById('calNext').addEventListener('click',()=>{calCurrent=new Date(calCurrent.getFullYear(),calCurrent.getMonth()+1,1);renderCalendar()});
+    document.body.addEventListener('click',handleTaskClick);
+    document.getElementById('saveEdit').addEventListener('click',()=>{
+      const text=document.getElementById('editText').value.trim();if(!text||!editingId)return;
+      tasks=tasks.map(t=>t.id===editingId?{...t,text,type:document.getElementById('editType').value}:t);saveTasks();renderAll();document.getElementById('editModal').classList.remove('open');showToast('Task updated')
+    });
+    document.getElementById('cancelEdit').addEventListener('click',()=>document.getElementById('editModal').classList.remove('open'));
+    document.getElementById('settingsBtn').addEventListener('click',()=>document.getElementById('settingsModal').classList.add('open'));
+    document.getElementById('closeSettings').addEventListener('click',()=>document.getElementById('settingsModal').classList.remove('open'));
+    document.getElementById('exportBtn').addEventListener('click',exportBackup);
+    document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click());
+    document.getElementById('importFile').addEventListener('change',e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value=''});
+    document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('Delete ALL tasks? This cannot be undone unless you have a backup.')){tasks=[];saveTasks();renderAll();showToast('All tasks cleared')}});
+    document.querySelectorAll('.modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-backdrop.open').forEach(m=>m.classList.remove('open'))});
+    if(window.lucide)lucide.createIcons();
+  }
+  document.addEventListener('DOMContentLoaded',init);
+
+    // Daily Bible verse & positive words
+    const SPIRITUAL_STORAGE_KEY = 'habit-tracker-spiritual-v1';
+    const dailyBibleVerse = document.getElementById('dailyBibleVerse');
+    const positiveWords = document.getElementById('positiveWords');
+    const saveSpiritualBtn = document.getElementById('saveSpiritualBtn');
+    const spiritualStatus = document.getElementById('spiritualStatus');
+
+    function loadSpiritualNotes(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(SPIRITUAL_STORAGE_KEY) || '{}');
+        if(dailyBibleVerse) dailyBibleVerse.value = saved.bibleVerse || '';
+        if(positiveWords) positiveWords.value = saved.positiveWords || '';
+      }catch(e){}
+    }
+
+    function saveSpiritualNotes(){
+      try{
+        localStorage.setItem(SPIRITUAL_STORAGE_KEY, JSON.stringify({
+          bibleVerse: dailyBibleVerse ? dailyBibleVerse.value : '',
+          positiveWords: positiveWords ? positiveWords.value : '',
+          updatedAt: new Date().toISOString()
+        }));
+        if(spiritualStatus) spiritualStatus.textContent = 'Saved just now.';
+      }catch(e){
+        if(spiritualStatus) spiritualStatus.textContent = 'Could not save on this device.';
+      }
+    }
+
+    if(saveSpiritualBtn) saveSpiritualBtn.addEventListener('click', saveSpiritualNotes);
+    if(dailyBibleVerse) dailyBibleVerse.addEventListener('input', saveSpiritualNotes);
+    if(positiveWords) positiveWords.addEventListener('input', saveSpiritualNotes);
+    loadSpiritualNotes();
+    
+</script>
+
+    <div class="copyright">© 2026 Tsega. All rights are reserved.</div>
+    
+</body>
+</html>
