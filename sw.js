@@ -1,10 +1,9 @@
-const CACHE_NAME = 'tsega-habit-tracker-v3';
+const CACHE_NAME = 'tsega-habit-tracker-v4';
 const ASSETS = [
   './',
   './index.html',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './index.html?v=2',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
