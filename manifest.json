@@ -1,9 +1,9 @@
 {
-  "id": "/tsega-tracker-app",
+  "id": "/tsega-tracker-v5",
   "name": "Tsega Habit Tracker",
   "short_name": "Tsega Tracker",
   "description": "Offline-first personal habit tracker, planner, and focus system.",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
