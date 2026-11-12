@@ -1,3998 +1,5492 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#120C25">
-<meta name="description" content="Tsega Habit Tracker — plan, focus, and stay consistent.">
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#100a1f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Tsega Habit Tracker</title>
+
 <link rel="manifest" href="./manifest.json">
-<link rel="icon" href="./icons/icon-192.png">
+
+<title>Tsega Habit Tracker</title>
 
 <style>
+/* =========================================================
+   TSEGA HABIT TRACKER
+   Mobile-first app interface
+   ========================================================= */
+
 :root{
---bg:#0c0817;
---bg2:#160e2b;
---card:rgba(31,20,56,.82);
---card2:rgba(42,27,73,.86);
---line:rgba(185,161,255,.16);
---text:#f7f3ff;
---muted:#aaa0c5;
---primary:#8d63ff;
---primary2:#b69cff;
---success:#48d597;
---danger:#ff687c;
---warning:#ffbe5c;
---blue:#63b7ff;
---shadow:0 18px 50px rgba(0,0,0,.35)
+  --bg:#090612;
+  --bg2:#100a1f;
+  --panel:rgba(25,17,45,.82);
+  --panel2:rgba(31,21,55,.92);
+  --panel3:rgba(17,11,31,.92);
+  --border:rgba(170,130,255,.18);
+  --border2:rgba(170,130,255,.28);
+
+  --purple:#8b5cf6;
+  --purple2:#a78bfa;
+  --purple3:#6d3df0;
+
+  --text:#f7f4ff;
+  --muted:#aaa1bd;
+  --muted2:#777084;
+
+  --green:#39d98a;
+  --yellow:#f5c451;
+  --red:#ff6b81;
+  --blue:#55a7ff;
+
+  --radius:22px;
+  --nav-height:76px;
+
+  --shadow:0 18px 60px rgba(0,0,0,.35);
 }
 
 *{
-box-sizing:border-box;
-margin:0;
-padding:0;
--webkit-tap-highlight-color:transparent
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+}
 
 body{
-min-height:100vh;
-color:var(--text);
-font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-background:
-radial-gradient(circle at 50% 20%,#24144b 0%,transparent 34%),
-linear-gradient(145deg,var(--bg),var(--bg2) 48%,#090612);
-padding:clamp(12px,3vw,28px) clamp(10px,3vw,24px) 40px;
-overflow-x:hidden
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 50% 10%,rgba(117,67,235,.18),transparent 32%),
+    radial-gradient(circle at 10% 80%,rgba(92,42,190,.12),transparent 30%),
+    var(--bg);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  overflow-x:hidden;
 }
 
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
+/* =========================================================
+   LIVING BACKGROUND
+   ========================================================= */
 
-/* FUTURISTIC ANIMATED OVERLAY */
-body:before,
-body:after{
-content:"";
-position:fixed;
-inset:-35%;
-pointer-events:none;
-z-index:-1;
-background:
-radial-gradient(circle at 20% 30%,rgba(141,99,255,.13),transparent 18%),
-radial-gradient(circle at 80% 70%,rgba(92,54,180,.12),transparent 20%),
-repeating-conic-gradient(
-from 20deg,
-rgba(255,255,255,.018) 0deg,
-transparent 7deg,
-rgba(141,99,255,.018) 14deg,
-transparent 22deg
-);
-animation:drift 22s linear infinite;
-mix-blend-mode:screen
+body::before{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-3;
+  pointer-events:none;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(100,55,220,.04),
+      rgba(180,110,255,.12),
+      rgba(55,30,130,.05),
+      rgba(100,55,220,.04)
+    );
+
+  animation:bgRotate 30s linear infinite;
 }
 
-body:after{
-opacity:.5;
-animation-duration:34s;
-animation-direction:reverse;
-filter:blur(18px)
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0 25%,
+      rgba(255,255,255,.018) 26%,
+      transparent 28% 55%,
+      rgba(150,100,255,.018) 56%,
+      transparent 58%
+    );
+
+  background-size:300% 300%;
+  animation:textureMove 18s ease-in-out infinite alternate;
 }
 
-@keyframes drift{
-to{transform:rotate(360deg) scale(1.08)}
+@keyframes bgRotate{
+  to{transform:rotate(360deg)}
 }
 
-.container{
-width:min(1180px,100%);
-margin:auto
+@keyframes textureMove{
+  from{background-position:0 0}
+  to{background-position:100% 100%}
 }
 
-.glass{
-background:linear-gradient(145deg,var(--card2),var(--card));
-border:1px solid var(--line);
-border-radius:22px;
-box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.04);
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-position:relative;
-overflow:hidden
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+#loader{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#090612;
+  transition:.5s ease;
 }
 
-.glass:after{
-content:"";
-position:absolute;
-inset:0;
-pointer-events:none;
-background:linear-gradient(
-115deg,
-rgba(255,255,255,.035),
-transparent 30%,
-rgba(141,99,255,.035) 72%,
-transparent
-)
+#loader.hide{
+  opacity:0;
+  visibility:hidden;
 }
 
-header{
-padding:clamp(16px,3vw,24px);
-margin-bottom:14px
+.loaderBox{
+  width:min(420px,86vw);
+  text-align:center;
 }
 
-.header-row{
-display:flex;
-justify-content:space-between;
-gap:14px;
-align-items:flex-start
+.logo{
+  width:92px;
+  height:92px;
+  margin:0 auto 28px;
+  display:grid;
+  place-items:center;
+
+  border-radius:30px;
+  background:linear-gradient(145deg,#9665ff,#6333d8);
+  box-shadow:
+    0 0 50px rgba(130,75,255,.35),
+    inset 0 1px 0 rgba(255,255,255,.2);
+
+  font-size:44px;
+  font-weight:900;
 }
 
-.brand{min-width:0}
-
-h1{
-font-size:clamp(25px,5vw,34px);
-letter-spacing:-.8px;
-line-height:1.05
+.loaderTitle{
+  font-size:28px;
+  font-weight:850;
+  margin-bottom:8px;
 }
 
-.subtitle{
-margin-top:8px;
-color:var(--muted);
-font-size:clamp(12px,2vw,14px)
+.loaderText{
+  color:var(--muted);
+  font-size:15px;
 }
 
-.header-actions{
-display:flex;
-gap:8px;
-flex-wrap:wrap
+.loaderTrack{
+  height:8px;
+  margin-top:35px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#211b2c;
 }
 
-.icon-btn{
-width:44px;
-height:44px;
-border-radius:14px;
-border:1px solid var(--line);
-background:#24183f;
-color:var(--primary2);
-display:grid;
-place-items:center;
-font-size:19px;
-box-shadow:0 8px 24px rgba(0,0,0,.2)
+.loaderProgress{
+  width:0%;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#7240ed,#a879ff);
+  transition:width .25s;
 }
 
-.icon-btn:active,
-.btn:active,
-.task-action:active{
-transform:scale(.96)
+/* =========================================================
+   AUTH SCREEN
+   ========================================================= */
+
+#authScreen{
+  position:fixed;
+  inset:0;
+  z-index:9000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  overflow:auto;
+
+  background:
+    radial-gradient(circle at 50% 25%,rgba(120,67,250,.20),transparent 38%),
+    #090612;
 }
 
-.verses{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-bottom:14px
+.authCard{
+  width:min(470px,100%);
+  padding:34px;
+  border:1px solid var(--border2);
+  border-radius:30px;
+
+  background:rgba(25,16,45,.92);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+
+  box-shadow:var(--shadow);
 }
 
-.verse{
-padding:14px 16px;
-color:#ddd4f2;
-font-size:12px;
-line-height:1.55
+.authLogo{
+  width:82px;
+  height:82px;
+  margin:0 auto 24px;
+  display:grid;
+  place-items:center;
+  border-radius:27px;
+  background:linear-gradient(145deg,#9665ff,#6333d8);
+  font-size:40px;
+  font-weight:900;
+  box-shadow:0 15px 40px rgba(112,61,235,.3);
 }
 
-.verse strong{
-display:block;
-color:var(--primary2);
-font-size:11px;
-letter-spacing:.8px;
-text-transform:uppercase;
-margin-bottom:5px
+.authCard h1{
+  margin:0;
+  text-align:center;
+  font-size:30px;
 }
+
+.authSubtitle{
+  margin:10px auto 28px;
+  max-width:390px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.5;
+}
+
+.field{
+  margin-bottom:16px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:8px;
+  color:#c8c0d7;
+  font-size:13px;
+  font-weight:700;
+}
+
+.inputWrap{
+  position:relative;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid var(--border);
+  outline:none;
+  color:var(--text);
+  background:rgba(8,5,16,.72);
+  border-radius:15px;
+  padding:14px 15px;
+  font:inherit;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:rgba(145,92,255,.65);
+  box-shadow:0 0 0 3px rgba(130,70,255,.10);
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.passwordInput{
+  padding-right:54px;
+}
+
+.eyeBtn{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:10px;
+  cursor:pointer;
+}
+
+.strength{
+  height:5px;
+  margin-top:8px;
+  border-radius:99px;
+  background:#292231;
+  overflow:hidden;
+}
+
+.strengthBar{
+  height:100%;
+  width:0;
+  transition:.25s;
+}
+
+.authButton{
+  width:100%;
+  border:0;
+  border-radius:16px;
+  padding:16px;
+  margin-top:8px;
+  color:white;
+  background:linear-gradient(135deg,#8d59ff,#6633dc);
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(112,61,235,.28);
+}
+
+.authButton:active{
+  transform:scale(.985);
+}
+
+.biometricButton{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+  border:1px solid var(--border2);
+  border-radius:15px;
+  color:var(--text);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  font-weight:700;
+}
+
+.securityNote{
+  margin-top:22px;
+  color:#847a96;
+  text-align:center;
+  font-size:12px;
+  line-height:1.55;
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+#app{
+  display:none;
+  min-height:100vh;
+}
+
+.appShell{
+  width:min(1450px,100%);
+  margin:auto;
+  padding:0 22px 120px;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    max(18px,env(safe-area-inset-top))
+    0
+    18px;
+
+  background:linear-gradient(
+    to bottom,
+    rgba(9,6,18,.96),
+    rgba(9,6,18,.78),
+    transparent
+  );
+
+  backdrop-filter:blur(12px);
+}
+
+.brandArea{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brandMini{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#9665ff,#6333d8);
+  font-weight:900;
+  box-shadow:0 8px 25px rgba(112,61,235,.22);
+}
+
+.brandName{
+  font-size:16px;
+  font-weight:850;
+}
+
+.brandSub{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px;
+}
+
+.profileButton{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:1px solid var(--border2);
+  color:white;
+  background:linear-gradient(145deg,#7444db,#43228c);
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* =========================================================
+   PAGE SYSTEM
+   ========================================================= */
+
+.page{
+  display:none;
+  animation:pageIn .25s ease;
+}
+
+.page.active{
+  display:block;
+}
+
+@keyframes pageIn{
+  from{
+    opacity:0;
+    transform:translateY(7px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.pageHeader{
+  margin:20px 0 24px;
+}
+
+.pageHeader h1{
+  margin:0;
+  font-size:clamp(26px,5vw,38px);
+  letter-spacing:-1px;
+}
+
+.pageHeader p{
+  margin:7px 0 0;
+  color:var(--muted);
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--panel);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 10px 40px rgba(0,0,0,.18);
+}
+
+.cardPadding{
+  padding:22px;
+}
+
+/* =========================================================
+   HOME
+   ========================================================= */
 
 .hero{
-padding:18px;
-margin-bottom:14px
+  position:relative;
+  overflow:hidden;
+  padding:28px;
+  margin-bottom:18px;
 }
 
-.hero-top{
-display:flex;
-gap:13px;
-align-items:flex-start
+.hero::after{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  right:-90px;
+  top:-100px;
+  border-radius:50%;
+  background:rgba(128,75,255,.15);
+  filter:blur(10px);
 }
 
-.hero-icon{
-width:44px;
-height:44px;
-border-radius:14px;
-display:grid;
-place-items:center;
-background:rgba(141,99,255,.14);
-color:var(--primary2);
-font-size:20px;
-flex:0 0 auto
+.heroContent{
+  position:relative;
+  z-index:1;
 }
 
 .eyebrow{
-font-size:10px;
-font-weight:900;
-letter-spacing:1.3px;
-color:var(--primary2);
-text-transform:uppercase
+  color:var(--purple2);
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
 }
 
-.quote{
-font-size:clamp(15px,2.5vw,18px);
-line-height:1.45;
-margin-top:5px
+.hero h1{
+  margin:8px 0;
+  font-size:clamp(28px,6vw,46px);
+  line-height:1.05;
+  letter-spacing:-1.5px;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-margin-top:15px
+.hero p{
+  color:var(--muted);
+  max-width:620px;
+  line-height:1.6;
+  margin-bottom:20px;
 }
 
-.stat{
-padding:14px;
-text-align:center;
-background:rgba(15,9,29,.38);
-border:1px solid var(--line);
-border-radius:16px
+.progressOuter{
+  height:11px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#211b2c;
 }
 
-.stat .n{
-font-size:23px;
-font-weight:900
+.progressInner{
+  height:100%;
+  width:0;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#7240ed,#b088ff);
+  transition:.4s;
 }
 
-.stat .l{
-font-size:10px;
-color:var(--muted);
-margin-top:2px
+.progressMeta{
+  display:flex;
+  justify-content:space-between;
+  margin-top:9px;
+  color:var(--muted);
+  font-size:12px;
 }
 
-.progress{margin-top:13px}
-
-.progress-head{
-display:flex;
-justify-content:space-between;
-font-size:11px;
-font-weight:800;
-color:#ded6f0;
-margin-bottom:7px
+.homeGrid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:18px;
 }
 
-.track{
-height:9px;
-border-radius:99px;
-background:#130d24;
-overflow:hidden
+.statCard{
+  grid-column:span 3;
+  padding:20px;
 }
 
-.bar{
-height:100%;
-width:0;
-border-radius:inherit;
-background:linear-gradient(90deg,var(--primary),var(--primary2));
-transition:width .35s ease
+.statLabel{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
 }
 
-.quick{
-padding:16px;
-margin-bottom:14px
+.statValue{
+  margin-top:7px;
+  font-size:28px;
+  font-weight:850;
 }
 
-.quick-grid{
-display:grid;
-grid-template-columns:minmax(0,1fr) 150px 145px 46px;
-gap:9px
+.statSmall{
+  margin-top:3px;
+  color:var(--muted2);
+  font-size:11px;
 }
 
-.field,
-.select,
-.textarea{
-width:100%;
-background:#140d27;
-color:var(--text);
-border:1px solid var(--line);
-border-radius:13px;
-outline:0;
-padding:12px 13px
+.focusCard{
+  grid-column:span 8;
+  padding:22px;
 }
 
-.field:focus,
-.select:focus,
-.textarea:focus{
-border-color:var(--primary);
-box-shadow:0 0 0 3px rgba(141,99,255,.12)
+.quoteCard{
+  grid-column:span 4;
+  padding:22px;
 }
 
-.btn{
-border:0;
-border-radius:13px;
-padding:12px 14px;
-font-weight:900;
-transition:.18s
+.sectionTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:15px;
 }
 
-.btn-primary{
-background:linear-gradient(135deg,var(--primary),#7448df);
-color:white
+.sectionTitle h2{
+  margin:0;
+  font-size:17px;
 }
 
-.btn-secondary{
-background:#2a1d49;
-color:#ded6f0;
-border:1px solid var(--line)
+.miniButton{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:9px 12px;
+  color:var(--text);
+  background:rgba(255,255,255,.035);
+  cursor:pointer;
+  font-weight:700;
 }
 
-.btn-danger{
-background:rgba(255,104,124,.1);
-color:var(--danger);
-border:1px solid rgba(255,104,124,.25)
+.bible{
+  padding:15px;
+  border-radius:15px;
+  background:rgba(139,92,246,.07);
+  border:1px solid rgba(139,92,246,.12);
+  margin-bottom:10px;
 }
 
-.toolbar{
-padding:12px;
-margin-bottom:14px;
-display:grid;
-grid-template-columns:minmax(0,1fr) 150px 150px;
-gap:9px
+.bible strong{
+  display:block;
+  margin-bottom:6px;
+  color:var(--purple2);
+  font-size:12px;
 }
 
-.date-chip{
-grid-column:1/-1;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-background:#17102d;
-border:1px solid var(--line);
-border-radius:12px;
-padding:10px 12px
+.bible span{
+  color:#d5cedf;
+  font-size:13px;
+  line-height:1.55;
 }
 
-.date-chip strong{font-size:13px}
-.date-chip span{font-size:11px;color:var(--muted)}
-
-.layout{
-display:grid;
-grid-template-columns:minmax(0,1.6fr) minmax(280px,.8fr);
-gap:14px
+.quickActions{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
 }
 
-.plans{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px
+.quickAction{
+  padding:15px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.025);
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
 }
 
-.panel{padding:16px}
-
-.panel-head{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:12px
+.quickAction b{
+  display:block;
+  margin-bottom:4px;
 }
 
-.panel-title{
-font-size:15px;
-font-weight:900
+.quickAction span{
+  color:var(--muted);
+  font-size:11px;
 }
 
-.count{
-min-width:28px;
-padding:4px 8px;
-border-radius:999px;
-background:rgba(141,99,255,.13);
-color:var(--primary2);
-font-size:11px;
-text-align:center
+/* =========================================================
+   DAILY PLAN
+   ========================================================= */
+
+.dateToolbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:18px;
 }
 
-.task-list{
-display:grid;
-gap:9px
+.dateToolbar input{
+  max-width:210px;
+}
+
+.addButton{
+  margin-left:auto;
+  border:0;
+  border-radius:15px;
+  padding:14px 17px;
+  color:#fff;
+  background:linear-gradient(135deg,#8d59ff,#6633dc);
+  font-weight:800;
+  cursor:pointer;
+}
+
+.taskList{
+  display:grid;
+  gap:12px;
+}
+
+.taskCard{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:rgba(24,16,42,.82);
+  transition:.2s;
+}
+
+.taskCard:hover{
+  border-color:var(--border2);
+  transform:translateY(-1px);
+}
+
+.check{
+  flex:0 0 auto;
+  width:24px;
+  height:24px;
+  border:2px solid #675c79;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  background:transparent;
+  color:white;
+  font-size:14px;
+  font-weight:900;
+}
+
+.check.done{
+  border-color:var(--green);
+  background:var(--green);
+  color:#07150e;
+}
+
+.taskMain{
+  flex:1;
+  min-width:0;
+}
+
+.taskTitle{
+  font-weight:750;
+  word-break:break-word;
+}
+
+.taskDone .taskTitle{
+  text-decoration:line-through;
+  color:#7f778b;
+}
+
+.taskMeta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:7px;
+}
+
+.tag{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 8px;
+  border-radius:99px;
+  color:#bcb1ce;
+  background:rgba(255,255,255,.055);
+  font-size:10px;
+  font-weight:700;
+}
+
+.tag.high{
+  color:#ff9aaa;
+  background:rgba(255,107,129,.09);
+}
+
+.tag.medium{
+  color:#f4cd70;
+  background:rgba(245,196,81,.08);
+}
+
+.tag.low{
+  color:#6fe6aa;
+  background:rgba(57,217,138,.08);
+}
+
+.taskActions{
+  display:flex;
+  gap:5px;
+}
+
+.iconButton{
+  width:38px;
+  height:38px;
+  border:1px solid transparent;
+  border-radius:11px;
+  color:var(--muted);
+  background:transparent;
+  cursor:pointer;
+}
+
+.iconButton:hover{
+  border-color:var(--border);
+  background:rgba(255,255,255,.04);
+  color:white;
 }
 
 .empty{
-padding:20px 10px;
-text-align:center;
-color:var(--muted);
-font-size:12px;
-border:1px dashed var(--line);
-border-radius:14px
+  padding:45px 20px;
+  text-align:center;
+  border:1px dashed var(--border);
+  border-radius:20px;
+  color:var(--muted);
 }
 
-.task{
-display:grid;
-grid-template-columns:28px minmax(0,1fr) auto;
-gap:10px;
-align-items:center;
-padding:12px;
-background:linear-gradient(
-145deg,
-rgba(16,10,30,.72),
-rgba(31,20,54,.65)
-);
-border:1px solid var(--line);
-border-radius:15px
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+.calendarCard{
+  padding:20px;
 }
 
-.task.done{opacity:.58}
-
-.task-main{min-width:0}
-
-.task-title{
-font-size:13px;
-font-weight:800;
-line-height:1.35;
-word-break:break-word
+.calendarHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
 }
 
-.task.done .task-title{text-decoration:line-through}
-
-.task-meta{
-display:flex;
-flex-wrap:wrap;
-gap:5px;
-margin-top:6px
+.calendarHeader h2{
+  margin:0;
+  font-size:19px;
 }
 
-.pill{
-font-size:9px;
-padding:3px 6px;
-border-radius:999px;
-background:#24183e;
-color:#bdb2d8;
-border:1px solid var(--line)
+.calendarControls{
+  display:flex;
+  gap:7px;
 }
 
-.pill.priority-high{color:#ff9aa8}
-.pill.priority-medium{color:#ffd28a}
-.pill.active{color:#77e7b3}
-
-.check{
-width:26px;
-height:26px;
-border-radius:9px;
-border:1px solid rgba(182,156,255,.3);
-background:#171027;
-color:white;
-display:grid;
-place-items:center;
-font-size:14px
+.calendarGrid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
 }
 
-.check.checked{
-background:linear-gradient(135deg,#5cda9d,#31b878);
-border-color:transparent
+.dayName{
+  padding:8px 0;
+  text-align:center;
+  color:var(--muted2);
+  font-size:10px;
+  font-weight:800;
 }
 
-.actions{
-display:flex;
-gap:4px
+.calendarDay{
+  min-height:62px;
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:8px;
+  color:#d9d2e4;
+  background:rgba(255,255,255,.025);
+  cursor:pointer;
 }
 
-.task-action{
-width:34px;
-height:34px;
-border-radius:10px;
-border:1px solid var(--line);
-background:#211638;
-color:#bfb3d7
+.calendarDay:hover{
+  border-color:var(--border);
 }
 
-.task-action.delete{color:var(--danger)}
-
-.side{
-display:grid;
-gap:14px;
-align-content:start
+.calendarDay.other{
+  opacity:.28;
 }
 
-.calendar{padding:16px}
-
-.cal-head{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:12px
+.calendarDay.selected{
+  border-color:var(--purple);
+  background:rgba(139,92,246,.14);
 }
 
-.cal-title{
-font-weight:900;
-font-size:14px
+.calendarDay.today{
+  box-shadow:inset 0 0 0 1px rgba(167,139,250,.45);
 }
 
-.cal-nav{
-display:flex;
-gap:5px
+.dayNumber{
+  font-size:12px;
+  font-weight:800;
 }
 
-.cal-nav button{
-width:34px;
-height:34px;
-border-radius:9px;
-border:1px solid var(--line);
-background:#211638;
-color:#cfc3e9
+.dayDot{
+  width:5px;
+  height:5px;
+  margin-top:9px;
+  border-radius:50%;
+  background:var(--purple2);
+  box-shadow:0 0 9px rgba(167,139,250,.6);
 }
 
-.weekdays,
-.days{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:4px
+/* =========================================================
+   INSIGHTS
+   ========================================================= */
+
+.insightsGrid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:18px;
 }
 
-.weekdays div{
-text-align:center;
-color:var(--muted);
-font-size:9px;
-padding:4px 0
+.insightCard{
+  grid-column:span 4;
+  padding:22px;
 }
 
-.day{
-min-width:0;
-aspect-ratio:1;
-border:1px solid transparent;
-border-radius:9px;
-background:transparent;
-color:#d7cee9;
-font-size:10px;
-position:relative
+.insightCard.wide{
+  grid-column:span 8;
 }
 
-.day:hover{background:#211638}
-.day.other{opacity:.25}
-.day.today{border-color:rgba(141,99,255,.45)}
-.day.selected{background:var(--primary);color:white}
-
-.day.has:after{
-content:"";
-position:absolute;
-bottom:4px;
-left:50%;
-width:4px;
-height:4px;
-border-radius:50%;
-background:var(--success);
-transform:translateX(-50%)
+.bigNumber{
+  margin-top:10px;
+  font-size:42px;
+  font-weight:900;
 }
 
-.selected-day{
-margin-top:12px;
-padding-top:12px;
-border-top:1px solid var(--line);
-font-size:11px;
-color:#d9d0ea
+.barRow{
+  margin-top:15px;
 }
 
-.selected-task{
-display:flex;
-justify-content:space-between;
-gap:8px;
-margin-top:7px;
-padding:7px 8px;
-border-radius:8px;
-background:#17102c
+.barLabel{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:7px;
 }
 
-.focus{
-padding:16px;
-text-align:center
+.bar{
+  height:8px;
+  border-radius:99px;
+  background:#211b2c;
+  overflow:hidden;
 }
 
-.timer{
-font-size:44px;
-font-weight:900;
-letter-spacing:1px;
-margin:8px 0
+.bar > span{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#7441ed,#ac85ff);
 }
 
-.timer-state{
-color:var(--muted);
-font-size:11px
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.settingsGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
 }
 
-.timer-controls{
-display:flex;
-justify-content:center;
-gap:7px;
-flex-wrap:wrap
+.settingCard{
+  padding:21px;
 }
 
-.timer-controls .btn{padding:9px 12px}
-
-.insights{padding:16px}
-
-.insight-row{
-display:flex;
-justify-content:space-between;
-gap:10px;
-padding:9px 0;
-border-bottom:1px solid rgba(185,161,255,.08);
-font-size:11px
+.settingItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
-.insight-row:last-child{border-bottom:0}
-
-.spiritual{
-margin-top:14px;
-padding:16px
+.settingItem:last-child{
+  border-bottom:0;
 }
 
-.spiritual-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
+.settingItem h3{
+  margin:0 0 4px;
+  font-size:14px;
 }
 
-.spiritual label{
-display:block;
-font-size:11px;
-font-weight:800;
-color:#cfc4e5;
-margin-bottom:6px
+.settingItem p{
+  margin:0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.4;
 }
 
-.textarea{
-min-height:100px;
-resize:vertical
+.settingButton{
+  flex:0 0 auto;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px 13px;
+  color:white;
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  font-weight:700;
 }
 
-.footer{
-text-align:center;
-color:#7f7597;
-font-size:10px;
-padding:24px 0 4px
+.danger{
+  border-color:rgba(255,107,129,.25);
+  color:#ff9aaa;
 }
 
-.modal-backdrop{
-position:fixed;
-inset:0;
-background:rgba(5,2,13,.72);
-backdrop-filter:blur(10px);
--webkit-backdrop-filter:blur(10px);
-z-index:50;
-display:none;
-align-items:center;
-justify-content:center;
-padding:16px
+/* =========================================================
+   BOTTOM NAV
+   ========================================================= */
+
+.bottomNav{
+  position:fixed;
+  left:50%;
+  bottom:0;
+  z-index:1500;
+
+  width:min(700px,calc(100% - 18px));
+
+  transform:translateX(-50%);
+
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+
+  padding:
+    8px
+    8px
+    max(8px,env(safe-area-inset-bottom));
+
+  border:1px solid var(--border2);
+  border-bottom:0;
+  border-radius:22px 22px 0 0;
+
+  background:rgba(17,10,31,.92);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+
+  box-shadow:0 -15px 50px rgba(0,0,0,.35);
 }
 
-.modal-backdrop.open{display:flex}
+.navButton{
+  position:relative;
+  border:0;
+  border-radius:15px;
+  padding:10px 5px;
+  color:#80758f;
+  background:transparent;
+  cursor:pointer;
+  font-size:10px;
+  font-weight:750;
+}
+
+.navIcon{
+  display:block;
+  margin-bottom:4px;
+  font-size:18px;
+}
+
+.navButton.active{
+  color:#d5c4ff;
+  background:rgba(139,92,246,.13);
+}
+
+.navButton.active::before{
+  content:"";
+  position:absolute;
+  top:-8px;
+  left:50%;
+  width:25px;
+  height:3px;
+  transform:translateX(-50%);
+  border-radius:99px;
+  background:var(--purple2);
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
 
 .modal{
-width:min(520px,100%);
-max-height:90vh;
-overflow:auto;
-background:linear-gradient(145deg,#2a1b4a,#171027);
-border:1px solid var(--line);
-border-radius:22px;
-padding:20px;
-box-shadow:0 30px 90px rgba(0,0,0,.55)
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:12px;
+
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(8px);
 }
 
-.modal h2{
-font-size:20px;
-margin-bottom:5px
+.modal.show{
+  display:flex;
 }
 
-.modal-sub{
-color:var(--muted);
-font-size:11px;
-margin-bottom:15px
+.modalBox{
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+
+  padding:22px;
+
+  border:1px solid var(--border2);
+  border-radius:25px;
+
+  background:#171025;
+  box-shadow:var(--shadow);
+  animation:modalIn .22s ease;
 }
 
-.form-grid{
-display:grid;
-gap:10px
+@keyframes modalIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
 
-.form-grid label{
-font-size:10px;
-font-weight:800;
-color:#cfc5e2
+.modalHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
 }
 
-.modal-actions{
-display:flex;
-gap:8px;
-justify-content:flex-end;
-margin-top:15px;
-flex-wrap:wrap
+.modalHeader h2{
+  margin:0;
+  font-size:20px;
 }
 
-.setting-row{
-padding:12px;
-border:1px solid var(--line);
-border-radius:13px;
-background:#17102c;
-margin-top:9px
+.closeButton{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:12px;
+  color:var(--muted);
+  background:rgba(255,255,255,.05);
+  cursor:pointer;
 }
 
-.setting-row strong{
-display:block;
-font-size:12px
+.formGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
 }
 
-.setting-row small{
-display:block;
-color:var(--muted);
-margin-top:3px;
-font-size:10px
+.full{
+  grid-column:1/-1;
 }
 
-/* LOCK SCREEN */
-#lockScreen{
-position:fixed;
-inset:0;
-z-index:100;
-background:
-radial-gradient(circle at 50% 40%,#24134c 0%,#0c0817 48%,#08050e 100%);
-display:none;
-place-items:center;
-padding:20px;
-overflow:hidden
+.formActions{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
 }
 
-#lockScreen.show{display:grid}
-
-#lockScreen:before{
-content:"";
-position:absolute;
-inset:-20%;
-background:repeating-conic-gradient(
-from 0deg,
-rgba(141,99,255,.05) 0deg,
-transparent 8deg,
-rgba(255,255,255,.018) 15deg,
-transparent 24deg
-);
-animation:drift 28s linear infinite
+.formActions button{
+  flex:1;
 }
 
-.lock-card{
-width:min(430px,100%);
-padding:26px;
-text-align:center;
-position:relative
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:95px;
+  z-index:8000;
+
+  max-width:calc(100% - 30px);
+
+  transform:translate(-50%,20px);
+  opacity:0;
+
+  padding:12px 16px;
+  border:1px solid var(--border2);
+  border-radius:14px;
+
+  color:white;
+  background:rgba(27,18,47,.95);
+  box-shadow:var(--shadow);
+
+  pointer-events:none;
+  transition:.25s;
+  font-size:13px;
+  font-weight:650;
 }
 
-.lock-logo{
-width:76px;
-height:76px;
-border-radius:24px;
-margin:0 auto 16px;
-display:grid;
-place-items:center;
-background:linear-gradient(145deg,#9568ff,#6840d5);
-font-size:34px;
-font-weight:900;
-box-shadow:0 20px 50px rgba(109,63,220,.35)
+#toast.show{
+  transform:translate(-50%,0);
+  opacity:1;
 }
 
-.lock-card h2{font-size:24px}
+/* =========================================================
+   PROFILE
+   ========================================================= */
 
-.lock-card p{
-color:var(--muted);
-font-size:12px;
-margin:7px 0 17px
+.profileHero{
+  text-align:center;
+  padding:10px 0 20px;
 }
 
-.lock-input{
-width:100%;
-padding:15px;
-border-radius:14px;
-background:#130d24;
-border:1px solid var(--line);
-color:white;
-text-align:center;
-letter-spacing:5px;
-font-size:18px;
-outline:0
+.avatarLarge{
+  width:86px;
+  height:86px;
+  margin:0 auto 13px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(145deg,#9665ff,#6333d8);
+  font-size:31px;
+  font-weight:900;
 }
 
-.lock-actions{
-display:grid;
-gap:8px;
-margin-top:10px
+.profileName{
+  font-size:20px;
+  font-weight:850;
 }
 
-.lock-error{
-min-height:18px;
-color:#ff8c9a;
-font-size:11px;
-margin-top:8px
+.profileJoined{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
 }
 
-.secure-note{
-margin-top:13px;
-color:#766d88;
-font-size:9px;
-line-height:1.5
-}
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
-/* LOADING SCREEN */
-.loading{
-position:fixed;
-inset:0;
-z-index:110;
-background:
-radial-gradient(circle at 50% 38%,#25144d,#0b0714 55%);
-display:grid;
-place-items:center;
-transition:opacity .35s
-}
-
-.loading.hide{
-opacity:0;
-pointer-events:none
-}
-
-.loader{
-text-align:center;
-width:min(500px,82vw)
-}
-
-.loader-logo{
-width:78px;
-height:78px;
-border-radius:26px;
-background:linear-gradient(145deg,#9368ff,#6841d5);
-display:grid;
-place-items:center;
-font-size:35px;
-font-weight:900;
-margin:0 auto 18px;
-box-shadow:0 20px 70px rgba(109,63,220,.4)
-}
-
-.loader h2{font-size:24px}
-
-.loader p{
-color:#a89fbb;
-margin-top:6px
-}
-
-.load-track{
-height:8px;
-border-radius:99px;
-background:#21172f;
-margin-top:22px;
-overflow:hidden
-}
-
-.load-bar{
-height:100%;
-width:0;
-background:linear-gradient(90deg,#7448df,#b79dff);
-transition:width .18s
-}
-
-.toast{
-position:fixed;
-left:50%;
-bottom:18px;
-transform:translate(-50%,20px);
-opacity:0;
-pointer-events:none;
-z-index:120;
-background:#2a1c4a;
-color:#f4efff;
-border:1px solid var(--line);
-padding:10px 14px;
-border-radius:12px;
-font-size:11px;
-box-shadow:0 15px 40px rgba(0,0,0,.4);
-transition:.25s
-}
-
-.toast.show{
-opacity:1;
-transform:translate(-50%,0)
-}
-
-/* TABLET */
 @media(max-width:900px){
+  .statCard{
+    grid-column:span 6;
+  }
 
-.layout{
-grid-template-columns:1fr
+  .focusCard,
+  .quoteCard{
+    grid-column:span 12;
+  }
+
+  .insightCard,
+  .insightCard.wide{
+    grid-column:span 6;
+  }
 }
 
-.plans{
-grid-template-columns:1fr 1fr
-}
-
-.side{
-grid-template-columns:1fr 1fr
-}
-
-.calendar{
-grid-column:span 1
-}
-
-.quick-grid{
-grid-template-columns:minmax(0,1fr) 140px 46px
-}
-
-.quick-grid .due-field{
-grid-column:1/3
-}
-
-.quick-grid .add{
-grid-column:3
-}
-
-.toolbar{
-grid-template-columns:1fr 1fr 1fr
-}
-}
-
-/* PHONE */
 @media(max-width:650px){
 
-body{
-padding:8px 8px 28px
+  .appShell{
+    padding:0 13px 105px;
+  }
+
+  .topbar{
+    padding-left:3px;
+    padding-right:3px;
+  }
+
+  .brandName{
+    font-size:14px;
+  }
+
+  .hero{
+    padding:22px;
+    border-radius:20px;
+  }
+
+  .statCard{
+    grid-column:span 6;
+    padding:17px;
+  }
+
+  .statValue{
+    font-size:24px;
+  }
+
+  .dateToolbar{
+    flex-wrap:wrap;
+  }
+
+  .dateToolbar input{
+    flex:1;
+    min-width:160px;
+    max-width:none;
+  }
+
+  .addButton{
+    width:100%;
+    margin-left:0;
+  }
+
+  .taskCard{
+    align-items:flex-start;
+    padding:14px;
+  }
+
+  .taskActions{
+    flex-direction:column;
+  }
+
+  .calendarCard{
+    padding:13px;
+  }
+
+  .calendarDay{
+    min-height:52px;
+    padding:6px;
+  }
+
+  .settingsGrid{
+    grid-template-columns:1fr;
+  }
+
+  .insightCard,
+  .insightCard.wide{
+    grid-column:span 12;
+  }
+
+  .formGrid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .authCard{
+    padding:25px 20px;
+    border-radius:25px;
+  }
 }
 
-.verses{
-grid-template-columns:1fr
-}
-
-.header-row{
-align-items:center
-}
-
-header{
-padding:14px
-}
-
-.header-actions .icon-btn{
-width:40px;
-height:40px
-}
-
-.stats{
-grid-template-columns:repeat(2,1fr)
-}
-
-.quick-grid{
-grid-template-columns:1fr 1fr
-}
-
-.quick-grid .task-name{
-grid-column:1/-1
-}
-
-.quick-grid .due-field{
-grid-column:auto
-}
-
-.quick-grid .add{
-grid-column:auto
-}
-
-.toolbar{
-grid-template-columns:1fr 1fr
-}
-
-.toolbar .search{
-grid-column:1/-1
-}
-
-.date-chip{
-grid-column:1/-1
-}
-
-.plans{
-grid-template-columns:1fr
-}
-
-.side{
-grid-template-columns:1fr
-}
-
-.spiritual-grid{
-grid-template-columns:1fr
-}
-
-.task{
-grid-template-columns:27px minmax(0,1fr);
-align-items:start
-}
-
-.actions{
-grid-column:2;
-justify-content:flex-end
-}
-
-.task-title{
-font-size:12px
-}
-
-.task-action{
-width:36px;
-height:36px
-}
-
-.check{
-width:27px;
-height:27px
-}
-
-.hero,
-.quick,
-.panel,
-.calendar,
-.focus,
-.insights,
-.spiritual{
-padding:13px
-}
-
-.timer{
-font-size:40px
-}
-
-.modal{
-padding:16px
-}
-}
-
-/* SMALL PHONE */
 @media(max-width:390px){
+  .navButton{
+    font-size:9px;
+  }
 
-.quick-grid{
-grid-template-columns:1fr
-}
+  .navIcon{
+    font-size:16px;
+  }
 
-.quick-grid>*{
-grid-column:1!important
-}
+  .statValue{
+    font-size:21px;
+  }
 
-.toolbar{
-grid-template-columns:1fr
-}
-
-.header-actions{
-gap:5px
-}
-
-.stats{
-gap:7px
+  .brandSub{
+    display:none;
+  }
 }
 
-.stat{
-padding:11px
-}
-
-.stat .n{
-font-size:20px
-}
-}
+/* =========================================================
+   ACCESSIBILITY / REDUCED MOTION
+   ========================================================= */
 
 @media(prefers-reduced-motion:reduce){
-
-*,
-*:before,
-*:after{
-animation-duration:.01ms!important;
-transition-duration:.01ms!important
-}
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOADING -->
-<div class="loading" id="loading">
-<div class="loader">
-<div class="loader-logo">T</div>
-<h2>Tsega Habit Tracker</h2>
-<p id="loadingText">Preparing your focus…</p>
-<div class="load-track">
-<div class="load-bar" id="loadBar"></div>
-</div>
-</div>
-</div>
+<!-- =======================================================
+     LOADER
+     ======================================================= -->
+
+<div id="loader">
+  <div class="loaderBox">
+    <div class="logo">T</div>
+    <div class="loaderTitle">Tsega Habit Tracker</div>
+    <div class="loaderText" id="loaderText">
+      Preparing your focus...
+    </div>
+
+    <div class="loaderTrack">
+      <div class="loaderProgress" id="loaderProgress"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- =======================================================
+     AUTH
+     ======================================================= -->
+
+<div id="authScreen">
+
+  <div class="authCard">
+
+    <div class="authLogo">T</div>
+
+    <h1 id="authTitle">Secure your tracker</h1>
+
+    <p class="authSubtitle" id="authSubtitle">
+      Enter your PIN or use biometric authentication to continue.
+    </p>
+
+    <div id="setupFields">
+
+      <div class="field">
+        <label>Your name</label>
+        <input
+          id="setupName"
+          type="text"
+          maxlength="40"
+          placeholder="e.g. Tsega">
+      </div>
+
+      <div class="field">
+        <label>Create a secure PIN</label>
+
+        <div class="inputWrap">
+          <input
+            id="setupPin"
+            class="passwordInput"
+            type="password"
+            inputmode="numeric"
+            autocomplete="new-password"
+            maxlength="12"
+            placeholder="4–12 digits">
+
+          <button
+            class="eyeBtn"
+            type="button"
+            onclick="togglePassword('setupPin',this)">
+            ◉
+          </button>
+        </div>
+
+        <div class="strength">
+          <div class="strengthBar" id="strengthBar"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Confirm your PIN</label>
+
+        <div class="inputWrap">
+          <input
+            id="setupPinConfirm"
+            class="passwordInput"
+            type="password"
+            inputmode="numeric"
+            autocomplete="new-password"
+            maxlength="12"
+            placeholder="Re-enter your PIN">
+
+          <button
+            class="eyeBtn"
+            type="button"
+            onclick="togglePassword('setupPinConfirm',this)">
+            ◉
+          </button>
+        </div>
+      </div>
+
+      <button
+        class="authButton"
+        onclick="createSecurity()">
+        Create PIN & Enter
+      </button>
+
+    </div>
 
-<!-- LOCK -->
-<div id="lockScreen">
-<div class="lock-card glass">
-
-<div class="lock-logo">T</div>
-
-<h2 id="lockTitle">Welcome back</h2>
-
-<p id="lockMessage">
-Enter your access PIN to continue.
-</p>
-
-<input
-class="lock-input"
-id="pinInput"
-type="password"
-inputmode="numeric"
-autocomplete="off"
-maxlength="12"
-placeholder="••••••"
->
-
-<input
-class="lock-input hidden"
-id="pinConfirm"
-type="password"
-inputmode="numeric"
-autocomplete="off"
-maxlength="12"
-placeholder="Confirm PIN"
-style="margin-top:8px"
->
-
-<div class="lock-actions">
-
-<button class="btn btn-primary" id="unlockBtn">
-Unlock
-</button>
-
-<button class="btn btn-secondary hidden" id="bioBtn">
-Use fingerprint / device biometrics
-</button>
 
-</div>
+    <div id="loginFields" style="display:none">
 
-<div class="lock-error" id="lockError"></div>
+      <div class="field">
+        <label>Secure access</label>
 
-<div class="secure-note">
-Your tasks remain stored on this device.
-This local lock is designed for personal access,
-not banking-grade security.
-</div>
+        <div class="inputWrap">
+          <input
+            id="loginPin"
+            class="passwordInput"
+            type="password"
+            inputmode="numeric"
+            autocomplete="current-password"
+            maxlength="12"
+            placeholder="Enter your PIN"
+            onkeydown="if(event.key==='Enter') unlockWithPin()">
 
-</div>
+          <button
+            class="eyeBtn"
+            type="button"
+            onclick="togglePassword('loginPin',this)">
+            ◉
+          </button>
+        </div>
+      </div>
+
+      <button
+        class="authButton"
+        onclick="unlockWithPin()">
+        Unlock App
+      </button>
+
+      <button
+        class="biometricButton"
+        id="biometricLoginButton"
+        onclick="unlockWithBiometric()"
+        style="display:none">
+        ◉ Use fingerprint / device biometric
+      </button>
+
+    </div>
+
+    <div class="securityNote">
+      Your app is protected. Enter your PIN or use biometric authentication
+      to access your tracker.
+    </div>
+
+  </div>
+
 </div>
 
-<!-- APP -->
-<main class="container" id="app" hidden>
 
-<header class="glass">
+<!-- =======================================================
+     MAIN APP
+     ======================================================= -->
 
-<div class="header-row">
+<div id="app">
 
-<div class="brand">
+  <div class="appShell">
 
-<h1>Daily Focus</h1>
+    <!-- TOP BAR -->
+    <header class="topbar">
 
-<div class="subtitle" id="todayDate"></div>
+      <div class="brandArea">
 
-</div>
+        <div class="brandMini">T</div>
 
-<div class="header-actions">
-
-<button
-class="icon-btn"
-id="focusBtn"
-title="Focus timer">
-⏱
-</button>
-
-<button
-class="icon-btn"
-id="settingsBtn"
-title="Settings">
-⚙
-</button>
+        <div>
+          <div class="brandName">
+            Tsega Habit Tracker
+          </div>
 
-</div>
+          <div class="brandSub">
+            Plan • Focus • Execute
+          </div>
+        </div>
 
-</div>
+      </div>
 
-</header>
+      <button
+        class="profileButton"
+        id="profileButton"
+        onclick="openProfile()">
+        T
+      </button>
 
-<!-- VERSES -->
-<section class="verses">
+    </header>
 
-<div class="verse glass">
 
-<strong>Proverbs 16:3</strong>
+    <!-- =====================================================
+         HOME
+         ===================================================== -->
 
-“Commit thy works unto the LORD,
-and thy thoughts shall be established.”
+    <main id="homePage" class="page active">
 
-</div>
+      <div class="pageHeader">
+        <h1 id="homeGreeting">
+          Hey there! It's about sticking to the plan
+        </h1>
 
-<div class="verse glass">
+        <p id="homeDate"></p>
+      </div>
 
-<strong>Proverbs 12:24</strong>
 
-“The hand of the diligent shall bear rule:
-but the slothful shall be under tribute.”
+      <section class="hero card">
 
-</div>
+        <div class="heroContent">
 
-</section>
+          <div class="eyebrow">
+            TODAY'S FOCUS
+          </div>
 
-<!-- HERO -->
-<section class="hero glass">
+          <h1 id="heroProgressText">
+            0% complete
+          </h1>
 
-<div class="hero-top">
+          <p>
+            Small completed actions compound into serious progress.
+            Stay with today's plan.
+          </p>
 
-<div class="hero-icon">✦</div>
+          <div class="progressOuter">
+            <div
+              class="progressInner"
+              id="homeProgress">
+            </div>
+          </div>
 
-<div>
+          <div class="progressMeta">
+            <span id="homeProgressLeft">
+              0 of 0 completed
+            </span>
 
-<div class="eyebrow">
-Daily mindset
-</div>
+            <span id="homeProgressPercent">
+              0%
+            </span>
+          </div>
 
-<div class="quote" id="quoteText"></div>
+        </div>
 
-</div>
+      </section>
 
-</div>
 
-<div class="stats">
+      <section class="homeGrid">
 
-<div class="stat">
-<div class="n" id="statCompleted">0</div>
-<div class="l">Completed</div>
-</div>
+        <div class="statCard card">
 
-<div class="stat">
-<div class="n" id="statProgress">0</div>
-<div class="l">In progress</div>
-</div>
+          <div class="statLabel">
+            TODAY
+          </div>
 
-<div class="stat">
-<div class="n" id="statPending">0</div>
-<div class="l">Pending</div>
-</div>
+          <div
+            class="statValue"
+            id="statToday">
+            0
+          </div>
 
-<div class="stat">
-<div class="n" id="statRate">0%</div>
-<div class="l">Completion</div>
-</div>
+          <div class="statSmall">
+            tasks planned
+          </div>
 
-</div>
+        </div>
 
-<div class="progress">
 
-<div class="progress-head">
+        <div class="statCard card">
 
-<span>Daily focus progress</span>
+          <div class="statLabel">
+            COMPLETED
+          </div>
 
-<span id="progressText">
-0 of 0 completed
-</span>
+          <div
+            class="statValue"
+            id="statCompleted">
+            0
+          </div>
 
-</div>
+          <div class="statSmall">
+            today
+          </div>
 
-<div class="track">
+        </div>
 
-<div class="bar" id="progressBar"></div>
 
-</div>
+        <div class="statCard card">
 
-</div>
+          <div class="statLabel">
+            STREAK
+          </div>
 
-</section>
+          <div
+            class="statValue"
+            id="statStreak">
+            0
+          </div>
 
-<!-- QUICK ADD -->
-<section class="quick glass">
+          <div class="statSmall">
+            productive days
+          </div>
 
-<div class="quick-grid">
+        </div>
 
-<input
-class="field task-name"
-id="taskInput"
-maxlength="180"
-placeholder="What needs to be done? Press Enter to add…"
->
 
-<select class="select" id="taskType">
+        <div class="statCard card">
 
-<option value="daily">
-📅 Daily
-</option>
+          <div class="statLabel">
+            TOTAL
+          </div>
 
-<option value="monthly">
-🗓 Monthly
-</option>
+          <div
+            class="statValue"
+            id="statTotal">
+            0
+          </div>
 
-<option value="yearly">
-📆 Yearly
-</option>
+          <div class="statSmall">
+            saved tasks
+          </div>
 
-<option value="todo">
-✅ To-Do
-</option>
+        </div>
 
-<option value="not-to-do">
-🚫 Not-To-Do
-</option>
 
-</select>
+        <div class="focusCard card">
 
-<input
-class="field due-field"
-id="taskDate"
-type="date"
->
+          <div class="sectionTitle">
 
-<button
-class="btn btn-primary add"
-id="addBtn"
-title="Add task">
-＋
-</button>
+            <h2>
+              Quick actions
+            </h2>
 
-</div>
+            <button
+              class="miniButton"
+              onclick="startFocusTimer()">
+              Focus
+            </button>
 
-</section>
+          </div>
 
-<!-- TOOLBAR -->
-<section class="toolbar glass">
+          <div class="quickActions">
 
-<input
-class="field search"
-id="searchInput"
-placeholder="Search tasks…"
->
+            <button
+              class="quickAction"
+              onclick="openAddTask()">
 
-<select class="select" id="statusFilter">
+              <b>＋ Add task</b>
 
-<option value="all">
-All status
-</option>
+              <span>
+                Put the next action on your plan.
+              </span>
 
-<option value="pending">
-Pending
-</option>
+            </button>
 
-<option value="progress">
-In progress
-</option>
 
-<option value="completed">
-Completed
-</option>
+            <button
+              class="quickAction"
+              onclick="goTo('daily')">
 
-</select>
+              <b>✓ Daily plan</b>
 
-<select class="select" id="sortSelect">
+              <span>
+                Review everything scheduled today.
+              </span>
 
-<option value="newest">
-Newest
-</option>
+            </button>
 
-<option value="oldest">
-Oldest
-</option>
 
-<option value="priority">
-Priority
-</option>
+            <button
+              class="quickAction"
+              onclick="goTo('calendar')">
 
-<option value="alphabetical">
-A–Z
-</option>
+              <b>▦ Calendar</b>
 
-</select>
+              <span>
+                Plan ahead without scrolling.
+              </span>
 
-<div class="date-chip">
+            </button>
 
-<strong id="selectedDateLabel">
-Today’s plan
-</strong>
 
-<span id="planHint">
-Tasks with a date appear on that day.
-</span>
+            <button
+              class="quickAction"
+              onclick="startFocusTimer()">
 
-</div>
+              <b>◷ Focus session</b>
 
-</section>
+              <span>
+                Work for 25 minutes without distraction.
+              </span>
 
-<!-- MAIN LAYOUT -->
-<div class="layout">
+            </button>
 
-<div class="left">
+          </div>
 
-<div class="plans">
+        </div>
 
-<div class="panel glass">
 
-<div class="panel-head">
+        <div class="quoteCard card">
 
-<div class="panel-title">
-📅 Daily
-</div>
+          <div class="sectionTitle">
+            <h2>
+              Daily guidance
+            </h2>
+          </div>
 
-<div class="count" data-count="daily">
-0
-</div>
+          <div class="bible">
 
-</div>
+            <strong>
+              PROVERBS 16:3
+            </strong>
 
-<div class="task-list" id="list-daily"></div>
+            <span>
+              “Commit thy works unto the LORD,
+              and thy thoughts shall be established.”
+            </span>
 
-</div>
+          </div>
 
 
-<div class="panel glass">
+          <div class="bible">
 
-<div class="panel-head">
+            <strong>
+              PROVERBS 12:24
+            </strong>
 
-<div class="panel-title">
-🗓 Monthly
-</div>
+            <span>
+              “The hand of the diligent shall bear rule:
+              but the slothful shall be under tribute.”
+            </span>
 
-<div class="count" data-count="monthly">
-0
-</div>
+          </div>
 
-</div>
+          <div
+            id="positiveWord"
+            style="
+              color:#bda8e8;
+              font-size:13px;
+              margin-top:13px;
+              line-height:1.5;
+            ">
+          </div>
 
-<div class="task-list" id="list-monthly"></div>
+        </div>
 
-</div>
+      </section>
 
+    </main>
 
-<div class="panel glass">
 
-<div class="panel-head">
+    <!-- =====================================================
+         DAILY PLAN
+         ===================================================== -->
 
-<div class="panel-title">
-📆 Yearly
-</div>
+    <main id="dailyPage" class="page">
 
-<div class="count" data-count="yearly">
-0
-</div>
+      <div class="pageHeader">
 
-</div>
+        <h1>
+          Daily Plan
+        </h1>
 
-<div class="task-list" id="list-yearly"></div>
+        <p>
+          Your actions for the selected day.
+        </p>
 
-</div>
+      </div>
 
 
-<div class="panel glass">
+      <div class="card cardPadding">
 
-<div class="panel-head">
+        <div class="dateToolbar">
 
-<div class="panel-title">
-✅ To-Do
-</div>
+          <input
+            id="dailyDate"
+            type="date"
+            onchange="renderDaily()">
 
-<div class="count" data-count="todo">
-0
-</div>
+          <button
+            class="miniButton"
+            onclick="setToday()">
+            Today
+          </button>
 
-</div>
+          <button
+            class="addButton"
+            onclick="openAddTask()">
+            ＋ Add task
+          </button>
 
-<div class="task-list" id="list-todo"></div>
+        </div>
 
-</div>
 
+        <div
+          class="sectionTitle"
+          style="margin-bottom:15px">
 
-<div class="panel glass">
+          <h2 id="dailyTitle">
+            Today's tasks
+          </h2>
 
-<div class="panel-head">
+          <span
+            class="tag"
+            id="dailyCount">
+            0 tasks
+          </span>
 
-<div class="panel-title">
-🚫 Not-To-Do
-</div>
+        </div>
 
-<div class="count" data-count="not-to-do">
-0
-</div>
 
-</div>
+        <div
+          id="taskList"
+          class="taskList">
+        </div>
 
-<div class="task-list" id="list-not-to-do"></div>
+      </div>
 
-</div>
+    </main>
 
 
-<div class="panel glass">
+    <!-- =====================================================
+         CALENDAR
+         ===================================================== -->
 
-<div class="panel-head">
+    <main id="calendarPage" class="page">
 
-<div class="panel-title">
-🏁 Completed
-</div>
+      <div class="pageHeader">
 
-<div class="count" id="count-completed">
-0
-</div>
+        <h1>
+          Calendar
+        </h1>
 
-</div>
+        <p>
+          See your plans across the month.
+        </p>
 
-<div class="task-list" id="list-completed"></div>
+      </div>
 
-</div>
 
+      <section class="calendarCard card">
 
-<div class="panel glass">
+        <div class="calendarHeader">
 
-<div class="panel-head">
+          <h2 id="calendarMonth">
+            Month
+          </h2>
 
-<div class="panel-title">
-⚡ In Progress
-</div>
+          <div class="calendarControls">
 
-<div class="count" id="count-progress">
-0
-</div>
+            <button
+              class="miniButton"
+              onclick="changeMonth(-1)">
+              ‹
+            </button>
 
-</div>
+            <button
+              class="miniButton"
+              onclick="changeMonth(1)">
+              ›
+            </button>
 
-<div class="task-list" id="list-progress"></div>
+          </div>
 
-</div>
+        </div>
 
-</div>
 
-</div>
+        <div
+          class="calendarGrid"
+          id="calendarGrid">
+        </div>
 
+      </section>
 
-<!-- SIDEBAR -->
-<aside class="side">
 
-<section class="calendar glass">
+      <section
+        class="card cardPadding"
+        style="margin-top:18px">
 
-<div class="cal-head">
+        <div class="sectionTitle">
 
-<div class="cal-title" id="calTitle"></div>
+          <h2 id="calendarSelectedTitle">
+            Selected day
+          </h2>
 
-<div class="cal-nav">
+          <button
+            class="miniButton"
+            onclick="openAddTaskForSelectedDate()">
+            ＋ Add
+          </button>
 
-<button id="calPrev">
-‹
-</button>
+        </div>
 
-<button id="calNext">
-›
-</button>
+        <div id="calendarDayTasks"></div>
 
-</div>
+      </section>
 
-</div>
+    </main>
 
-<div class="weekdays">
 
-<div>Sun</div>
-<div>Mon</div>
-<div>Tue</div>
-<div>Wed</div>
-<div>Thu</div>
-<div>Fri</div>
-<div>Sat</div>
+    <!-- =====================================================
+         INSIGHTS
+         ===================================================== -->
 
-</div>
+    <main id="insightsPage" class="page">
 
-<div class="days" id="calDays"></div>
+      <div class="pageHeader">
 
-<div class="selected-day" id="calSelected"></div>
+        <h1>
+          Insights
+        </h1>
 
-</section>
+        <p>
+          Understand your consistency and execution.
+        </p>
 
+      </div>
 
-<section class="focus glass">
 
-<div class="eyebrow">
-Focus session
-</div>
+      <section class="insightsGrid">
 
-<div class="timer" id="timer">
-25:00
-</div>
+        <div class="insightCard card">
 
-<div class="timer-state" id="timerState">
-Ready to focus
-</div>
+          <div class="statLabel">
+            COMPLETION RATE
+          </div>
 
-<div class="timer-controls">
+          <div
+            class="bigNumber"
+            id="insightCompletion">
+            0%
+          </div>
 
-<button class="btn btn-primary" id="timerStart">
-Start
-</button>
+          <div class="barRow">
 
-<button class="btn btn-secondary" id="timerReset">
-Reset
-</button>
+            <div class="barLabel">
+              <span>Overall</span>
+              <span id="insightCompletionLabel">0%</span>
+            </div>
 
-</div>
+            <div class="bar">
+              <span
+                id="insightCompletionBar"
+                style="width:0%">
+              </span>
+            </div>
 
-</section>
+          </div>
 
+        </div>
 
-<section class="insights glass">
 
-<div class="panel-title">
-📊 Quick insights
-</div>
+        <div class="insightCard card">
 
-<div class="insight-row">
-<span>Today scheduled</span>
-<strong id="insToday">0</strong>
-</div>
+          <div class="statLabel">
+            BEST STREAK
+          </div>
 
-<div class="insight-row">
-<span>Today completed</span>
-<strong id="insDone">0</strong>
-</div>
+          <div
+            class="bigNumber"
+            id="insightBestStreak">
+            0
+          </div>
 
-<div class="insight-row">
-<span>Current streak</span>
-<strong id="insStreak">0 days</strong>
-</div>
+          <div class="statSmall">
+            consecutive productive days
+          </div>
 
-<div class="insight-row">
-<span>Longest streak</span>
-<strong id="insLongest">0 days</strong>
-</div>
+        </div>
 
-</section>
 
-</aside>
+        <div class="insightCard card">
 
-</div>
+          <div class="statLabel">
+            COMPLETED TASKS
+          </div>
 
-<!-- SPIRITUAL -->
-<section class="spiritual glass">
+          <div
+            class="bigNumber"
+            id="insightTotalCompleted">
+            0
+          </div>
 
-<div class="panel-head">
+          <div class="statSmall">
+            across your tracker
+          </div>
 
-<div>
+        </div>
 
-<div class="panel-title">
-📖 Daily Bible & Positive Words
-</div>
 
-<div style="font-size:10px;color:var(--muted);margin-top:3px">
-Saved automatically on this device.
-</div>
+        <div class="insightCard wide card">
 
-</div>
+          <div class="sectionTitle">
 
-</div>
+            <h2>
+              Category distribution
+            </h2>
 
-<div class="spiritual-grid">
+          </div>
 
-<div>
+          <div id="categoryBars"></div>
 
-<label for="dailyBibleVerse">
-My daily Bible verse / reflection
-</label>
+        </div>
 
-<textarea
-class="textarea"
-id="dailyBibleVerse"
-placeholder="Write your verse or reflection…"
-></textarea>
 
-</div>
+        <div class="insightCard card">
 
-<div>
+          <div class="sectionTitle">
+            <h2>
+              Priority
+            </h2>
+          </div>
 
-<label for="positiveWords">
-My positive words
-</label>
+          <div id="priorityStats"></div>
 
-<textarea
-class="textarea"
-id="positiveWords"
-placeholder="Write your affirmation, gratitude, or encouragement…"
-></textarea>
+        </div>
 
-</div>
+      </section>
 
-</div>
+    </main>
 
-</section>
 
-<div class="footer">
+    <!-- =====================================================
+         SETTINGS
+         ===================================================== -->
 
-Built with 💜 · Stay consistent · Your data stays in this browser
+    <main id="settingsPage" class="page">
 
-<br><br>
+      <div class="pageHeader">
 
-© 2026 Tsega. All rights are reserved.
+        <h1>
+          Settings
+        </h1>
 
-</div>
+        <p>
+          Control your tracker, security and backups.
+        </p>
 
-</main>
+      </div>
 
 
-<!-- EDIT MODAL -->
-<div class="modal-backdrop" id="editModal">
+      <section class="settingsGrid">
 
-<div class="modal">
+        <div class="settingCard card">
 
-<h2>Edit task</h2>
+          <div class="sectionTitle">
+            <h2>Security</h2>
+          </div>
 
-<div class="modal-sub">
-Update the plan without losing its history.
-</div>
 
-<div class="form-grid">
+          <div class="settingItem">
 
-<label>
-Task
-<input
-class="field"
-id="editText"
-maxlength="180"
->
-</label>
+            <div>
+              <h3>Biometric unlock</h3>
+              <p>
+                Use fingerprint or supported device authentication.
+              </p>
+            </div>
 
-<label>
-Category
+            <button
+              class="settingButton"
+              onclick="setupBiometric()">
+              Enable
+            </button>
 
-<select class="select" id="editType">
+          </div>
 
-<option value="daily">📅 Daily</option>
-<option value="monthly">🗓 Monthly</option>
-<option value="yearly">📆 Yearly</option>
-<option value="todo">✅ To-Do</option>
-<option value="not-to-do">🚫 Not-To-Do</option>
 
-</select>
+          <div class="settingItem">
 
-</label>
+            <div>
+              <h3>Lock now</h3>
+              <p>
+                Immediately protect the application.
+              </p>
+            </div>
 
-<label>
-Date
-<input
-class="field"
-id="editDate"
-type="date"
->
-</label>
+            <button
+              class="settingButton"
+              onclick="lockApp()">
+              Lock
+            </button>
 
-<label>
-Priority
+          </div>
 
-<select class="select" id="editPriority">
 
-<option value="low">Low</option>
-<option value="medium">Medium</option>
-<option value="high">High</option>
+          <div class="settingItem">
 
-</select>
+            <div>
+              <h3>Auto-lock</h3>
+              <p>
+                Automatically lock after 15 minutes of inactivity.
+              </p>
+            </div>
 
-</label>
+            <span
+              class="tag"
+              style="color:#6fe6aa">
+              ON
+            </span>
 
-<label>
-Notes
+          </div>
 
-<textarea
-class="textarea"
-id="editNotes"
-placeholder="Optional notes…"
-></textarea>
+        </div>
 
-</label>
 
-</div>
+        <div class="settingCard card">
 
-<div class="modal-actions">
+          <div class="sectionTitle">
+            <h2>Data & backup</h2>
+          </div>
 
-<button
-class="btn btn-secondary"
-id="cancelEdit">
-Cancel
-</button>
 
-<button
-class="btn btn-primary"
-id="saveEdit">
-Save changes
-</button>
+          <div class="settingItem">
 
-</div>
+            <div>
+              <h3>Export backup</h3>
+              <p>
+                Download all tasks as a JSON backup.
+              </p>
+            </div>
 
-</div>
+            <button
+              class="settingButton"
+              onclick="exportData()">
+              Export
+            </button>
 
-</div>
+          </div>
 
 
-<!-- SETTINGS -->
-<div class="modal-backdrop" id="settingsModal">
+          <div class="settingItem">
 
-<div class="modal">
+            <div>
+              <h3>Import backup</h3>
+              <p>
+                Restore tasks from a previous backup.
+              </p>
+            </div>
 
-<h2>Settings & Backup</h2>
+            <button
+              class="settingButton"
+              onclick="document.getElementById('importFile').click()">
+              Import
+            </button>
 
-<div class="modal-sub">
-Protect your data and manage your app.
-</div>
+            <input
+              id="importFile"
+              type="file"
+              accept=".json,application/json"
+              hidden
+              onchange="importData(event)">
 
-<div class="setting-row">
+          </div>
 
-<strong>Backup</strong>
 
-<small>
-Export a JSON backup regularly.
-Importing a backup replaces the current task list.
-</small>
+          <div class="settingItem">
 
-<div class="modal-actions">
+            <div>
+              <h3>Saved locally</h3>
+              <p>
+                Your tracker data is stored on this device.
+              </p>
+            </div>
 
-<button
-class="btn btn-secondary"
-id="exportBtn">
-Export backup
-</button>
+            <span class="tag">
+              LOCAL
+            </span>
 
-<button
-class="btn btn-primary"
-id="importBtn">
-Import backup
-</button>
+          </div>
 
-<input
-id="importFile"
-type="file"
-accept="application/json"
-hidden
->
+        </div>
 
-</div>
 
-</div>
+        <div class="settingCard card">
 
+          <div class="sectionTitle">
+            <h2>App</h2>
+          </div>
 
-<div class="setting-row">
 
-<strong>App lock</strong>
+          <div class="settingItem">
 
-<small>
-Change or remove the local access PIN.
-Removing it does not remove tasks.
-</small>
+            <div>
+              <h3>Profile</h3>
+              <p>
+                Change your name and profile appearance.
+              </p>
+            </div>
 
-<div class="modal-actions">
+            <button
+              class="settingButton"
+              onclick="openProfile()">
+              Open
+            </button>
 
-<button
-class="btn btn-secondary"
-id="changePinBtn">
-Change PIN
-</button>
+          </div>
 
-<button
-class="btn btn-secondary"
-id="removePinBtn">
-Remove lock
-</button>
 
-</div>
+          <div class="settingItem">
 
-</div>
+            <div>
+              <h3>Focus timer</h3>
+              <p>
+                25-minute focused work session.
+              </p>
+            </div>
 
+            <button
+              class="settingButton"
+              onclick="startFocusTimer()">
+              Start
+            </button>
 
-<div class="setting-row">
+          </div>
 
-<strong>Data</strong>
 
-<small>
-Your existing storage key is preserved:
-habit-tracker-tasks-v2.
-</small>
+          <div class="settingItem">
 
-<div class="modal-actions">
+            <div>
+              <h3>Version</h3>
+              <p>
+                Tsega Habit Tracker
+              </p>
+            </div>
 
-<button
-class="btn btn-danger"
-id="clearBtn">
-Delete all tasks
-</button>
+            <span class="tag">
+              2.0
+            </span>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-<div class="modal-actions">
 
-<button
-class="btn btn-secondary"
-id="closeSettings">
-Close
-</button>
+        <div class="settingCard card">
 
-</div>
+          <div class="sectionTitle">
+            <h2>Danger zone</h2>
+          </div>
 
-</div>
 
-</div>
+          <div class="settingItem">
 
+            <div>
+              <h3>Clear all tasks</h3>
+              <p>
+                Permanently remove tracker tasks from this device.
+                Export a backup first.
+              </p>
+            </div>
 
-<!-- PIN CHANGE -->
-<div class="modal-backdrop" id="pinModal">
+            <button
+              class="settingButton danger"
+              onclick="clearAllTasks()">
+              Clear
+            </button>
 
-<div class="modal">
+          </div>
 
-<h2 id="pinModalTitle">
-Change PIN
-</h2>
+        </div>
 
-<div class="modal-sub">
-Use 4–12 digits. Your PIN is stored as a local hash,
-not plain text.
-</div>
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================================
+       BOTTOM NAV
+       ===================================================== -->
+
+  <nav class="bottomNav">
+
+    <button
+      class="navButton active"
+      data-page="home"
+      onclick="goTo('home')">
+
+      <span class="navIcon">⌂</span>
+      Home
+
+    </button>
+
 
-<div class="form-grid">
+    <button
+      class="navButton"
+      data-page="daily"
+      onclick="goTo('daily')">
 
-<label>
-New PIN
+      <span class="navIcon">✓</span>
+      Daily
 
-<input
-class="field"
-id="newPin"
-type="password"
-inputmode="numeric"
-maxlength="12"
->
+    </button>
 
-</label>
 
-<label>
-Confirm PIN
+    <button
+      class="navButton"
+      data-page="calendar"
+      onclick="goTo('calendar')">
 
-<input
-class="field"
-id="confirmPin"
-type="password"
-inputmode="numeric"
-maxlength="12"
->
+      <span class="navIcon">▦</span>
+      Calendar
 
-</label>
+    </button>
 
+
+    <button
+      class="navButton"
+      data-page="insights"
+      onclick="goTo('insights')">
+
+      <span class="navIcon">◔</span>
+      Insights
+
+    </button>
+
+
+    <button
+      class="navButton"
+      data-page="settings"
+      onclick="goTo('settings')">
+
+      <span class="navIcon">⚙</span>
+      Settings
+
+    </button>
+
+  </nav>
+
 </div>
+
+
+<!-- =======================================================
+     TASK MODAL
+     ======================================================= -->
+
+<div
+  class="modal"
+  id="taskModal"
+  onclick="closeModalOutside(event,'taskModal')">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+
+      <h2 id="taskModalTitle">
+        Add task
+      </h2>
+
+      <button
+        class="closeButton"
+        onclick="closeModal('taskModal')">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="formGrid">
+
+      <div class="field full">
+
+        <label>
+          Task
+        </label>
+
+        <input
+          id="taskTitle"
+          type="text"
+          maxlength="180"
+          placeholder="What needs to be done?">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Category
+        </label>
+
+        <select id="taskCategory">
+
+          <option>Daily</option>
+          <option>Monthly</option>
+          <option>Yearly</option>
+          <option>To-Do</option>
+          <option>Not-To-Do</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Priority
+        </label>
+
+        <select id="taskPriority">
+
+          <option value="medium">
+            Medium
+          </option>
+
+          <option value="high">
+            High
+          </option>
+
+          <option value="low">
+            Low
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Planned date
+        </label>
+
+        <input
+          id="taskDate"
+          type="date">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Due time
+        </label>
+
+        <input
+          id="taskTime"
+          type="time">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Repeat
+        </label>
+
+        <select id="taskRepeat">
 
-<div class="modal-actions">
+          <option value="none">
+            Does not repeat
+          </option>
 
-<button
-class="btn btn-secondary"
-id="cancelPin">
-Cancel
-</button>
+          <option value="daily">
+            Every day
+          </option>
 
-<button
-class="btn btn-primary"
-id="savePin">
-Save PIN
-</button>
+          <option value="weekly">
+            Every week
+          </option>
 
+          <option value="monthly">
+            Every month
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>
+          Notes
+        </label>
+
+        <textarea
+          id="taskNotes"
+          maxlength="1000"
+          placeholder="Optional notes, details or reminders..."></textarea>
+
+      </div>
+
+    </div>
+
+
+    <div class="formActions">
+
+      <button
+        class="settingButton"
+        onclick="closeModal('taskModal')">
+        Cancel
+      </button>
+
+      <button
+        class="authButton"
+        style="margin-top:0"
+        onclick="saveTask()">
+        Save task
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
+
+
+<!-- =======================================================
+     PROFILE MODAL
+     ======================================================= -->
+
+<div
+  class="modal"
+  id="profileModal"
+  onclick="closeModalOutside(event,'profileModal')">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+
+      <h2>
+        Your profile
+      </h2>
+
+      <button
+        class="closeButton"
+        onclick="closeModal('profileModal')">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="profileHero">
+
+      <div
+        class="avatarLarge"
+        id="profileAvatar">
+        T
+      </div>
+
+      <div
+        class="profileName"
+        id="profileDisplayName">
+        Tsega
+      </div>
 
+      <div class="profileJoined">
+        Personal productivity profile
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Display name
+      </label>
+
+      <input
+        id="profileNameInput"
+        type="text"
+        maxlength="40"
+        placeholder="Your name">
+
+    </div>
+
+
+    <div class="formActions">
+
+      <button
+        class="settingButton"
+        onclick="closeModal('profileModal')">
+        Cancel
+      </button>
+
+      <button
+        class="authButton"
+        style="margin-top:0"
+        onclick="saveProfile()">
+        Save profile
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
 
+
+<!-- =======================================================
+     FOCUS TIMER MODAL
+     ======================================================= -->
+
+<div
+  class="modal"
+  id="timerModal">
+
+  <div class="modalBox" style="text-align:center">
+
+    <div class="modalHeader">
+
+      <h2>
+        Focus Session
+      </h2>
+
+      <button
+        class="closeButton"
+        onclick="stopFocusTimer()">
+        ×
+      </button>
+
+    </div>
+
+    <div
+      id="timerDisplay"
+      style="
+        font-size:72px;
+        font-weight:900;
+        letter-spacing:-4px;
+        margin:30px 0;
+      ">
+      25:00
+    </div>
+
+    <p
+      style="
+        color:var(--muted);
+        line-height:1.6;
+      ">
+      Put your phone down, choose one task,
+      and work until the timer ends.
+    </p>
+
+    <button
+      class="authButton"
+      onclick="toggleFocusTimer()"
+      id="timerButton">
+      Start
+    </button>
+
+  </div>
+
 </div>
+
+
+<!-- =======================================================
+     TOAST
+     ======================================================= -->
 
-<div class="toast" id="toast"></div>
+<div id="toast"></div>
 
 
 <script>
-(function(){
+/* =========================================================
+   DATA
+   ========================================================= */
 
-'use strict';
+const TASK_KEY = "habit-tracker-tasks-v2";
+const OLD_TASK_KEY = "habit-tracker-tasks-v1";
+const PROFILE_KEY = "tsega-profile-v1";
+const AUTH_KEY = "tsega-security-v2";
+const APP_STATE_KEY = "tsega-app-state-v1";
 
-const STORAGE_KEY='habit-tracker-tasks-v2';
+let tasks = [];
+let editingTaskId = null;
 
-const OLD_KEY='habit-tracker-tasks-v1';
+let selectedDate = todayString();
 
-const AUTH_KEY='tsega-habit-lock-v1';
+let calendarDate = new Date();
 
-const BIO_KEY='tsega-habit-bio-v1';
+let timerSeconds = 25 * 60;
+let timerRunning = false;
+let timerInterval = null;
 
-const SPIRIT_KEY='habit-tracker-spiritual-v1';
+let lastActivity = Date.now();
 
-const QUOTES=[
-'Small steps every day lead to big changes every year.',
-'You don’t have to be extreme, just consistent.',
-'Discipline is choosing between what you want now and what you want most.',
-'Progress, not perfection.',
-'Your future is created by what you do today.',
-'One task at a time. One day at a time.',
-'Success is the sum of small efforts repeated daily.',
-'Focus on the step in front of you, not the whole staircase.',
-'The secret of getting ahead is getting started.',
-'Consistency beats intensity.',
-'You are what you repeatedly do.',
-'Every action is a vote for the person you want to become.',
-'Don’t break the chain.',
-'Do it now. Sometimes later becomes never.'
-];
-
-let tasks=[];
-
-let selectedDate=new Date();
-
-let calCurrent=new Date();
-
-let editingId=null;
-
-let timerSeconds=1500;
-
-let timerRunning=false;
-
-let timerInterval=null;
-
-const $=id=>document.getElementById(id);
-
-const today=()=>new Date();
-
-const key=d=>{
-d=new Date(d);
-
-return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+let appState = {
+  page:"home"
 };
 
-const same=(a,b)=>key(a)===key(b);
 
-const esc=s=>String(s??'').replace(
-/[&<>"']/g,
-c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
-}[c])
-);
+/* =========================================================
+   BASIC HELPERS
+   ========================================================= */
 
-function toast(m){
+function todayString(){
+  const d = new Date();
 
-$('toast').textContent=m;
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
 
-$('toast').classList.add('show');
-
-clearTimeout(toast.t);
-
-toast.t=setTimeout(
-()=>$('toast').classList.remove('show'),
-2200
-);
-
+  return `${y}-${m}-${day}`;
 }
 
-function normalize(raw){
 
-return {
-...raw,
-id:String(raw.id??(Date.now()+Math.random())),
-text:String(
-raw.text??
-raw.title??
-raw.name??
-raw.task??
-''
-),
-type:raw.type??raw.category??'daily',
-completed:!!raw.completed,
-inProgress:!!raw.inProgress,
-createdAt:raw.createdAt??new Date().toISOString(),
-scheduledDate:raw.scheduledDate??raw.date??'',
-priority:raw.priority??'medium',
-notes:raw.notes??'',
-updatedAt:
-raw.updatedAt??
-raw.createdAt??
-new Date().toISOString()
-};
-
+function uid(){
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,9);
 }
+
+
+function escapeHTML(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function showToast(message){
+  const el = document.getElementById("toast");
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(()=>{
+    el.classList.remove("show");
+  },2500);
+}
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
 
 function loadTasks(){
 
-try{
+  try{
 
-let raw=localStorage.getItem(STORAGE_KEY);
+    let raw = localStorage.getItem(TASK_KEY);
 
-if(!raw)
-raw=localStorage.getItem(OLD_KEY);
+    if(!raw){
+      raw = localStorage.getItem(OLD_TASK_KEY);
+    }
 
-const arr=raw?JSON.parse(raw):[];
+    if(!raw){
+      tasks = [];
+      return;
+    }
 
-return Array.isArray(arr)
-?arr.map(normalize).filter(t=>t.text)
-:[];
+    const parsed = JSON.parse(raw);
 
-}catch(e){
+    if(!Array.isArray(parsed)){
+      tasks = [];
+      return;
+    }
 
-return [];
+    tasks = parsed.map(t=>{
 
+      /*
+       * Flexible migration:
+       * preserves old fields while normalizing
+       * common names used by previous versions.
+       */
+
+      const normalized = {
+        ...t,
+
+        id:String(
+          t.id ??
+          uid()
+        ),
+
+        title:String(
+          t.title ??
+          t.text ??
+          t.name ??
+          t.task ??
+          ""
+        ),
+
+        category:String(
+          t.category ??
+          t.type ??
+          "Daily"
+        ),
+
+        completed:Boolean(
+          t.completed ??
+          t.done ??
+          false
+        ),
+
+        scheduledDate:
+          t.scheduledDate ??
+          t.date ??
+          "",
+
+        dueTime:
+          t.dueTime ??
+          t.time ??
+          "",
+
+        priority:
+          t.priority ??
+          "medium",
+
+        notes:
+          t.notes ??
+          "",
+
+        repeat:
+          t.repeat ??
+          "none",
+
+        createdAt:
+          t.createdAt ??
+          Date.now(),
+
+        updatedAt:
+          t.updatedAt ??
+          Date.now()
+      };
+
+      return normalized;
+    });
+
+    saveTasks();
+
+  }catch(error){
+
+    console.error(error);
+
+    tasks = [];
+
+    showToast(
+      "Your saved data could not be read. Check your backup before making changes."
+    );
+  }
 }
 
-}
 
 function saveTasks(){
 
-try{
+  try{
 
-localStorage.setItem(
-STORAGE_KEY,
-JSON.stringify(tasks)
-);
+    localStorage.setItem(
+      TASK_KEY,
+      JSON.stringify(tasks)
+    );
 
-}catch(e){
+  }catch(error){
 
-toast('Could not save on this device');
+    console.error(error);
 
+    showToast(
+      "Storage is unavailable. Export a backup if possible."
+    );
+  }
 }
 
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+function loadProfile(){
+
+  try{
+
+    const profile =
+      JSON.parse(
+        localStorage.getItem(PROFILE_KEY) || "null"
+      );
+
+    if(profile){
+      updateProfileUI(profile);
+    }
+
+  }catch(e){}
 }
 
-function visibleTasks(){
 
-const q=$('searchInput')
-.value
-.trim()
-.toLowerCase();
+function getProfile(){
 
-const status=$('statusFilter').value;
+  try{
 
-const sort=$('sortSelect').value;
+    return JSON.parse(
+      localStorage.getItem(PROFILE_KEY) || "null"
+    );
 
-let arr=tasks.filter(
-t=>!q||
-`${t.text} ${t.notes}`
-.toLowerCase()
-.includes(q)
-);
+  }catch(e){
 
-if(status==='completed')
-arr=arr.filter(t=>t.completed);
-
-if(status==='progress')
-arr=arr.filter(
-t=>t.inProgress&&!t.completed
-);
-
-if(status==='pending')
-arr=arr.filter(
-t=>!t.completed&&!t.inProgress
-);
-
-if(sort==='oldest')
-arr.sort(
-(a,b)=>new Date(a.createdAt)-new Date(b.createdAt)
-);
-
-else if(sort==='alphabetical')
-arr.sort(
-(a,b)=>a.text.localeCompare(b.text)
-);
-
-else if(sort==='priority'){
-
-const p={
-high:0,
-medium:1,
-low:2
-};
-
-arr.sort(
-(a,b)=>
-(p[a.priority]??1)-
-(p[b.priority]??1)
-);
-
+    return null;
+  }
 }
 
-else{
 
-arr.sort(
-(a,b)=>
-new Date(b.createdAt)-
-new Date(a.createdAt)
-);
+function updateProfileUI(profile){
 
+  const name =
+    profile?.name ||
+    "Tsega";
+
+  const initial =
+    name.trim().charAt(0).toUpperCase() ||
+    "T";
+
+  document.getElementById("profileButton").textContent =
+    initial;
+
+  document.getElementById("profileAvatar").textContent =
+    initial;
+
+  document.getElementById("profileDisplayName").textContent =
+    name;
+
+  document.getElementById("profileNameInput").value =
+    name;
 }
 
-return arr;
 
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+function getAuth(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(AUTH_KEY) || "null"
+    );
+
+  }catch(e){
+
+    return null;
+  }
 }
 
-function taskMatchesDate(t,d){
 
-/*
-IMPORTANT:
-Old tasks without a scheduledDate remain visible.
-New tasks are date-aware.
-*/
+async function hashPIN(pin){
 
-return !t.scheduledDate ||
-t.scheduledDate===key(d);
+  /*
+   * SHA-256 is used where Web Crypto is available.
+   * The PIN itself is not stored.
+   */
 
+  if(window.crypto?.subtle){
+
+    const data =
+      new TextEncoder().encode(pin);
+
+    const hash =
+      await crypto.subtle.digest(
+        "SHA-256",
+        data
+      );
+
+    return Array.from(
+      new Uint8Array(hash)
+    )
+    .map(b=>b.toString(16).padStart(2,"0"))
+    .join("");
+  }
+
+  /*
+   * Lightweight fallback.
+   */
+
+  let h = 2166136261;
+
+  for(let i=0;i<pin.length;i++){
+
+    h ^= pin.charCodeAt(i);
+    h +=
+      (h<<1) +
+      (h<<4) +
+      (h<<7) +
+      (h<<8) +
+      (h<<24);
+  }
+
+  return (h >>> 0).toString(16);
 }
 
-function renderTask(t){
 
-const d=document.createElement('div');
+function passwordStrength(pin){
 
-d.className='task'+
-(t.completed?' done':'');
+  if(!pin) return 0;
 
-const dateText=t.scheduledDate
-?new Date(
-t.scheduledDate+'T12:00:00'
-).toLocaleDateString(
-'en-US',
-{
-month:'short',
-day:'numeric'
-}
-)
-:'No date';
+  let score = 0;
 
-d.innerHTML=`
+  if(pin.length >= 4) score++;
+  if(pin.length >= 6) score++;
+  if(pin.length >= 8) score++;
+  if(pin.length >= 10) score++;
 
-<button
-class="check ${t.completed?'checked':''}"
-data-action="complete"
-data-id="${esc(t.id)}"
-aria-label="Complete task">
-${t.completed?'✓':''}
-</button>
-
-<div class="task-main">
-
-<div class="task-title">
-${esc(t.text)}
-</div>
-
-<div class="task-meta">
-
-<span class="pill">
-${esc(dateText)}
-</span>
-
-<span class="pill priority-${esc(t.priority)}">
-${esc(t.priority)} priority
-</span>
-
-${
-t.inProgress&&!t.completed
-?'<span class="pill active">active</span>'
-:''
+  return Math.min(score,4);
 }
 
-</div>
 
-${
-t.notes
-?`
-<div style="
-font-size:10px;
-color:var(--muted);
-margin-top:6px">
-${esc(t.notes)}
-</div>
-`
-:''
+function updateStrength(){
+
+  const pin =
+    document.getElementById("setupPin").value;
+
+  const bar =
+    document.getElementById("strengthBar");
+
+  const score =
+    passwordStrength(pin);
+
+  const widths =
+    ["0%","25%","50%","75%","100%"];
+
+  bar.style.width =
+    widths[score];
+
+  if(score === 0){
+    bar.style.background = "#332b3d";
+  }else if(score <= 2){
+    bar.style.background = "#f5c451";
+  }else if(score === 3){
+    bar.style.background = "#8b5cf6";
+  }else{
+    bar.style.background = "#39d98a";
+  }
 }
 
-</div>
 
-<div class="actions">
+function togglePassword(id,button){
 
-<button
-class="task-action"
-data-action="edit"
-data-id="${esc(t.id)}"
-aria-label="Edit">
-✎
-</button>
+  const input =
+    document.getElementById(id);
 
-<button
-class="task-action"
-data-action="progress"
-data-id="${esc(t.id)}"
-aria-label="Toggle progress">
-▶
-</button>
+  if(input.type === "password"){
 
-<button
-class="task-action delete"
-data-action="delete"
-data-id="${esc(t.id)}"
-aria-label="Delete">
-×
-</button>
+    input.type = "text";
+    button.textContent = "◌";
 
-</div>
-`;
+  }else{
 
-return d;
-
+    input.type = "password";
+    button.textContent = "◉";
+  }
 }
 
-function list(id,arr,msg){
 
-const el=$(id);
+async function createSecurity(){
 
-el.innerHTML='';
+  const name =
+    document.getElementById("setupName").value.trim();
 
-if(!arr.length){
+  const pin =
+    document.getElementById("setupPin").value;
 
-el.innerHTML=
-`<div class="empty">${msg}</div>`;
+  const confirm =
+    document.getElementById("setupPinConfirm").value;
 
-return;
+  if(!name){
 
+    showToast("Please enter your name.");
+    return;
+  }
+
+  if(!/^[0-9]{4,12}$/.test(pin)){
+
+    showToast(
+      "Your PIN must contain 4–12 digits."
+    );
+
+    return;
+  }
+
+  if(pin !== confirm){
+
+    showToast(
+      "The PINs do not match."
+    );
+
+    return;
+  }
+
+  const hash =
+    await hashPIN(pin);
+
+  localStorage.setItem(
+    AUTH_KEY,
+    JSON.stringify({
+      pinHash:hash,
+      biometricId:null,
+      createdAt:Date.now()
+    })
+  );
+
+  localStorage.setItem(
+    PROFILE_KEY,
+    JSON.stringify({
+      name:name,
+      createdAt:Date.now()
+    })
+  );
+
+  updateProfileUI({
+    name:name
+  });
+
+  enterApp();
+
+  showToast(
+    "Your secure access has been created."
+  );
 }
 
-arr.forEach(
-t=>el.appendChild(renderTask(t))
-);
 
+async function unlockWithPin(){
+
+  const pin =
+    document.getElementById("loginPin").value;
+
+  if(!pin){
+
+    showToast("Enter your PIN.");
+    return;
+  }
+
+  const auth = getAuth();
+
+  if(!auth){
+
+    showSetup();
+    return;
+  }
+
+  const hash =
+    await hashPIN(pin);
+
+  if(hash !== auth.pinHash){
+
+    showToast(
+      "Incorrect PIN. Please try again."
+    );
+
+    document.getElementById("loginPin").value = "";
+
+    return;
+  }
+
+  enterApp();
 }
 
-function renderAll(){
 
-const v=visibleTasks();
+function showSetup(){
 
-const daily=v.filter(
-t=>t.type==='daily'&&
-taskMatchesDate(t,selectedDate)
-);
+  document.getElementById("authScreen").style.display =
+    "flex";
 
-const monthly=v.filter(
-t=>t.type==='monthly'&&
-taskMatchesDate(t,selectedDate)
-);
+  document.getElementById("setupFields").style.display =
+    "block";
 
-const yearly=v.filter(
-t=>t.type==='yearly'&&
-taskMatchesDate(t,selectedDate)
-);
+  document.getElementById("loginFields").style.display =
+    "none";
 
-const todo=v.filter(
-t=>t.type==='todo'&&
-taskMatchesDate(t,selectedDate)
-);
+  document.getElementById("authTitle").textContent =
+    "Secure your tracker";
 
-const avoid=v.filter(
-t=>t.type==='not-to-do'&&
-taskMatchesDate(t,selectedDate)
-);
+  document.getElementById("authSubtitle").textContent =
+    "Create your secure access PIN. You can enable biometric authentication after setup.";
+}
 
-list(
-'list-daily',
-daily,
-'No daily plans for this date. Add one above.'
-);
 
-list(
-'list-monthly',
-monthly,
-'No monthly plans for this date.'
-);
+async function showLogin(){
 
-list(
-'list-yearly',
-yearly,
-'No yearly plans for this date.'
-);
+  document.getElementById("authScreen").style.display =
+    "flex";
 
-list(
-'list-todo',
-todo,
-'No to-do items for this date.'
-);
+  document.getElementById("setupFields").style.display =
+    "none";
 
-list(
-'list-not-to-do',
-avoid,
-'No things to avoid for this date.'
-);
+  document.getElementById("loginFields").style.display =
+    "block";
 
-list(
-'list-completed',
-v.filter(t=>t.completed),
-'Nothing completed yet.'
-);
+  document.getElementById("authTitle").textContent =
+    "Welcome back";
 
-list(
-'list-progress',
-v.filter(t=>t.inProgress&&!t.completed),
-'Nothing currently active.'
-);
+  const profile = getProfile();
 
-[
-'daily',
-'monthly',
-'yearly',
-'todo',
-'not-to-do'
-].forEach(x=>{
+  document.getElementById("authSubtitle").textContent =
+    `Enter your PIN or use biometric authentication to continue${profile?.name ? ", " + profile.name : ""}.`;
 
-document.querySelector(
-`[data-count="${x}"]`
-).textContent=
-({
-'daily':daily.length,
-'monthly':monthly.length,
-'yearly':yearly.length,
-'todo':todo.length,
-'not-to-do':avoid.length
-}[x]);
+  if(
+    window.PublicKeyCredential &&
+    getAuth()?.biometricId
+  ){
+
+    document.getElementById(
+      "biometricLoginButton"
+    ).style.display = "block";
+
+  }
+}
+
+
+function enterApp(){
+
+  document.getElementById("authScreen").style.display =
+    "none";
+
+  document.getElementById("app").style.display =
+    "block";
+
+  loadProfile();
+  renderAll();
+
+  lastActivity = Date.now();
+}
+
+
+/* =========================================================
+   BIOMETRIC / DEVICE AUTHENTICATION
+   ========================================================= */
+
+function randomBytes(length=32){
+
+  const bytes =
+    new Uint8Array(length);
+
+  crypto.getRandomValues(bytes);
+
+  return bytes;
+}
+
+
+function bufferToBase64(buffer){
+
+  const bytes =
+    new Uint8Array(buffer);
+
+  let binary = "";
+
+  bytes.forEach(b=>{
+    binary += String.fromCharCode(b);
+  });
+
+  return btoa(binary);
+}
+
+
+function base64ToBuffer(base64){
+
+  const binary =
+    atob(base64);
+
+  const bytes =
+    new Uint8Array(binary.length);
+
+  for(let i=0;i<binary.length;i++){
+    bytes[i] =
+      binary.charCodeAt(i);
+  }
+
+  return bytes.buffer;
+}
+
+
+async function setupBiometric(){
+
+  if(!window.isSecureContext){
+
+    showToast(
+      "Biometric authentication requires a secure HTTPS app."
+    );
+
+    return;
+  }
+
+  if(!window.PublicKeyCredential){
+
+    showToast(
+      "This browser does not support device biometrics here."
+    );
+
+    return;
+  }
+
+  try{
+
+    const challenge =
+      randomBytes(32);
+
+    const userId =
+      randomBytes(16);
+
+    const credential =
+      await navigator.credentials.create({
+
+        publicKey:{
+
+          challenge:challenge,
+
+          rp:{
+            name:"Tsega Habit Tracker"
+          },
+
+          user:{
+            id:userId,
+            name:"tsega",
+            displayName:
+              getProfile()?.name ||
+              "Tsega"
+          },
+
+          pubKeyCredParams:[
+            {
+              type:"public-key",
+              alg:-7
+            },
+            {
+              type:"public-key",
+              alg:-257
+            }
+          ],
+
+          authenticatorSelection:{
+            authenticatorAttachment:"platform",
+            userVerification:"required",
+            residentKey:"preferred"
+          },
+
+          timeout:60000,
+
+          attestation:"none"
+        }
+
+      });
+
+    if(!credential){
+
+      throw new Error(
+        "No credential returned."
+      );
+    }
+
+    const auth = getAuth();
+
+    auth.biometricId =
+      bufferToBase64(
+        credential.rawId
+      );
+
+    localStorage.setItem(
+      AUTH_KEY,
+      JSON.stringify(auth)
+    );
+
+    showToast(
+      "Biometric unlock has been enabled."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Biometric setup was cancelled or is unavailable."
+    );
+  }
+}
+
+
+async function unlockWithBiometric(){
+
+  const auth = getAuth();
+
+  if(!auth?.biometricId){
+
+    showToast(
+      "Biometric unlock has not been enabled."
+    );
+
+    return;
+  }
+
+  try{
+
+    const credential =
+      await navigator.credentials.get({
+
+        publicKey:{
+
+          challenge:
+            randomBytes(32),
+
+          allowCredentials:[
+            {
+              id:
+                base64ToBuffer(
+                  auth.biometricId
+                ),
+              type:"public-key"
+            }
+          ],
+
+          userVerification:"required",
+
+          timeout:60000
+        }
+
+      });
+
+    if(credential){
+
+      enterApp();
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Biometric verification was not completed."
+    );
+  }
+}
+
+
+/* =========================================================
+   LOCK
+   ========================================================= */
+
+function lockApp(){
+
+  if(
+    document.getElementById("app").style.display !==
+    "block"
+  ){
+
+    return;
+  }
+
+  document.getElementById("app").style.display =
+    "none";
+
+  showLogin();
+
+  document.getElementById("loginPin").value = "";
+
+  showToast("Tracker locked.");
+}
+
+
+function recordActivity(){
+
+  lastActivity = Date.now();
+}
+
+
+["click","touchstart","keydown","scroll"].forEach(event=>{
+
+  document.addEventListener(
+    event,
+    recordActivity,
+    {passive:true}
+  );
 
 });
 
-updateStats();
 
-renderCalendar();
+setInterval(()=>{
 
-updatePlanLabel();
+  if(
+    document.getElementById("app").style.display ===
+    "block"
+  ){
 
+    /*
+     * 15 minute inactivity lock.
+     */
+
+    if(Date.now() - lastActivity >
+       15 * 60 * 1000){
+
+      lockApp();
+    }
+  }
+
+},30000);
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function goTo(page){
+
+  const pages =
+    ["home","daily","calendar","insights","settings"];
+
+  if(!pages.includes(page)){
+    page = "home";
+  }
+
+  pages.forEach(p=>{
+
+    const element =
+      document.getElementById(p+"Page");
+
+    if(element){
+
+      element.classList.toggle(
+        "active",
+        p === page
+      );
+    }
+
+  });
+
+
+  document.querySelectorAll(
+    ".navButton"
+  ).forEach(button=>{
+
+    button.classList.toggle(
+      "active",
+      button.dataset.page === page
+    );
+
+  });
+
+
+  appState.page = page;
+
+  localStorage.setItem(
+    APP_STATE_KEY,
+    JSON.stringify(appState)
+  );
+
+
+  if(page === "daily"){
+    renderDaily();
+  }
+
+  if(page === "calendar"){
+    renderCalendar();
+  }
+
+  if(page === "insights"){
+    renderInsights();
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
-function updateStats(){
 
-const done=
-tasks.filter(t=>t.completed).length;
+/* =========================================================
+   DAILY PLAN
+   ========================================================= */
 
-const active=
-tasks.filter(
-t=>t.inProgress&&!t.completed
-).length;
+function setToday(){
 
-const pending=
-tasks.filter(
-t=>!t.completed&&!t.inProgress
-).length;
+  selectedDate =
+    todayString();
 
-const total=tasks.length;
+  document.getElementById(
+    "dailyDate"
+  ).value =
+    selectedDate;
 
-$('statCompleted').textContent=done;
-
-$('statProgress').textContent=active;
-
-$('statPending').textContent=pending;
-
-$('statRate').textContent=
-total
-?Math.round(done/total*100)+'%'
-:'0%';
-
-$('count-completed').textContent=
-tasks.filter(t=>t.completed).length;
-
-$('count-progress').textContent=active;
-
-$('progressText').textContent=
-`${done} of ${total} completed`;
-
-$('progressBar').style.width=
-(total?done/total*100:0)+'%';
-
-const td=tasks.filter(
-t=>t.scheduledDate===key(selectedDate)
-);
-
-$('insToday').textContent=td.length;
-
-$('insDone').textContent=
-td.filter(t=>t.completed).length;
-
-const streak=calcStreak();
-
-$('insStreak').textContent=
-streak.current+
-' day'+
-(streak.current===1?'':'s');
-
-$('insLongest').textContent=
-streak.longest+
-' days';
-
+  renderDaily();
 }
 
-function calcStreak(){
 
-const days=new Set(
-tasks
-.filter(t=>t.completed)
-.map(
-t=>key(t.scheduledDate||t.createdAt)
-)
-);
+function getTasksForDate(date){
 
-let current=0;
+  return tasks.filter(task=>{
 
-let d=new Date();
+    if(task.scheduledDate === date){
+      return true;
+    }
 
-while(days.has(key(d))){
+    /*
+     * Old tasks without a date remain visible today
+     * so older data is not silently lost.
+     */
 
-current++;
+    if(!task.scheduledDate &&
+       date === todayString()){
 
-d.setDate(
-d.getDate()-1
-);
+      return true;
+    }
 
+    return false;
+  });
 }
 
-let longest=0;
 
-let run=0;
+function renderDaily(){
 
-let sorted=[...days].sort();
+  const dateInput =
+    document.getElementById("dailyDate");
 
-let prev=null;
+  if(dateInput){
+    dateInput.value = selectedDate;
+  }
 
-for(const s of sorted){
+  const list =
+    document.getElementById("taskList");
 
-if(prev){
+  if(!list) return;
 
-const a=
-new Date(prev+'T12:00:00');
+  const dayTasks =
+    getTasksForDate(selectedDate);
 
-const b=
-new Date(s+'T12:00:00');
+  document.getElementById(
+    "dailyTitle"
+  ).textContent =
+    selectedDate === todayString()
+      ? "Today's tasks"
+      : formatDate(selectedDate);
 
-if(
-(b-a)/86400000===1
-)
-run++;
-else
-run=1;
+  document.getElementById(
+    "dailyCount"
+  ).textContent =
+    `${dayTasks.length} task${dayTasks.length===1?"":"s"}`;
 
-}else{
 
-run=1;
+  if(dayTasks.length === 0){
 
+    list.innerHTML = `
+      <div class="empty">
+        <div style="font-size:32px;margin-bottom:10px">
+          ✓
+        </div>
+
+        <strong>
+          No tasks planned for this day
+        </strong>
+
+        <div style="margin-top:6px">
+          Add your next action and make the plan visible.
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  list.innerHTML =
+    dayTasks
+      .sort(sortTasks)
+      .map(renderTaskCard)
+      .join("");
 }
 
-longest=Math.max(
-longest,
-run
-);
 
-prev=s;
+function sortTasks(a,b){
 
+  if(a.completed !== b.completed){
+    return a.completed ? 1 : -1;
+  }
+
+  const priorityRank = {
+    high:0,
+    medium:1,
+    low:2
+  };
+
+  if(
+    priorityRank[a.priority] !==
+    priorityRank[b.priority]
+  ){
+
+    return priorityRank[a.priority] -
+           priorityRank[b.priority];
+  }
+
+  if(a.dueTime && b.dueTime){
+
+    return a.dueTime.localeCompare(
+      b.dueTime
+    );
+  }
+
+  return (a.createdAt || 0) -
+         (b.createdAt || 0);
 }
 
-return{
-current,
-longest
-};
 
+function renderTaskCard(task){
+
+  const priority =
+    task.priority || "medium";
+
+  const repeat =
+    task.repeat &&
+    task.repeat !== "none"
+      ? task.repeat
+      : "";
+
+  return `
+
+    <div
+      class="taskCard ${task.completed ? "taskDone":""}"
+      data-id="${escapeHTML(task.id)}">
+
+      <button
+        class="check ${task.completed ? "done":""}"
+        onclick="toggleTask('${escapeHTML(task.id)}')"
+        aria-label="Complete task">
+
+        ${task.completed ? "✓" : ""}
+
+      </button>
+
+
+      <div class="taskMain">
+
+        <div class="taskTitle">
+          ${escapeHTML(task.title)}
+        </div>
+
+
+        <div class="taskMeta">
+
+          <span class="tag">
+            ${escapeHTML(task.category)}
+          </span>
+
+          <span class="tag ${priority}">
+            ${priority.toUpperCase()}
+          </span>
+
+          ${
+            task.dueTime
+            ? `<span class="tag">◷ ${escapeHTML(task.dueTime)}</span>`
+            : ""
+          }
+
+          ${
+            repeat
+            ? `<span class="tag">↻ ${escapeHTML(repeat)}</span>`
+            : ""
+          }
+
+        </div>
+
+
+        ${
+          task.notes
+          ? `
+            <div style="
+              color:#82798e;
+              font-size:11px;
+              margin-top:8px;
+              line-height:1.45;
+            ">
+              ${escapeHTML(task.notes)}
+            </div>
+          `
+          : ""
+        }
+
+      </div>
+
+
+      <div class="taskActions">
+
+        <button
+          class="iconButton"
+          onclick="editTask('${escapeHTML(task.id)}')"
+          title="Edit">
+          ✎
+        </button>
+
+        <button
+          class="iconButton"
+          onclick="deleteTask('${escapeHTML(task.id)}')"
+          title="Delete">
+          ×
+        </button>
+
+      </div>
+
+    </div>
+  `;
 }
 
-function addTask(){
 
-const text=
-$('taskInput')
-.value
-.trim();
+/* =========================================================
+   TASK CREATION
+   ========================================================= */
 
-if(!text){
+function openAddTask(date=null){
 
-$('taskInput').focus();
+  editingTaskId = null;
 
-return;
+  document.getElementById(
+    "taskModalTitle"
+  ).textContent =
+    "Add task";
 
+
+  document.getElementById(
+    "taskTitle"
+  ).value = "";
+
+
+  document.getElementById(
+    "taskCategory"
+  ).value = "Daily";
+
+
+  document.getElementById(
+    "taskPriority"
+  ).value = "medium";
+
+
+  document.getElementById(
+    "taskDate"
+  ).value =
+    date ||
+    selectedDate ||
+    todayString();
+
+
+  document.getElementById(
+    "taskTime"
+  ).value = "";
+
+
+  document.getElementById(
+    "taskRepeat"
+  ).value = "none";
+
+
+  document.getElementById(
+    "taskNotes"
+  ).value = "";
+
+
+  openModal("taskModal");
+
+  setTimeout(()=>{
+    document.getElementById(
+      "taskTitle"
+    ).focus();
+  },100);
 }
 
-tasks.unshift(
-normalize({
-id:
-Date.now().toString(36)+
-Math.random()
-.toString(36)
-.slice(2,7),
 
-text,
+function openAddTaskForSelectedDate(){
 
-type:$('taskType').value,
+  const date =
+    formatDateInput(calendarDate);
 
-scheduledDate:
-$('taskDate').value||
-key(selectedDate),
-
-priority:'medium',
-
-completed:false,
-
-inProgress:false,
-
-createdAt:
-new Date().toISOString()
-})
-);
-
-saveTasks();
-
-$('taskInput').value='';
-
-renderAll();
-
-toast('Task added');
-
+  openAddTask(date);
 }
 
-function openEdit(id){
 
-const t=tasks.find(
-x=>x.id===id
-);
+function editTask(id){
 
-if(!t)return;
+  const task =
+    tasks.find(t=>String(t.id)===String(id));
 
-editingId=id;
+  if(!task) return;
 
-$('editText').value=t.text;
+  editingTaskId = task.id;
 
-$('editType').value=t.type;
+  document.getElementById(
+    "taskModalTitle"
+  ).textContent =
+    "Edit task";
 
-$('editDate').value=
-t.scheduledDate||'';
 
-$('editPriority').value=
-t.priority||'medium';
+  document.getElementById(
+    "taskTitle"
+  ).value =
+    task.title || "";
 
-$('editNotes').value=
-t.notes||'';
 
-$('editModal')
-.classList.add('open');
+  document.getElementById(
+    "taskCategory"
+  ).value =
+    task.category || "Daily";
 
-setTimeout(
-()=>$('editText').focus(),
-80
-);
 
+  document.getElementById(
+    "taskPriority"
+  ).value =
+    task.priority || "medium";
+
+
+  document.getElementById(
+    "taskDate"
+  ).value =
+    task.scheduledDate ||
+    todayString();
+
+
+  document.getElementById(
+    "taskTime"
+  ).value =
+    task.dueTime || "";
+
+
+  document.getElementById(
+    "taskRepeat"
+  ).value =
+    task.repeat || "none";
+
+
+  document.getElementById(
+    "taskNotes"
+  ).value =
+    task.notes || "";
+
+
+  openModal("taskModal");
 }
 
-function taskClick(e){
 
-const b=
-e.target.closest('[data-action]');
+function saveTask(){
 
-if(!b)return;
+  const title =
+    document.getElementById(
+      "taskTitle"
+    ).value.trim();
 
-const id=b.dataset.id;
+  if(!title){
 
-const act=b.dataset.action;
+    showToast(
+      "Please enter a task."
+    );
 
-if(act==='complete'){
+    return;
+  }
 
-tasks=tasks.map(
-t=>t.id===id
-?{
-...t,
-completed:!t.completed,
-inProgress:false,
-updatedAt:new Date().toISOString()
+
+  const data = {
+
+    title:title,
+
+    category:
+      document.getElementById(
+        "taskCategory"
+      ).value,
+
+    priority:
+      document.getElementById(
+        "taskPriority"
+      ).value,
+
+    scheduledDate:
+      document.getElementById(
+        "taskDate"
+      ).value ||
+      todayString(),
+
+    dueTime:
+      document.getElementById(
+        "taskTime"
+      ).value,
+
+    repeat:
+      document.getElementById(
+        "taskRepeat"
+      ).value,
+
+    notes:
+      document.getElementById(
+        "taskNotes"
+      ).value.trim(),
+
+    updatedAt:Date.now()
+  };
+
+
+  if(editingTaskId){
+
+    const index =
+      tasks.findIndex(
+        t=>String(t.id) ===
+           String(editingTaskId)
+      );
+
+    if(index !== -1){
+
+      tasks[index] = {
+        ...tasks[index],
+        ...data
+      };
+
+    }
+
+    showToast("Task updated.");
+
+  }else{
+
+    tasks.push({
+
+      id:uid(),
+
+      ...data,
+
+      completed:false,
+
+      createdAt:Date.now()
+
+    });
+
+    showToast("Task added to your plan.");
+  }
+
+
+  saveTasks();
+
+  closeModal("taskModal");
+
+  renderAll();
 }
-:t
-);
 
+
+function toggleTask(id){
+
+  const task =
+    tasks.find(
+      t=>String(t.id) === String(id)
+    );
+
+  if(!task) return;
+
+  task.completed =
+    !task.completed;
+
+  task.updatedAt =
+    Date.now();
+
+  saveTasks();
+
+  renderAll();
+
+  showToast(
+    task.completed
+      ? "Task completed."
+      : "Task marked incomplete."
+  );
 }
 
-else if(act==='progress'){
 
-tasks=tasks.map(
-t=>
-t.id===id&&!t.completed
-?{
-...t,
-inProgress:!t.inProgress,
-updatedAt:new Date().toISOString()
-}
-:t
-);
+function deleteTask(id){
 
-}
+  const task =
+    tasks.find(
+      t=>String(t.id) === String(id)
+    );
 
-else if(act==='delete'){
+  if(!task) return;
 
-tasks=
-tasks.filter(
-t=>t.id!==id
-);
+  if(!confirm(
+    `Delete "${task.title}"?`
+  )){
 
-toast('Task deleted');
+    return;
+  }
 
-}
+  tasks =
+    tasks.filter(
+      t=>String(t.id) !== String(id)
+    );
 
-else if(act==='edit'){
+  saveTasks();
 
-openEdit(id);
+  renderAll();
 
-return;
-
+  showToast("Task deleted.");
 }
 
-saveTasks();
 
-renderAll();
+/* =========================================================
+   CALENDAR
+   ========================================================= */
 
+function formatDateInput(date){
+
+  const y =
+    date.getFullYear();
+
+  const m =
+    String(date.getMonth()+1)
+      .padStart(2,"0");
+
+  const d =
+    String(date.getDate())
+      .padStart(2,"0");
+
+  return `${y}-${m}-${d}`;
 }
 
-function updatePlanLabel(){
 
-$('selectedDateLabel')
-.textContent=
-same(selectedDate,today())
-?'Today’s plan'
-:selectedDate.toLocaleDateString(
-'en-US',
-{
-weekday:'short',
-month:'short',
-day:'numeric',
-year:'numeric'
+function formatDate(dateString){
+
+  if(!dateString){
+    return "";
+  }
+
+  const d =
+    new Date(
+      dateString + "T00:00:00"
+    );
+
+  return d.toLocaleDateString(
+    undefined,
+    {
+      weekday:"long",
+      month:"long",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
 }
-)+' plan';
 
-$('planHint').textContent=
-`${tasks.filter(
-t=>t.scheduledDate===key(selectedDate)
-).length} scheduled task(s)`;
 
+function changeMonth(amount){
+
+  calendarDate =
+    new Date(
+      calendarDate.getFullYear(),
+      calendarDate.getMonth()+amount,
+      1
+    );
+
+  renderCalendar();
 }
+
 
 function renderCalendar(){
 
-const y=calCurrent.getFullYear();
+  const grid =
+    document.getElementById(
+      "calendarGrid"
+    );
 
-const m=calCurrent.getMonth();
+  if(!grid) return;
 
-const first=new Date(
-y,m,1
-);
+  const year =
+    calendarDate.getFullYear();
 
-const start=first.getDay();
+  const month =
+    calendarDate.getMonth();
 
-const days=
-new Date(
-y,m+1,0
-).getDate();
 
-$('calTitle').textContent=
-calCurrent.toLocaleDateString(
-'en-US',
-{
-month:'long',
-year:'numeric'
-}
-);
+  document.getElementById(
+    "calendarMonth"
+  ).textContent =
+    calendarDate.toLocaleDateString(
+      undefined,
+      {
+        month:"long",
+        year:"numeric"
+      }
+    );
 
-const el=$('calDays');
 
-el.innerHTML='';
+  const first =
+    new Date(year,month,1);
 
-for(
-let i=0;
-i<start;
-i++
-){
+  const start =
+    first.getDay();
 
-const x=
-document.createElement('button');
+  const daysInMonth =
+    new Date(
+      year,
+      month+1,
+      0
+    ).getDate();
 
-x.className='day other';
 
-x.textContent=
-new Date(
-y,m,i-start+1
-).getDate();
+  const previousDays =
+    new Date(
+      year,
+      month,
+      0
+    ).getDate();
 
-x.disabled=true;
 
-el.appendChild(x);
+  let html = "";
 
-}
 
-for(
-let n=1;
-n<=days;
-n++
-){
+  const names =
+    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-const d=
-new Date(y,m,n);
 
-const b=
-document.createElement('button');
+  names.forEach(name=>{
 
-b.className=
-'day'+
-(same(d,today())
-?' today'
-:'')+
-(same(d,selectedDate)
-?' selected'
-:'');
+    html += `
+      <div class="dayName">
+        ${name}
+      </div>
+    `;
 
-if(
-tasks.some(
-t=>t.scheduledDate===key(d)
-)
-)
-b.classList.add('has');
+  });
 
-b.textContent=n;
 
-b.onclick=()=>{
+  for(let i=0;i<42;i++){
 
-selectedDate=d;
+    let day =
+      i - start + 1;
 
-$('taskDate').value=
-key(d);
+    let cellDate;
+    let other = false;
 
-renderAll();
+    if(day < 1){
 
-};
+      day =
+        previousDays + day;
 
-el.appendChild(b);
+      cellDate =
+        new Date(
+          year,
+          month-1,
+          day
+        );
 
-}
+      other = true;
 
-const total=start+days;
+    }else if(day > daysInMonth){
 
-for(
-let i=total;
-i<Math.ceil(total/7)*7;
-i++
-){
+      day =
+        day - daysInMonth;
 
-const x=
-document.createElement('button');
+      cellDate =
+        new Date(
+          year,
+          month+1,
+          day
+        );
 
-x.className='day other';
+      other = true;
 
-x.textContent=
-i-total+1;
+    }else{
 
-x.disabled=true;
+      cellDate =
+        new Date(
+          year,
+          month,
+          day
+        );
+    }
 
-el.appendChild(x);
 
-}
+    const dateString =
+      formatDateInput(cellDate);
 
-const st=
-tasks.filter(
-t=>t.scheduledDate===
-key(selectedDate)
-);
 
-$('calSelected').innerHTML=
-`
-<strong>
-${esc(
-selectedDate.toLocaleDateString(
-'en-US',
-{
-weekday:'long',
-month:'long',
-day:'numeric'
-}
-)
-)}
-</strong>
+    const hasTasks =
+      tasks.some(
+        task =>
+          task.scheduledDate ===
+          dateString
+      );
 
-${
-st.length
-?st.slice(0,8).map(
-t=>
-`
-<div class="selected-task">
-<span>${esc(t.text)}</span>
-<span>${t.completed?'✓':'•'}</span>
-</div>
-`
-).join('')
-:'<div style="margin-top:8px;color:var(--muted)">No scheduled tasks.</div>'
-}
-`;
 
-}
+    const isToday =
+      dateString ===
+      todayString();
 
-function exportBackup(){
 
-const payload={
-app:'Tsega Habit Tracker',
-version:4,
-exportedAt:new Date().toISOString(),
-tasks,
-spiritual:
-JSON.parse(
-localStorage.getItem(SPIRIT_KEY)||'{}'
-)
-};
+    const isSelected =
+      dateString ===
+      formatDateInput(calendarDate) &&
+      !other;
 
-const a=
-document.createElement('a');
 
-const u=
-URL.createObjectURL(
-new Blob(
-[
-JSON.stringify(
-payload,
-null,
-2
-)
-],
-{
-type:'application/json'
-}
-)
-);
+    html += `
 
-a.href=u;
+      <button
+        class="
+          calendarDay
+          ${other ? "other":""}
+          ${isToday ? "today":""}
+          ${isSelected ? "selected":""}
+        "
+        onclick="selectCalendarDate('${dateString}')">
 
-a.download=
-`tsega-habit-backup-${key(today())}.json`;
+        <div class="dayNumber">
+          ${day}
+        </div>
 
-document.body.appendChild(a);
+        ${
+          hasTasks
+          ? `<div class="dayDot"></div>`
+          : ""
+        }
 
-a.click();
+      </button>
 
-a.remove();
+    `;
+  }
 
-URL.revokeObjectURL(u);
 
-toast('Backup exported');
+  grid.innerHTML = html;
 
+  renderCalendarDayTasks();
 }
 
-function importBackup(file){
 
-const r=new FileReader();
+function selectCalendarDate(dateString){
 
-r.onload=()=>{
+  calendarDate =
+    new Date(
+      dateString + "T00:00:00"
+    );
 
-try{
+  selectedDate =
+    dateString;
 
-const d=
-JSON.parse(r.result);
-
-const incoming=
-Array.isArray(d)
-?d
-:d.tasks;
-
-if(!Array.isArray(incoming))
-throw 0;
-
-if(
-!confirm(
-'Replace current tasks with this backup?'
-)
-)
-return;
-
-tasks=
-incoming.map(normalize);
-
-saveTasks();
-
-if(d.spiritual)
-localStorage.setItem(
-SPIRIT_KEY,
-JSON.stringify(d.spiritual)
-);
-
-loadSpiritual();
-
-renderAll();
-
-toast('Backup restored');
-
-}catch(e){
-
-toast('Invalid backup file');
-
+  renderCalendar();
 }
 
-};
 
-r.readAsText(file);
+function renderCalendarDayTasks(){
 
+  const date =
+    formatDateInput(calendarDate);
+
+  const tasksForDay =
+    getTasksForDate(date);
+
+
+  document.getElementById(
+    "calendarSelectedTitle"
+  ).textContent =
+    formatDate(date);
+
+
+  const box =
+    document.getElementById(
+      "calendarDayTasks"
+    );
+
+
+  if(!tasksForDay.length){
+
+    box.innerHTML = `
+      <div class="empty">
+        No tasks scheduled.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  box.innerHTML =
+    `
+      <div class="taskList">
+        ${
+          tasksForDay
+            .sort(sortTasks)
+            .map(renderTaskCard)
+            .join("")
+        }
+      </div>
+    `;
 }
 
-function loadSpiritual(){
 
-try{
+/* =========================================================
+   INSIGHTS
+   ========================================================= */
 
-const s=
-JSON.parse(
-localStorage.getItem(
-SPIRIT_KEY
-)||'{}'
-);
+function getCompletionRate(){
 
-$('dailyBibleVerse').value=
-s.bibleVerse||'';
+  if(!tasks.length){
+    return 0;
+  }
 
-$('positiveWords').value=
-s.positiveWords||'';
+  const completed =
+    tasks.filter(
+      t=>t.completed
+    ).length;
 
-}catch(e){}
-
+  return Math.round(
+    completed / tasks.length * 100
+  );
 }
 
-function saveSpiritual(){
 
-localStorage.setItem(
-SPIRIT_KEY,
-JSON.stringify({
-bibleVerse:
-$('dailyBibleVerse').value,
+function getStreak(){
 
-positiveWords:
-$('positiveWords').value,
+  const days = new Set(
+    tasks
+      .filter(t=>t.completed)
+      .map(t=>t.scheduledDate)
+      .filter(Boolean)
+  );
 
-updatedAt:
-new Date().toISOString()
-})
-);
 
+  let streak = 0;
+
+  let date =
+    new Date(
+      todayString() + "T00:00:00"
+    );
+
+
+  while(true){
+
+    const key =
+      formatDateInput(date);
+
+    if(!days.has(key)){
+      break;
+    }
+
+    streak++;
+
+    date.setDate(
+      date.getDate()-1
+    );
+  }
+
+
+  return streak;
 }
 
-async function hashPin(pin){
 
-if(
-window.crypto?.subtle
-){
+function getBestStreak(){
 
-const data=
-new TextEncoder()
-.encode(pin);
+  const days =
+    [...new Set(
+      tasks
+        .filter(t=>t.completed)
+        .map(t=>t.scheduledDate)
+        .filter(Boolean)
+    )]
+    .sort();
 
-const buf=
-await crypto.subtle.digest(
-'SHA-256',
-data
-);
 
-return[
-...new Uint8Array(buf)
-]
-.map(
-b=>b.toString(16).padStart(2,'0')
-)
-.join('');
+  if(!days.length){
+    return 0;
+  }
 
+
+  let best = 1;
+  let current = 1;
+
+
+  for(let i=1;i<days.length;i++){
+
+    const previous =
+      new Date(
+        days[i-1] + "T00:00:00"
+      );
+
+    const currentDate =
+      new Date(
+        days[i] + "T00:00:00"
+      );
+
+
+    const diff =
+      Math.round(
+        (currentDate - previous) /
+        86400000
+      );
+
+
+    if(diff === 1){
+
+      current++;
+
+      best =
+        Math.max(
+          best,
+          current
+        );
+
+    }else{
+
+      current = 1;
+    }
+  }
+
+
+  return best;
 }
 
-let h=2166136261;
 
-for(
-let i=0;
-i<pin.length;
-i++
-){
+function renderInsights(){
 
-h^=pin.charCodeAt(i);
+  const rate =
+    getCompletionRate();
 
-h=Math.imul(
-h,
-16777619
-);
 
+  document.getElementById(
+    "insightCompletion"
+  ).textContent =
+    rate + "%";
+
+
+  document.getElementById(
+    "insightCompletionLabel"
+  ).textContent =
+    rate + "%";
+
+
+  document.getElementById(
+    "insightCompletionBar"
+  ).style.width =
+    rate + "%";
+
+
+  document.getElementById(
+    "insightBestStreak"
+  ).textContent =
+    getBestStreak();
+
+
+  document.getElementById(
+    "insightTotalCompleted"
+  ).textContent =
+    tasks.filter(
+      t=>t.completed
+    ).length;
+
+
+  const categories = {};
+
+  tasks.forEach(task=>{
+
+    const category =
+      task.category ||
+      "Daily";
+
+    categories[category] =
+      (categories[category] || 0) + 1;
+
+  });
+
+
+  const categoryBox =
+    document.getElementById(
+      "categoryBars"
+    );
+
+
+  const maxCategory =
+    Math.max(
+      ...Object.values(categories),
+      1
+    );
+
+
+  categoryBox.innerHTML =
+    Object.entries(categories)
+      .map(([name,count])=>{
+
+        const width =
+          Math.round(
+            count/maxCategory*100
+          );
+
+        return `
+
+          <div class="barRow">
+
+            <div class="barLabel">
+              <span>
+                ${escapeHTML(name)}
+              </span>
+
+              <span>
+                ${count}
+              </span>
+            </div>
+
+            <div class="bar">
+              <span
+                style="width:${width}%">
+              </span>
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("") ||
+      `<div class="empty">No data yet.</div>`;
+
+
+  const priorities = {
+    high:0,
+    medium:0,
+    low:0
+  };
+
+
+  tasks.forEach(task=>{
+
+    const p =
+      task.priority || "medium";
+
+    if(priorities[p] !== undefined){
+      priorities[p]++;
+    }
+
+  });
+
+
+  document.getElementById(
+    "priorityStats"
+  ).innerHTML = Object.entries(
+    priorities
+  ).map(([name,count])=>`
+
+    <div class="settingItem">
+
+      <div>
+        <h3>
+          ${name.toUpperCase()}
+        </h3>
+      </div>
+
+      <span class="tag ${name}">
+        ${count}
+      </span>
+
+    </div>
+
+  `).join("");
 }
 
-return 'fallback-'+
-(h>>>0).toString(16);
 
+/* =========================================================
+   HOME
+   ========================================================= */
+
+function renderHome(){
+
+  const todayTasks =
+    getTasksForDate(
+      todayString()
+    );
+
+
+  const completed =
+    todayTasks.filter(
+      t=>t.completed
+    ).length;
+
+
+  const total =
+    todayTasks.length;
+
+
+  const percentage =
+    total
+      ? Math.round(
+          completed / total * 100
+        )
+      : 0;
+
+
+  document.getElementById(
+    "homeDate"
+  ).textContent =
+    new Date().toLocaleDateString(
+      undefined,
+      {
+        weekday:"long",
+        month:"long",
+        day:"numeric",
+        year:"numeric"
+      }
+    );
+
+
+  document.getElementById(
+    "homeProgress"
+  ).style.width =
+    percentage + "%";
+
+
+  document.getElementById(
+    "heroProgressText"
+  ).textContent =
+    percentage + "% complete";
+
+
+  document.getElementById(
+    "homeProgressLeft"
+  ).textContent =
+    `${completed} of ${total} completed`;
+
+
+  document.getElementById(
+    "homeProgressPercent"
+  ).textContent =
+    percentage + "%";
+
+
+  document.getElementById(
+    "statToday"
+  ).textContent =
+    total;
+
+
+  document.getElementById(
+    "statCompleted"
+  ).textContent =
+    completed;
+
+
+  document.getElementById(
+    "statStreak"
+  ).textContent =
+    getStreak();
+
+
+  document.getElementById(
+    "statTotal"
+  ).textContent =
+    tasks.length;
+
+
+  const words = [
+    "Consistency",
+    "Discipline",
+    "Focus",
+    "Patience",
+    "Execution",
+    "Courage",
+    "Persistence",
+    "Clarity"
+  ];
+
+
+  const word =
+    words[
+      new Date().getDate() %
+      words.length
+    ];
+
+
+  document.getElementById(
+    "positiveWord"
+  ).innerHTML =
+    `Today's word: <strong>${word}</strong>.
+     Keep the next action simple and execute it.`;
 }
 
-async function setupLock(
-pin,
-confirmPin
-){
 
-if(
-!/^\d{4,12}$/.test(pin)
-){
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
 
-showLockError(
-'PIN must contain 4–12 digits.'
-);
+function renderAll(){
 
-return false;
-
+  renderHome();
+  renderDaily();
+  renderCalendar();
+  renderInsights();
+  loadProfile();
 }
 
-if(pin!==confirmPin){
 
-showLockError(
-'PINs do not match.'
-);
+/* =========================================================
+   MODALS
+   ========================================================= */
 
-return false;
+function openModal(id){
 
+  document
+    .getElementById(id)
+    .classList.add("show");
 }
 
-localStorage.setItem(
-AUTH_KEY,
-JSON.stringify({
-hash:
-await hashPin(pin),
 
-createdAt:
-new Date().toISOString()
-})
-);
+function closeModal(id){
 
-return true;
-
+  document
+    .getElementById(id)
+    .classList.remove("show");
 }
 
-function b64u(buf){
 
-return btoa(
-String.fromCharCode(
-...new Uint8Array(buf)
-)
-)
-.replace(/\+/g,'-')
-.replace(/\//g,'_')
-.replace(/=+$/,'');
+function closeModalOutside(event,id){
 
+  if(event.target.id === id){
+
+    closeModal(id);
+  }
 }
 
-function u8(s){
 
-s=s
-.replace(/-/g,'+')
-.replace(/_/g,'/');
+/* =========================================================
+   PROFILE
+   ========================================================= */
 
-while(
-s.length%4
-)
-s+='=';
+function openProfile(){
 
-return Uint8Array.from(
-atob(s),
-c=>c.charCodeAt(0)
-);
+  const profile =
+    getProfile() || {
+      name:"Tsega"
+    };
 
+  updateProfileUI(profile);
+
+  openModal("profileModal");
 }
 
-async function registerBio(){
 
-try{
+function saveProfile(){
 
-if(
-!window.PublicKeyCredential||
-!navigator.credentials
-)
-throw 0;
+  const name =
+    document.getElementById(
+      "profileNameInput"
+    ).value.trim();
 
-const cred=
-await navigator.credentials.create({
 
-publicKey:{
+  if(!name){
 
-challenge:
-crypto.getRandomValues(
-new Uint8Array(32)
-),
+    showToast(
+      "Please enter a profile name."
+    );
 
-rp:{
-name:'Tsega Habit Tracker'
-},
+    return;
+  }
 
-user:{
-id:
-crypto.getRandomValues(
-new Uint8Array(16)
-),
 
-name:'tsega',
+  localStorage.setItem(
+    PROFILE_KEY,
+    JSON.stringify({
+      name:name,
+      updatedAt:Date.now()
+    })
+  );
 
-displayName:'Tsega'
-},
 
-pubKeyCredParams:[
-{
-type:'public-key',
-alg:-7
-},
-{
-type:'public-key',
-alg:-257
-}
-],
+  updateProfileUI({
+    name:name
+  });
 
-authenticatorSelection:{
-authenticatorAttachment:'platform',
-userVerification:'required'
-},
 
-timeout:60000
+  closeModal("profileModal");
 
+  showToast(
+    "Profile updated."
+  );
 }
 
-});
 
-if(!cred)
-throw 0;
+/* =========================================================
+   BACKUP
+   ========================================================= */
 
-localStorage.setItem(
-BIO_KEY,
-b64u(cred.rawId)
-);
+function exportData(){
 
-$('bioBtn')
-.classList
-.remove('hidden');
+  const backup = {
 
-toast(
-'Biometric unlock enabled'
-);
+    app:"Tsega Habit Tracker",
 
-}catch(e){
+    version:2,
 
-toast(
-'Fingerprint/device biometrics is not available here'
-);
+    exportedAt:
+      new Date().toISOString(),
 
+    tasks:tasks,
+
+    profile:getProfile()
+
+  };
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          backup,
+          null,
+          2
+        )
+      ],
+      {
+        type:"application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+
+  a.href = url;
+
+  a.download =
+    `tsega-habit-backup-${todayString()}.json`;
+
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+
+  showToast(
+    "Backup downloaded."
+  );
 }
 
+
+function importData(event){
+
+  const file =
+    event.target.files?.[0];
+
+  if(!file) return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = function(){
+
+    try{
+
+      const data =
+        JSON.parse(
+          reader.result
+        );
+
+
+      const importedTasks =
+        Array.isArray(data)
+          ? data
+          : data.tasks;
+
+
+      if(!Array.isArray(importedTasks)){
+
+        throw new Error(
+          "Invalid backup"
+        );
+      }
+
+
+      if(!confirm(
+        "Import this backup? Your current task list will be replaced by the backup."
+      )){
+
+        return;
+      }
+
+
+      tasks =
+        importedTasks.map(t=>({
+
+          ...t,
+
+          id:String(
+            t.id || uid()
+          ),
+
+          title:
+            t.title ||
+            t.text ||
+            t.name ||
+            "",
+
+          category:
+            t.category ||
+            t.type ||
+            "Daily",
+
+          completed:
+            Boolean(
+              t.completed
+            ),
+
+          scheduledDate:
+            t.scheduledDate ||
+            t.date ||
+            "",
+
+          priority:
+            t.priority ||
+            "medium",
+
+          notes:
+            t.notes ||
+            "",
+
+          repeat:
+            t.repeat ||
+            "none"
+
+        }));
+
+
+      saveTasks();
+
+
+      if(data.profile){
+
+        localStorage.setItem(
+          PROFILE_KEY,
+          JSON.stringify(
+            data.profile
+          )
+        );
+
+      }
+
+
+      renderAll();
+
+      showToast(
+        "Backup restored successfully."
+      );
+
+
+    }catch(error){
+
+      console.error(error);
+
+      showToast(
+        "This backup file is not valid."
+      );
+
+    }finally{
+
+      event.target.value = "";
+
+    }
+
+  };
+
+
+  reader.readAsText(file);
 }
 
-async function bioUnlock(){
 
-try{
+/* =========================================================
+   CLEAR DATA
+   ========================================================= */
 
-const id=
-localStorage.getItem(BIO_KEY);
+function clearAllTasks(){
 
-if(
-!id||
-!window.PublicKeyCredential||
-!navigator.credentials
-)
-throw 0;
+  if(!tasks.length){
 
-await navigator.credentials.get({
+    showToast(
+      "There are no tasks to clear."
+    );
 
-publicKey:{
+    return;
+  }
 
-challenge:
-crypto.getRandomValues(
-new Uint8Array(32)
-),
 
-allowCredentials:[
-{
-type:'public-key',
-id:u8(id)
-}
-],
+  const confirmation =
+    prompt(
+      "Type DELETE to permanently clear all tasks. Export a backup first if you need them later."
+    );
 
-userVerification:'required'
 
-},
+  if(confirmation !== "DELETE"){
 
-mediation:'optional'
+    showToast(
+      "Nothing was deleted."
+    );
 
-});
+    return;
+  }
 
-$('lockScreen')
-.classList
-.remove('show');
 
-toast(
-'Unlocked with device biometrics'
-);
+  tasks = [];
 
-}catch(e){
+  saveTasks();
 
-showLockError(
-'Biometric unlock was cancelled or unavailable.'
-);
+  renderAll();
 
+  showToast(
+    "All tasks have been cleared."
+  );
 }
 
+
+/* =========================================================
+   FOCUS TIMER
+   ========================================================= */
+
+function startFocusTimer(){
+
+  timerSeconds = 25 * 60;
+
+  timerRunning = false;
+
+  updateTimerDisplay();
+
+  document.getElementById(
+    "timerButton"
+  ).textContent =
+    "Start";
+
+
+  openModal("timerModal");
 }
 
-async function unlock(){
 
-const auth=
-JSON.parse(
-localStorage.getItem(
-AUTH_KEY
-)||'null'
-);
+function updateTimerDisplay(){
 
-const pin=
-$('pinInput').value;
+  const minutes =
+    Math.floor(
+      timerSeconds / 60
+    )
+    .toString()
+    .padStart(2,"0");
 
-if(!auth){
 
-if(
-await setupLock(
-pin,
-$('pinConfirm').value
-)
-){
+  const seconds =
+    (timerSeconds % 60)
+    .toString()
+    .padStart(2,"0");
 
-$('lockScreen')
-.classList
-.remove('show');
 
-$('pinInput').value='';
-
-$('pinConfirm').value='';
-
-$('pinConfirm')
-.classList
-.add('hidden');
-
-if(
-window.PublicKeyCredential&&
-window.isSecureContext
-){
-
-/*
-Show biometric button after account creation.
-The user can then enable it from the button.
-*/
-$('bioBtn')
-.classList
-.remove('hidden');
-
+  document.getElementById(
+    "timerDisplay"
+  ).textContent =
+    `${minutes}:${seconds}`;
 }
 
-toast('App lock created');
 
+function toggleFocusTimer(){
+
+  if(timerRunning){
+
+    timerRunning = false;
+
+    clearInterval(
+      timerInterval
+    );
+
+    document.getElementById(
+      "timerButton"
+    ).textContent =
+      "Resume";
+
+    return;
+  }
+
+
+  timerRunning = true;
+
+  document.getElementById(
+    "timerButton"
+  ).textContent =
+    "Pause";
+
+
+  timerInterval =
+    setInterval(()=>{
+
+      timerSeconds--;
+
+      updateTimerDisplay();
+
+
+      if(timerSeconds <= 0){
+
+        clearInterval(
+          timerInterval
+        );
+
+        timerRunning = false;
+
+        document.getElementById(
+          "timerButton"
+        ).textContent =
+          "Start";
+
+        showToast(
+          "Focus session complete. Well done."
+        );
+
+        if(
+          "Notification" in window &&
+          Notification.permission ===
+          "granted"
+        ){
+
+          new Notification(
+            "Tsega Habit Tracker",
+            {
+              body:
+                "Your focus session is complete."
+            }
+          );
+        }
+
+      }
+
+    },1000);
 }
 
-return false;
 
+function stopFocusTimer(){
+
+  clearInterval(
+    timerInterval
+  );
+
+  timerRunning = false;
+
+  closeModal("timerModal");
 }
 
-if(
-!/^\d{4,12}$/.test(pin)
-){
 
-showLockError(
-'Enter your 4–12 digit PIN.'
-);
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
 
-return false;
+function initialize(){
 
-}
+  loadTasks();
 
-if(
-(await hashPin(pin))!==auth.hash
-){
+  loadProfile();
 
-showLockError(
-'Incorrect PIN. Try again.'
-);
-
-$('pinInput').select();
-
-return false;
-
-}
-
-$('lockScreen')
-.classList
-.remove('show');
-
-$('pinInput').value='';
-
-return true;
-
-}
-
-function showLockError(m){
-
-$('lockError').textContent=m;
 
-setTimeout(
-()=>$('lockError').textContent='',
-2500
-);
-
-}
-
-function showLock(){
-
-const has=
-!!localStorage.getItem(
-AUTH_KEY
-);
-
-$('lockTitle').textContent=
-has
-?'Welcome back'
-:'Secure your tracker';
-
-$('lockMessage').textContent=
-has
-?'Enter your access PIN to continue.'
-:'Create a 4–12 digit PIN. You can enable fingerprint/device biometrics after setup.';
-
-$('unlockBtn').textContent=
-has
-?'Unlock'
-:'Create PIN & Enter';
-
-$('pinConfirm')
-.classList
-.toggle(
-'hidden',
-has
-);
-
-const bio=
-localStorage.getItem(
-BIO_KEY
-);
-
-$('bioBtn')
-.classList
-.toggle(
-'hidden',
-!(
-has&&
-bio&&
-window.PublicKeyCredential&&
-window.isSecureContext
-)
-);
-
-$('lockScreen')
-.classList
-.add('show');
-
-}
-
-async function init(){
-
-$('todayDate').textContent=
-today().toLocaleDateString(
-'en-US',
-{
-weekday:'long',
-month:'long',
-day:'numeric',
-year:'numeric'
-}
-)+
-' · Hey there! It’s about sticking to the plan';
-
-const n=
-Math.floor(
-(
-Date.now()-
-new Date(
-today().getFullYear(),
-0,
-0
-)
-)/86400000
-);
-
-$('quoteText').textContent=
-'“'+
-QUOTES[n%QUOTES.length]+
-'”';
-
-tasks=loadTasks();
-
-$('taskDate').value=
-key(selectedDate);
-
-loadSpiritual();
-
-renderAll();
-
-$('taskInput')
-.addEventListener(
-'keydown',
-e=>{
-if(e.key==='Enter')
-addTask();
-}
-);
-
-$('addBtn').onclick=
-addTask;
-
-[
-'searchInput',
-'statusFilter',
-'sortSelect'
-].forEach(
-id=>
-$(id).addEventListener(
-'input',
-renderAll
-)
-);
-
-$('taskDate').onchange=()=>{
+  const storedState =
+    localStorage.getItem(
+      APP_STATE_KEY
+    );
 
-selectedDate=
-new Date(
-$('taskDate').value+
-'T12:00:00'
-);
-
-calCurrent=
-new Date(selectedDate);
-
-renderAll();
 
-};
+  if(storedState){
 
-document.body.addEventListener(
-'click',
-taskClick
-);
+    try{
 
-$('calPrev').onclick=()=>{
+      appState =
+        JSON.parse(
+          storedState
+        );
 
-calCurrent=
-new Date(
-calCurrent.getFullYear(),
-calCurrent.getMonth()-1,
-1
-);
+    }catch(e){}
 
-renderCalendar();
+  }
 
-};
 
-$('calNext').onclick=()=>{
+  selectedDate =
+    todayString();
 
-calCurrent=
-new Date(
-calCurrent.getFullYear(),
-calCurrent.getMonth()+1,
-1
-);
 
-renderCalendar();
+  document.getElementById(
+    "dailyDate"
+  ).value =
+    selectedDate;
 
-};
 
-$('saveEdit').onclick=()=>{
+  document.getElementById(
+    "setupPin"
+  ).addEventListener(
+    "input",
+    updateStrength
+  );
 
-const t=
-tasks.find(
-x=>x.id===editingId
-);
 
-if(!t)return;
+  const auth =
+    getAuth();
 
-t.text=
-$('editText')
-.value
-.trim()||
-t.text;
 
-t.type=
-$('editType').value;
+  if(auth){
 
-t.scheduledDate=
-$('editDate').value;
+    showLogin();
 
-t.priority=
-$('editPriority').value;
+  }else{
 
-t.notes=
-$('editNotes')
-.value
-.trim();
+    showSetup();
 
-t.updatedAt=
-new Date().toISOString();
+  }
 
-saveTasks();
 
-renderAll();
+  renderAll();
 
-$('editModal')
-.classList
-.remove('open');
 
-toast('Task updated');
+  /*
+   * Loading animation.
+   */
 
-};
+  let progress = 0;
 
-$('cancelEdit').onclick=()=>
-$('editModal')
-.classList
-.remove('open');
+  const progressBar =
+    document.getElementById(
+      "loaderProgress"
+    );
 
-$('settingsBtn').onclick=()=>
-$('settingsModal')
-.classList
-.add('open');
+  const loaderText =
+    document.getElementById(
+      "loaderText"
+    );
 
-$('closeSettings').onclick=()=>
-$('settingsModal')
-.classList
-.remove('open');
 
-$('exportBtn').onclick=
-exportBackup;
+  const messages = [
+    "Preparing your focus...",
+    "Loading your plan...",
+    "Checking your tracker...",
+    "Almost ready..."
+  ];
 
-$('importBtn').onclick=()=>
-$('importFile').click();
 
-$('importFile').onchange=e=>{
+  const interval =
+    setInterval(()=>{
 
-if(e.target.files[0])
-importBackup(e.target.files[0]);
+      progress +=
+        Math.floor(
+          Math.random()*15
+        ) + 8;
 
-e.target.value='';
 
-};
+      if(progress > 100){
+        progress = 100;
+      }
 
-$('clearBtn').onclick=()=>{
 
-if(
-confirm(
-'Delete ALL tasks? This cannot be undone unless you have a backup.'
-)
-){
+      progressBar.style.width =
+        progress + "%";
 
-tasks=[];
 
-saveTasks();
+      loaderText.textContent =
+        messages[
+          Math.min(
+            Math.floor(
+              progress/25
+            ),
+            messages.length-1
+          )
+        ];
 
-renderAll();
 
-toast('All tasks cleared');
+      if(progress >= 100){
 
-}
+        clearInterval(interval);
 
-};
+        setTimeout(()=>{
 
-$('focusBtn').onclick=()=>{
+          document
+            .getElementById("loader")
+            .classList.add("hide");
 
-$('timerStart').scrollIntoView({
-behavior:'smooth',
-block:'center'
-});
+        },350);
 
-};
+      }
 
-$('dailyBibleVerse').oninput=
-saveSpiritual;
-
-$('positiveWords').oninput=
-saveSpiritual;
-
-$('changePinBtn').onclick=()=>
-$('pinModal')
-.classList
-.add('open');
-
-$('cancelPin').onclick=()=>
-$('pinModal')
-.classList
-.remove('open');
-
-$('savePin').onclick=async()=>{
-
-const a=
-$('newPin').value;
-
-const b=
-$('confirmPin').value;
-
-if(
-!/^\d{4,12}$/.test(a)||
-a!==b
-){
-
-toast(
-'PIN must match and contain 4–12 digits'
-);
-
-return;
-
-}
-
-localStorage.setItem(
-AUTH_KEY,
-JSON.stringify({
-hash:
-await hashPin(a),
-createdAt:
-new Date().toISOString()
-})
-);
-
-$('newPin').value='';
-
-$('confirmPin').value='';
-
-$('pinModal')
-.classList
-.remove('open');
-
-toast('PIN changed');
-
-};
-
-$('removePinBtn').onclick=()=>{
-
-if(
-confirm(
-'Remove the app lock? Your tasks will remain.'
-)
-){
-
-localStorage.removeItem(
-AUTH_KEY
-);
-
-toast('App lock removed');
-
-}
-
-};
-
-/* Enable fingerprint/device biometric registration
-when the user presses the biometric button for the first time. */
-$('bioBtn').onclick=async()=>{
-
-const existing=
-localStorage.getItem(BIO_KEY);
-
-if(!existing){
-
-await registerBio();
-
-return;
-
-}
-
-await bioUnlock();
-
-};
-
-document
-.querySelectorAll('.modal-backdrop')
-.forEach(
-m=>
-m.addEventListener(
-'click',
-e=>{
-if(e.target===m)
-m.classList.remove('open');
-}
-)
-);
-
-document.addEventListener(
-'keydown',
-e=>{
-if(e.key==='Escape')
-document
-.querySelectorAll('.modal-backdrop.open')
-.forEach(
-m=>m.classList.remove('open')
-);
-}
-);
-
-$('timerStart').onclick=()=>{
-
-if(timerRunning){
-
-timerRunning=false;
-
-clearInterval(
-timerInterval
-);
-
-$('timerStart').textContent=
-'Resume';
-
-$('timerState').textContent=
-'Paused';
-
-}else{
-
-timerRunning=true;
-
-$('timerStart').textContent=
-'Pause';
-
-$('timerState').textContent=
-'Focus — stay on the plan';
-
-timerInterval=
-setInterval(
-()=>{
-
-timerSeconds--;
-
-if(timerSeconds<=0){
-
-timerSeconds=1500;
-
-timerRunning=false;
-
-clearInterval(
-timerInterval
-);
-
-$('timerStart').textContent=
-'Start';
-
-$('timerState').textContent=
-'Session complete 🎯';
-
-toast(
-'Focus session complete'
-);
-
-}
-
-renderTimer();
-
-},
-1000
-);
-
-}
-
-renderTimer();
-
-};
-
-$('timerReset').onclick=()=>{
-
-timerRunning=false;
-
-clearInterval(
-timerInterval
-);
-
-timerSeconds=1500;
-
-$('timerStart').textContent=
-'Start';
-
-$('timerState').textContent=
-'Ready to focus';
-
-renderTimer();
-
-};
-
-renderTimer();
-
-}
-
-function renderTimer(){
-
-$('timer').textContent=
-`${String(
-Math.floor(timerSeconds/60)
-).padStart(2,'0')}:${String(
-timerSeconds%60
-).padStart(2,'0')}`;
-
-}
-
-async function boot(){
-
-const bar=$('loadBar');
-
-const text=$('loadingText');
-
-let p=0;
-
-const tick=
-setInterval(
-()=>{
-p=Math.min(p+9,88);
-bar.style.width=p+'%';
-},
-90
-);
-
-text.textContent=
-'Loading your plans…';
-
-/*
-Remove any old broken service worker.
-This is the key fix for the stuck old splash screen.
-*/
-if(
-'serviceWorker' in navigator
-){
-
-try{
-
-const regs=
-await navigator
-.serviceWorker
-.getRegistrations();
-
-await Promise.all(
-regs.map(
-r=>r.unregister()
-)
-);
-
-}catch(e){}
-
-}
-
-await new Promise(
-r=>setTimeout(r,260)
-);
-
-await init();
-
-/*
-Register the new service worker after
-the new page has loaded.
-*/
-if(
-'serviceWorker' in navigator
-){
-
-try{
-
-await navigator.serviceWorker.register(
-'./sw.js?v=2026-11-12-2',
-{
-updateViaCache:'none'
-}
-);
-
-}catch(e){}
-
-}
-
-clearInterval(tick);
-
-bar.style.width='100%';
-
-text.textContent='Ready.';
-
-await new Promise(
-r=>setTimeout(r,180)
-);
-
-$('loading')
-.classList
-.add('hide');
-
-$('app').hidden=false;
-
-showLock();
+    },180);
 
 }
 
-boot();
 
-})();
+/* =========================================================
+   SERVICE WORKER
+   ========================================================= */
+
+if("serviceWorker" in navigator){
+
+  window.addEventListener(
+    "load",
+    ()=>{
+
+      navigator.serviceWorker
+        .register("./sw.js")
+        .catch(error=>{
+          console.log(
+            "Service worker registration:",
+            error
+          );
+        });
+
+    }
+  );
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+initialize();
+
 </script>
 
 </body>
