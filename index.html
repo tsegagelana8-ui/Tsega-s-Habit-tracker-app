@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <meta name="theme-color" content="#120C25">
-<meta name="description" content="Tsega Habit Tracker — personal planning, habits and daily focus.">
+<meta name="description" content="Tsega Habit Tracker — personal planning, habits, offline focus and daily discipline.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tsega Tracker">
 
-<link rel="manifest" href="./manifest.json">
-<link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link id="dynamicManifest" rel="manifest">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%237c4dff'/><text x='50' y='68' font-family='Arial' font-size='56' font-weight='900' fill='white' text-anchor='middle'>T</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%237c4dff'/><text x='50' y='68' font-family='Arial' font-size='56' font-weight='900' fill='white' text-anchor='middle'>T</text></svg>">
 
 <title>Tsega Habit Tracker</title>
 
@@ -63,10 +63,18 @@ body{
   overflow-x:hidden;
 }
 
+button, input, select, textarea{
+  font-family:inherit;
+  font-size:14px;
+}
+
+button{
+  cursor:pointer;
+}
+
 /* =========================================================
    PREMIUM MOVING OVERLAY
 ========================================================= */
-
 .ambient-overlay{
   position:fixed;
   inset:0;
@@ -98,17 +106,8 @@ body{
   animation:floatOverlay 22s ease-in-out infinite alternate;
 }
 
-.ambient-overlay::before{
-  top:-25%;
-  left:-20%;
-}
-
-.ambient-overlay::after{
-  right:-25%;
-  bottom:-25%;
-  animation-delay:-9s;
-  animation-duration:28s;
-}
+.ambient-overlay::before{ top:-25%; left:-20%; }
+.ambient-overlay::after{ right:-25%; bottom:-25%; animation-delay:-9s; animation-duration:28s; }
 
 @keyframes floatOverlay{
   0%{transform:rotate(0deg) translate3d(0,0,0) scale(1)}
@@ -119,7 +118,6 @@ body{
 /* =========================================================
    SPLASH
 ========================================================= */
-
 .splash{
   position:fixed;
   inset:0;
@@ -130,7 +128,7 @@ body{
   background:
     radial-gradient(circle at 50% 38%,rgba(139,92,246,.18),transparent 30%),
     #0a0614;
-  transition:opacity .5s ease,visibility .5s ease;
+  transition:opacity .45s ease,visibility .45s ease;
 }
 
 .splash.hidden{
@@ -155,9 +153,7 @@ body{
   font-weight:900;
   color:white;
   background:linear-gradient(145deg,#9869ff,#6535d5);
-  box-shadow:
-    0 0 70px rgba(139,92,246,.35),
-    0 25px 55px rgba(0,0,0,.4);
+  box-shadow:0 0 70px rgba(139,92,246,.35),0 25px 55px rgba(0,0,0,.4);
   animation:logoPulse 2.5s ease-in-out infinite;
 }
 
@@ -165,17 +161,8 @@ body{
   50%{transform:translateY(-5px);box-shadow:0 0 90px rgba(139,92,246,.48),0 25px 55px rgba(0,0,0,.4)}
 }
 
-.splash-title{
-  font-size:30px;
-  font-weight:850;
-  letter-spacing:-.8px;
-}
-
-.splash-sub{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:15px;
-}
+.splash-title{ font-size:30px; font-weight:850; letter-spacing:-.8px; }
+.splash-sub{ margin-top:8px; color:var(--muted); font-size:15px; }
 
 .loading-track{
   height:8px;
@@ -195,14 +182,11 @@ body{
   transition:width .12s linear;
 }
 
-@keyframes loadingGradient{
-  to{background-position:200% 0}
-}
+@keyframes loadingGradient{ to{background-position:200% 0} }
 
 /* =========================================================
    LOCK SCREEN
 ========================================================= */
-
 .lock-screen{
   position:fixed;
   inset:0;
@@ -214,58 +198,42 @@ body{
   background:
     radial-gradient(circle at 50% 25%,rgba(139,92,246,.22),transparent 35%),
     rgba(7,4,15,.98);
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(24px);
 }
 
-.lock-screen.show{
-  display:flex;
-}
+.lock-screen.show{ display:flex; }
 
 .lock-card{
   width:min(470px,100%);
   border:1px solid rgba(196,181,253,.18);
-  background:
-    linear-gradient(145deg,rgba(39,25,71,.96),rgba(19,12,37,.97));
+  background:linear-gradient(145deg,rgba(39,25,71,.96),rgba(19,12,37,.97));
   border-radius:30px;
   padding:34px;
-  box-shadow:0 35px 100px rgba(0,0,0,.55);
+  box-shadow:0 35px 100px rgba(0,0,0,.65);
   text-align:center;
 }
 
 .lock-logo{
-  width:94px;
-  height:94px;
-  border-radius:28px;
+  width:88px;
+  height:88px;
+  border-radius:26px;
   display:grid;
   place-items:center;
-  margin:0 auto 20px;
-  font-size:44px;
+  margin:0 auto 18px;
+  font-size:42px;
   font-weight:900;
   background:linear-gradient(145deg,#9869ff,#6635d7);
   box-shadow:0 20px 50px rgba(108,70,220,.28);
 }
 
-.lock-title{
-  font-size:27px;
-  font-weight:850;
-  letter-spacing:-.5px;
-}
+.lock-title{ font-size:26px; font-weight:850; letter-spacing:-.5px; }
+.lock-description{ color:var(--muted); line-height:1.55; margin:9px auto 22px; max-width:380px; font-size:13px; }
 
-.lock-description{
-  color:var(--muted);
-  line-height:1.55;
-  margin:9px auto 24px;
-  max-width:380px;
-}
-
-.lock-input-wrap{
-  position:relative;
-  margin-top:12px;
-}
+.lock-input-wrap{ position:relative; margin-top:12px; }
 
 .lock-input{
   width:100%;
-  height:58px;
+  height:56px;
   padding:0 54px 0 18px;
   border-radius:16px;
   border:1px solid var(--line);
@@ -279,37 +247,37 @@ body{
 
 .lock-input:focus{
   border-color:var(--primary);
-  box-shadow:0 0 0 4px rgba(139,92,246,.11);
+  box-shadow:0 0 0 4px rgba(139,92,246,.14);
 }
 
 .password-eye{
   position:absolute;
   right:8px;
-  top:8px;
+  top:7px;
   height:42px;
   width:42px;
   border:0;
   border-radius:12px;
   background:transparent;
   color:var(--muted);
+  font-size:16px;
 }
 
 .lock-button{
   width:100%;
-  min-height:55px;
-  margin-top:13px;
+  min-height:54px;
+  margin-top:14px;
   border:0;
   border-radius:16px;
   background:linear-gradient(135deg,#8b5cf6,#7041df);
   color:#fff;
   font-weight:850;
   font-size:15px;
-  box-shadow:0 14px 35px rgba(112,65,223,.22);
+  box-shadow:0 14px 35px rgba(112,65,223,.25);
+  transition:.15s;
 }
 
-.lock-button:active{
-  transform:scale(.985);
-}
+.lock-button:active{ transform:scale(.985); }
 
 .biometric-button{
   width:100%;
@@ -317,39 +285,38 @@ body{
   margin-top:10px;
   border-radius:15px;
   border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
+  background:rgba(139,92,246,.09);
   color:var(--primary3);
   font-weight:750;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  transition:.15s;
 }
+
+.biometric-button:hover{ background:rgba(139,92,246,.16); }
 
 .lock-error{
   min-height:20px;
   color:var(--danger);
   font-size:12px;
   margin-top:10px;
+  font-weight:600;
 }
 
 .lock-footnote{
   color:#746d88;
   font-size:11px;
   line-height:1.5;
-  margin-top:20px;
+  margin-top:18px;
 }
 
 /* =========================================================
    APP LAYOUT
 ========================================================= */
-
-.app{
-  position:relative;
-  z-index:2;
-  min-height:100vh;
-  display:none;
-}
-
-.app.ready{
-  display:block;
-}
+.app{ position:relative; z-index:2; min-height:100vh; display:none; }
+.app.ready{ display:block; }
 
 .app-shell{
   display:grid;
@@ -384,24 +351,13 @@ body{
   background:linear-gradient(145deg,#9869ff,#6535d5);
   font-weight:900;
   font-size:21px;
+  flex-shrink:0;
 }
 
-.brand-name{
-  font-weight:850;
-  font-size:15px;
-}
+.brand-name{ font-weight:850; font-size:15px; }
+.brand-sub{ color:var(--soft); font-size:10px; margin-top:2px; }
 
-.brand-sub{
-  color:var(--soft);
-  font-size:10px;
-  margin-top:2px;
-}
-
-.nav{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
+.nav{ display:flex; flex-direction:column; gap:6px; }
 
 .nav-btn{
   width:100%;
@@ -419,29 +375,16 @@ body{
   transition:.18s ease;
 }
 
-.nav-btn:hover{
-  background:rgba(139,92,246,.08);
-  color:var(--text);
-}
-
+.nav-btn:hover{ background:rgba(139,92,246,.08); color:var(--text); }
 .nav-btn.active{
   background:linear-gradient(135deg,rgba(139,92,246,.23),rgba(139,92,246,.08));
   color:var(--primary3);
   border:1px solid rgba(139,92,246,.17);
 }
 
-.nav-icon{
-  width:21px;
-  text-align:center;
-  font-size:17px;
-}
+.nav-icon{ width:21px; text-align:center; font-size:17px; }
 
-.sidebar-bottom{
-  position:absolute;
-  left:14px;
-  right:14px;
-  bottom:20px;
-}
+.sidebar-bottom{ position:absolute; left:14px; right:14px; bottom:20px; }
 
 .mini-profile{
   border:1px solid var(--line2);
@@ -452,7 +395,9 @@ body{
   align-items:center;
   gap:10px;
   cursor:pointer;
+  transition:.15s;
 }
+.mini-profile:hover{ border-color:var(--line); }
 
 .avatar{
   width:40px;
@@ -468,40 +413,15 @@ body{
   flex-shrink:0;
 }
 
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.mini-profile-name{
-  min-width:0;
-  flex:1;
-}
-
-.mini-profile-name strong{
-  display:block;
-  font-size:12px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.mini-profile-name span{
-  display:block;
-  font-size:10px;
-  color:var(--soft);
-  margin-top:2px;
-}
+.avatar img{ width:100%; height:100%; object-fit:cover; }
+.mini-profile-name{ min-width:0; flex:1; }
+.mini-profile-name strong{ display:block; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mini-profile-name span{ display:block; font-size:10px; color:var(--soft); margin-top:2px; }
 
 /* =========================================================
-   MAIN
+   MAIN & TOPBAR
 ========================================================= */
-
-.main{
-  min-width:0;
-  padding:25px clamp(15px,3vw,38px) 110px;
-}
+.main{ min-width:0; padding:25px clamp(15px,3vw,38px) 110px; }
 
 .topbar{
   display:flex;
@@ -518,57 +438,60 @@ body{
   font-weight:880;
 }
 
-.topbar-left p{
-  color:var(--muted);
-  margin-top:7px;
-  font-size:13px;
+.topbar-left p{ color:var(--muted); margin-top:7px; font-size:13px; }
+
+.top-actions{ display:flex; align-items:center; gap:8px; }
+
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  height:36px;
+  padding:0 12px;
+  border-radius:99px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.03);
+  font-size:11px;
+  font-weight:750;
+  color:var(--primary3);
 }
 
-.top-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 8px var(--success);
 }
+.status-dot.offline{ background:var(--warning); box-shadow:0 0 8px var(--warning); }
 
 .circle-btn{
-  width:45px;
-  height:45px;
+  width:44px;
+  height:44px;
   border-radius:14px;
   border:1px solid var(--line);
   background:rgba(255,255,255,.035);
   color:var(--primary3);
   display:grid;
   place-items:center;
-  font-size:18px;
+  font-size:17px;
+  transition:.15s;
 }
 
-.circle-btn:hover{
-  background:rgba(139,92,246,.12);
-}
+.circle-btn:hover{ background:rgba(139,92,246,.14); }
 
-.page{
-  display:none;
-  animation:pageIn .25s ease;
-}
+.page{ display:none; animation:pageIn .25s ease; }
+.page.active{ display:block; }
 
-.page.active{
-  display:block;
-}
-
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(5px)}
-  to{opacity:1;transform:translateY(0)}
-}
+@keyframes pageIn{ from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
 /* =========================================================
-   GENERAL CARDS
+   GENERAL CARDS & CONTROLS
 ========================================================= */
-
 .card{
   position:relative;
   border:1px solid var(--line);
-  background:
-    linear-gradient(145deg,rgba(38,24,68,.88),rgba(19,12,38,.9));
+  background:linear-gradient(145deg,rgba(38,24,68,.88),rgba(19,12,38,.9));
   border-radius:var(--radius);
   box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.035);
   overflow:hidden;
@@ -579,45 +502,18 @@ body{
   position:absolute;
   inset:0;
   pointer-events:none;
-  background:
-    linear-gradient(115deg,rgba(139,92,246,.055),transparent 35%,rgba(255,255,255,.018));
+  background:linear-gradient(115deg,rgba(139,92,246,.055),transparent 35%,rgba(255,255,255,.018));
 }
 
-.card-body{
-  position:relative;
-  z-index:2;
-  padding:20px;
-}
-
-.section-title{
-  font-size:15px;
-  font-weight:820;
-}
-
-.section-subtitle{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
-  line-height:1.45;
-}
-
-.row-between{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
+.card-body{ position:relative; z-index:2; padding:20px; }
+.section-title{ font-size:15px; font-weight:820; }
+.section-subtitle{ color:var(--muted); font-size:11px; margin-top:4px; line-height:1.45; }
+.row-between{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
 
 /* =========================================================
    HOME
 ========================================================= */
-
-.verses{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-bottom:16px;
-}
+.verses{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
 
 .verse{
   position:relative;
@@ -639,42 +535,16 @@ body{
   background:rgba(139,92,246,.12);
 }
 
-.verse-ref{
-  color:var(--primary2);
-  font-size:10px;
-  font-weight:850;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
+.verse-ref{ color:var(--primary2); font-size:10px; font-weight:850; letter-spacing:1px; text-transform:uppercase; }
+.verse p{ position:relative; margin-top:8px; color:#eeeaff; font-size:13px; line-height:1.55; }
+.verse.right{ text-align:right; }
 
-.verse p{
-  position:relative;
-  margin-top:8px;
-  color:#eeeaff;
-  font-size:13px;
-  line-height:1.55;
-}
-
-.verse.right{
-  text-align:right;
-}
-
-.hero{
-  padding:24px;
-  margin-bottom:16px;
-}
-
-.hero-content{
-  position:relative;
-  z-index:2;
-  display:flex;
-  align-items:center;
-  gap:17px;
-}
+.hero{ padding:22px; margin-bottom:16px; }
+.hero-content{ position:relative; z-index:2; display:flex; align-items:center; gap:17px; }
 
 .hero-icon{
-  width:55px;
-  height:55px;
+  width:54px;
+  height:54px;
   border-radius:17px;
   background:rgba(139,92,246,.13);
   border:1px solid rgba(139,92,246,.2);
@@ -684,27 +554,10 @@ body{
   flex-shrink:0;
 }
 
-.hero-label{
-  color:var(--primary2);
-  font-size:10px;
-  font-weight:850;
-  letter-spacing:1.1px;
-  text-transform:uppercase;
-}
+.hero-label{ color:var(--primary2); font-size:10px; font-weight:850; letter-spacing:1.1px; text-transform:uppercase; }
+.hero-text{ color:#f1edff; font-size:15px; line-height:1.55; margin-top:5px; }
 
-.hero-text{
-  color:#f1edff;
-  font-size:16px;
-  line-height:1.55;
-  margin-top:5px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:11px;
-  margin-bottom:16px;
-}
+.stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:11px; margin-bottom:16px; }
 
 .stat{
   padding:17px;
@@ -714,70 +567,43 @@ body{
   text-align:center;
 }
 
-.stat-icon{
-  font-size:17px;
-  margin-bottom:7px;
-}
+.stat-icon{ font-size:18px; margin-bottom:6px; }
+.stat-number{ font-size:25px; font-weight:880; }
+.stat-label{ margin-top:3px; color:var(--muted); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; }
 
-.stat-number{
-  font-size:25px;
-  font-weight:880;
-}
+.progress-card{ margin-bottom:16px; }
+.progress-header{ display:flex; justify-content:space-between; gap:10px; font-size:12px; font-weight:750; }
+.progress-header span:last-child{ color:var(--primary2); }
+.progress-track{ margin-top:10px; height:9px; background:#100a20; border-radius:99px; overflow:hidden; }
+.progress-bar{ height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,#7442e8,#a78bfa,#48d597); transition:width .35s ease; }
 
-.stat-label{
-  margin-top:3px;
-  color:var(--muted);
-  font-size:10px;
-  font-weight:700;
-}
+/* Habit Streaks Strip */
+.habit-strip{ display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px; margin-top:14px; }
 
-.progress-card{
-  margin-bottom:16px;
-}
-
-.progress-header{
+.habit-chip{
   display:flex;
+  align-items:center;
   justify-content:space-between;
   gap:10px;
-  font-size:12px;
-  font-weight:750;
+  padding:12px 14px;
+  border-radius:15px;
+  border:1px solid var(--line2);
+  background:rgba(255,255,255,.025);
+  transition:.18s;
 }
-
-.progress-header span:last-child{
-  color:var(--primary2);
+.habit-chip.done{
+  border-color:rgba(72,213,151,.32);
+  background:rgba(72,213,151,.07);
 }
+.habit-info strong{ display:block; font-size:13px; }
+.habit-info span{ display:block; font-size:10px; color:var(--warning); margin-top:2px; font-weight:700; }
 
-.progress-track{
-  margin-top:10px;
-  height:9px;
-  background:#100a20;
-  border-radius:99px;
-  overflow:hidden;
-}
+.quick-add{ margin-bottom:16px; }
+.quick-add-grid{ display:grid; grid-template-columns:minmax(0,1fr) 155px 130px 115px; gap:9px; margin-top:12px; }
 
-.progress-bar{
-  height:100%;
-  width:0;
-  border-radius:inherit;
-  background:linear-gradient(90deg,#7442e8,#a78bfa,#48d597);
-  transition:width .35s ease;
-}
-
-.quick-add{
-  margin-bottom:16px;
-}
-
-.quick-add-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 145px 145px;
-  gap:9px;
-}
-
-.input,
-.select,
-.textarea{
+.input,.select,.textarea{
   width:100%;
-  min-height:48px;
+  min-height:46px;
   border:1px solid var(--line);
   border-radius:13px;
   outline:none;
@@ -786,21 +612,11 @@ body{
   padding:0 14px;
 }
 
-.textarea{
-  padding:13px 14px;
-  min-height:105px;
-  resize:vertical;
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus{
-  border-color:rgba(139,92,246,.65);
-  box-shadow:0 0 0 4px rgba(139,92,246,.08);
-}
+.textarea{ padding:13px 14px; min-height:105px; resize:vertical; }
+.input:focus,.select:focus,.textarea:focus{ border-color:rgba(139,92,246,.65); box-shadow:0 0 0 4px rgba(139,92,246,.08); }
 
 .primary-btn{
-  min-height:48px;
+  min-height:46px;
   border:0;
   border-radius:13px;
   padding:0 18px;
@@ -808,10 +624,12 @@ body{
   font-weight:820;
   background:linear-gradient(135deg,#8b5cf6,#7041dc);
   box-shadow:0 10px 25px rgba(112,65,220,.18);
+  transition:.15s;
 }
+.primary-btn:hover{ filter:brightness(1.07); }
 
 .secondary-btn{
-  min-height:45px;
+  min-height:44px;
   border:1px solid var(--line);
   border-radius:13px;
   padding:0 15px;
@@ -819,43 +637,27 @@ body{
   font-weight:750;
   background:rgba(255,255,255,.035);
 }
+.secondary-btn:hover{ background:rgba(139,92,246,.1); }
 
 .danger-btn{
-  min-height:45px;
-  border:1px solid rgba(255,102,120,.18);
+  min-height:44px;
+  border:1px solid rgba(255,102,120,.22);
   border-radius:13px;
   padding:0 15px;
   color:var(--danger);
   font-weight:750;
-  background:rgba(255,102,120,.06);
+  background:rgba(255,102,120,.07);
 }
 
 /* =========================================================
    PLANS
 ========================================================= */
-
-.date-strip{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:16px;
-}
-
-.date-control{
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
-
-.date-control .input{
-  width:auto;
-  min-width:155px;
-  padding:0 12px;
-}
+.date-strip{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.date-control{ display:flex; align-items:center; gap:9px; }
+.date-control .input{ width:auto; min-width:155px; padding:0 12px; }
 
 .today-btn{
-  min-height:43px;
+  min-height:44px;
   border:1px solid var(--line);
   border-radius:12px;
   background:rgba(139,92,246,.09);
@@ -864,35 +666,12 @@ body{
   font-weight:750;
 }
 
-.filters{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 160px 160px;
-  gap:9px;
-  margin-bottom:16px;
-}
+.filters{ display:grid; grid-template-columns:minmax(0,1fr) 160px 160px; gap:9px; margin-bottom:16px; }
+.plans-grid{ display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+.plan-card{ min-width:0; }
 
-.plans-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-}
-
-.plan-card{
-  min-width:0;
-}
-
-.plan-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:18px 18px 10px;
-}
-
-.plan-name{
-  font-size:14px;
-  font-weight:830;
-}
+.plan-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:18px 18px 10px; }
+.plan-name{ font-size:14px; font-weight:830; }
 
 .plan-count{
   min-width:28px;
@@ -908,10 +687,7 @@ body{
   font-weight:850;
 }
 
-.task-list{
-  padding:5px 12px 13px;
-  min-height:75px;
-}
+.task-list{ padding:5px 12px 13px; min-height:75px; }
 
 .task-card{
   position:relative;
@@ -926,10 +702,7 @@ body{
   transition:.18s ease;
 }
 
-.task-card:hover{
-  border-color:rgba(196,181,253,.18);
-  transform:translateY(-1px);
-}
+.task-card:hover{ border-color:rgba(196,181,253,.18); transform:translateY(-1px); }
 
 .task-check{
   width:23px;
@@ -941,136 +714,58 @@ body{
   display:grid;
   place-items:center;
   color:white;
-  cursor:pointer;
-}
-
-.task-check.checked{
-  border-color:var(--success);
-  background:var(--success);
-}
-
-.task-main{
-  min-width:0;
-  flex:1;
-}
-
-.task-title{
   font-size:13px;
-  line-height:1.4;
-  word-break:break-word;
+  font-weight:900;
 }
 
-.task-card.completed .task-title{
-  text-decoration:line-through;
-  opacity:.48;
-}
+.task-check.checked{ border-color:var(--success); background:var(--success); color:#091510; }
+.task-main{ min-width:0; flex:1; }
+.task-title{ font-size:13px; line-height:1.4; word-break:break-word; }
+.task-card.completed .task-title{ text-decoration:line-through; opacity:.48; }
 
-.task-meta{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:5px;
-  margin-top:5px;
-}
+.task-meta{ display:flex; align-items:center; flex-wrap:wrap; gap:5px; margin-top:5px; }
 
 .badge{
   display:inline-flex;
   align-items:center;
-  min-height:20px;
+  min-height:19px;
   padding:0 7px;
   border-radius:6px;
-  font-size:8px;
+  font-size:9px;
   font-weight:850;
   letter-spacing:.3px;
   text-transform:uppercase;
 }
 
-.badge.active{
-  color:#a7f3d0;
-  background:rgba(72,213,151,.09);
-  border:1px solid rgba(72,213,151,.15);
-}
+.badge.high{ color:#ffc3ca; background:rgba(255,102,120,.12); }
+.badge.medium{ color:#ffdba4; background:rgba(255,191,105,.12); }
+.badge.low{ color:#c7baff; background:rgba(139,92,246,.13); }
+.meta-date{ color:var(--soft); font-size:10px; }
 
-.badge.high{
-  color:#ffc3ca;
-  background:rgba(255,102,120,.08);
-}
-
-.badge.medium{
-  color:#ffdba4;
-  background:rgba(255,191,105,.08);
-}
-
-.badge.low{
-  color:#c7baff;
-  background:rgba(139,92,246,.09);
-}
-
-.meta-date{
-  color:var(--soft);
-  font-size:9px;
-}
-
-.task-actions{
-  display:flex;
-  align-items:center;
-  gap:1px;
-}
-
+.task-actions{ display:flex; align-items:center; gap:2px; }
 .task-action{
-  width:31px;
-  height:31px;
+  width:30px;
+  height:30px;
   border:0;
   border-radius:9px;
   background:transparent;
   color:var(--muted);
   display:grid;
   place-items:center;
+  font-size:13px;
 }
+.task-action:hover{ background:rgba(255,255,255,.06); color:white; }
+.task-action.delete{ color:var(--danger); }
 
-.task-action:hover{
-  background:rgba(255,255,255,.05);
-  color:white;
-}
-
-.task-action.delete{
-  color:var(--danger);
-}
-
-.empty{
-  padding:24px 10px;
-  text-align:center;
-  color:var(--soft);
-  font-size:11px;
-}
+.empty{ padding:24px 10px; text-align:center; color:var(--soft); font-size:12px; }
 
 /* =========================================================
    CALENDAR
 ========================================================= */
-
-.calendar-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.4fr) minmax(270px,.7fr);
-  gap:16px;
-}
-
-.calendar-head{
-  padding:20px 20px 12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.calendar-month{
-  font-size:17px;
-  font-weight:850;
-}
-
-.calendar-controls{
-  display:flex;
-  gap:5px;
-}
-
+.calendar-layout{ display:grid; grid-template-columns:minmax(0,1.4fr) minmax(270px,.7fr); gap:16px; }
+.calendar-head{ padding:20px 20px 12px; display:flex; align-items:center; justify-content:space-between; }
+.calendar-month{ font-size:17px; font-weight:850; }
+.calendar-controls{ display:flex; gap:5px; }
 .calendar-controls button{
   width:38px;
   height:38px;
@@ -1080,24 +775,9 @@ body{
   color:var(--primary3);
 }
 
-.calendar-grid{
-  padding:7px 15px 18px;
-}
-
-.weekdays,
-.days{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:4px;
-}
-
-.weekdays div{
-  text-align:center;
-  color:var(--soft);
-  font-size:9px;
-  font-weight:800;
-  padding:7px 0;
-}
+.calendar-grid{ padding:7px 15px 18px; }
+.weekdays,.days{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.weekdays div{ text-align:center; color:var(--soft); font-size:10px; font-weight:800; padding:7px 0; }
 
 .day{
   position:relative;
@@ -1108,22 +788,10 @@ body{
   color:var(--text);
   font-weight:700;
 }
-
-.day:hover{
-  background:rgba(139,92,246,.08);
-}
-
-.day.other{
-  opacity:.25;
-}
-
-.day.today{
-  border-color:rgba(167,139,250,.4);
-}
-
-.day.selected{
-  background:linear-gradient(135deg,#8b5cf6,#6738d6);
-}
+.day:hover{ background:rgba(139,92,246,.08); }
+.day.other{ opacity:.25; }
+.day.today{ border-color:rgba(167,139,250,.45); }
+.day.selected{ background:linear-gradient(135deg,#8b5cf6,#6738d6); }
 
 .day.has-tasks::after{
   content:"";
@@ -1136,29 +804,11 @@ body{
   transform:translateX(-50%);
   background:var(--success);
 }
+.day.selected.has-tasks::after{ background:white; }
 
-.day.selected.has-tasks::after{
-  background:white;
-}
-
-.selected-day{
-  height:100%;
-}
-
-.selected-day-body{
-  padding:20px;
-}
-
-.selected-date-title{
-  font-size:16px;
-  font-weight:850;
-}
-
-.selected-date-sub{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
-}
+.selected-day-body{ padding:20px; }
+.selected-date-title{ font-size:16px; font-weight:850; }
+.selected-date-sub{ color:var(--muted); font-size:11px; margin-top:4px; }
 
 .day-task{
   margin-top:10px;
@@ -1167,190 +817,113 @@ body{
   border-radius:12px;
   background:rgba(255,255,255,.025);
   font-size:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-
-.day-task.done{
-  text-decoration:line-through;
-  opacity:.45;
-}
+.day-task.done{ text-decoration:line-through; opacity:.45; }
 
 /* =========================================================
    FOCUS
 ========================================================= */
-
-.focus-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.1fr) minmax(270px,.9fr);
-  gap:16px;
-}
-
-.timer-card{
-  text-align:center;
-  padding:35px 20px;
-}
-
-.timer-mode{
-  color:var(--primary2);
-  font-size:11px;
-  font-weight:850;
-  letter-spacing:1.2px;
-  text-transform:uppercase;
-}
-
-.timer-display{
-  margin:20px 0;
-  font-size:clamp(65px,11vw,105px);
-  font-weight:900;
-  letter-spacing:-5px;
-  font-variant-numeric:tabular-nums;
-}
+.focus-layout{ display:grid; grid-template-columns:minmax(0,1.1fr) minmax(270px,.9fr); gap:16px; }
+.timer-card{ text-align:center; padding:32px 20px; }
+.timer-mode{ color:var(--primary2); font-size:11px; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; }
 
 .timer-ring{
-  width:250px;
-  height:250px;
+  width:245px;
+  height:245px;
   max-width:72vw;
-  margin:auto;
+  margin:18px auto;
   border-radius:50%;
   display:grid;
   place-items:center;
-  border:9px solid rgba(139,92,246,.1);
-  box-shadow:
-    inset 0 0 50px rgba(139,92,246,.06),
-    0 0 50px rgba(139,92,246,.08);
+  border:8px solid rgba(139,92,246,.16);
+  box-shadow:inset 0 0 50px rgba(139,92,246,.08),0 0 50px rgba(139,92,246,.1);
 }
 
-.timer-controls{
-  display:flex;
-  justify-content:center;
-  gap:8px;
+.timer-display{
+  font-size:clamp(54px,9vw,76px);
+  font-weight:900;
+  letter-spacing:-3px;
+  font-variant-numeric:tabular-nums;
 }
 
+.timer-controls{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
 .timer-controls button{
   min-height:46px;
   border-radius:13px;
   border:1px solid var(--line);
-  padding:0 17px;
+  padding:0 18px;
   font-weight:800;
 }
 
-.focus-presets{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:18px;
-}
-
+.focus-presets{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:16px; }
 .preset{
   padding:14px;
   border:1px solid var(--line);
   border-radius:14px;
   background:rgba(255,255,255,.025);
   color:var(--text);
-  cursor:pointer;
+  text-align:left;
+  transition:.15s;
 }
-
-.preset strong{
-  display:block;
-  font-size:13px;
-}
-
-.preset span{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:10px;
-}
+.preset:hover,.preset.active{ border-color:var(--primary); background:rgba(139,92,246,.12); }
+.preset strong{ display:block; font-size:13px; }
+.preset span{ display:block; margin-top:4px; color:var(--muted); font-size:11px; }
 
 /* =========================================================
    PROFILE
 ========================================================= */
-
-.profile-layout{
-  display:grid;
-  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
-  gap:16px;
-}
-
-.profile-card{
-  text-align:center;
-  padding:30px 20px;
-}
+.profile-layout{ display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:16px; }
+.profile-card{ text-align:center; padding:30px 20px; }
 
 .profile-avatar-large{
   position:relative;
-  width:115px;
-  height:115px;
+  width:110px;
+  height:110px;
   margin:0 auto 15px;
-  border-radius:34px;
+  border-radius:32px;
   overflow:hidden;
   background:linear-gradient(145deg,#9869ff,#6031cf);
   display:grid;
   place-items:center;
-  font-size:48px;
+  font-size:46px;
   font-weight:900;
   box-shadow:0 20px 55px rgba(108,70,220,.25);
 }
-
-.profile-avatar-large img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+.profile-avatar-large img{ width:100%; height:100%; object-fit:cover; }
 
 .upload-avatar{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-height:43px;
+  min-height:42px;
   padding:0 14px;
   border-radius:12px;
-  background:rgba(139,92,246,.1);
-  border:1px solid rgba(139,92,246,.2);
+  background:rgba(139,92,246,.12);
+  border:1px solid rgba(139,92,246,.22);
   color:var(--primary3);
   font-size:12px;
   font-weight:800;
   cursor:pointer;
 }
 
-.profile-name{
-  margin-top:15px;
-  font-size:20px;
-  font-weight:850;
-}
+.profile-name{ margin-top:14px; font-size:20px; font-weight:850; }
+.profile-note{ color:var(--muted); font-size:11px; margin-top:5px; }
 
-.profile-note{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:5px;
-}
-
-.settings-section{
-  padding:20px;
-}
-
+.settings-section{ padding:20px; }
 .settings-item{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:15px;
-  padding:15px 0;
+  padding:14px 0;
   border-bottom:1px solid var(--line2);
 }
-
-.settings-item:last-child{
-  border-bottom:0;
-}
-
-.settings-item strong{
-  font-size:13px;
-}
-
-.settings-item p{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:4px;
-  line-height:1.4;
-}
+.settings-item:last-child{ border-bottom:0; }
+.settings-item strong{ font-size:13px; }
+.settings-item p{ color:var(--muted); font-size:11px; margin-top:4px; line-height:1.4; }
 
 .switch{
   width:46px;
@@ -1362,73 +935,23 @@ body{
   cursor:pointer;
   flex-shrink:0;
 }
-
-.switch span{
-  display:block;
-  width:19px;
-  height:19px;
-  border-radius:50%;
-  background:#aaa2b7;
-  transition:.2s;
-}
-
-.switch.on{
-  background:#6f40df;
-}
-
-.switch.on span{
-  transform:translateX(19px);
-  background:white;
-}
+.switch span{ display:block; width:19px; height:19px; border-radius:50%; background:#aaa2b7; transition:.2s; }
+.switch.on{ background:#6f40df; }
+.switch.on span{ transform:translateX(19px); background:white; }
 
 /* =========================================================
    SPIRITUAL
 ========================================================= */
-
-.spiritual{
-  margin-top:16px;
-}
-
-.spiritual-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
-  margin-top:15px;
-}
-
-.spiritual-field label{
-  display:block;
-  margin-bottom:7px;
-  color:var(--primary2);
-  font-size:10px;
-  font-weight:850;
-  letter-spacing:.6px;
-}
-
-.spiritual-actions{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:10px;
-}
-
-.spiritual-status{
-  color:var(--soft);
-  font-size:10px;
-  flex:1;
-}
+.spiritual{ margin-top:16px; }
+.spiritual-grid{ display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:15px; }
+.spiritual-field label{ display:block; margin-bottom:7px; color:var(--primary2); font-size:10px; font-weight:850; letter-spacing:.6px; }
+.spiritual-actions{ display:flex; align-items:center; gap:10px; margin-top:12px; }
+.spiritual-status{ color:var(--soft); font-size:11px; flex:1; }
 
 /* =========================================================
-   BOTTOM NAV
+   BOTTOM NAV & MODALS
 ========================================================= */
-
-.mobile-nav{
-  display:none;
-}
-
-/* =========================================================
-   MODALS
-========================================================= */
+.mobile-nav{ display:none; }
 
 .modal-backdrop{
   position:fixed;
@@ -1438,22 +961,19 @@ body{
   align-items:center;
   justify-content:center;
   padding:18px;
-  background:rgba(5,3,12,.68);
-  backdrop-filter:blur(10px);
+  background:rgba(5,3,12,.72);
+  backdrop-filter:blur(12px);
 }
-
-.modal-backdrop.open{
-  display:flex;
-}
+.modal-backdrop.open{ display:flex; }
 
 .modal{
-  width:min(560px,100%);
+  width:min(520px,100%);
   max-height:90vh;
   overflow:auto;
   border-radius:25px;
   border:1px solid var(--line);
   background:linear-gradient(145deg,#29194a,#120c25);
-  box-shadow:0 35px 100px rgba(0,0,0,.55);
+  box-shadow:0 35px 100px rgba(0,0,0,.65);
 }
 
 .modal-head{
@@ -1461,179 +981,75 @@ body{
   justify-content:space-between;
   align-items:center;
   gap:12px;
-  padding:20px;
+  padding:18px 20px;
   border-bottom:1px solid var(--line2);
 }
-
-.modal-title{
-  font-size:18px;
-  font-weight:850;
-}
-
-.modal-close{
-  width:37px;
-  height:37px;
-  border-radius:11px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-  color:var(--muted);
-}
-
-.modal-body{
-  padding:20px;
-}
-
-.form-label{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  font-weight:800;
-  margin-bottom:6px;
-}
-
-.form-group{
-  margin-bottom:13px;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.modal-footer{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  padding:16px 20px 20px;
-}
+.modal-title{ font-size:17px; font-weight:850; }
+.modal-close{ width:36px; height:36px; border-radius:11px; border:1px solid var(--line); background:rgba(255,255,255,.04); color:var(--muted); }
+.modal-body{ padding:20px; }
+.form-label{ display:block; color:var(--muted); font-size:11px; font-weight:800; margin-bottom:6px; }
+.form-group{ margin-bottom:13px; }
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.modal-footer{ display:flex; justify-content:flex-end; gap:8px; padding:12px 20px 20px; }
 
 /* =========================================================
-   TOAST
+   TOAST & INSTALL BANNER
 ========================================================= */
-
 .toast{
   position:fixed;
   z-index:99999;
   left:50%;
-  bottom:24px;
+  bottom:90px;
   transform:translate(-50%,20px);
   opacity:0;
   pointer-events:none;
-  padding:12px 16px;
+  padding:12px 18px;
   border-radius:13px;
   border:1px solid var(--line);
   background:#29194a;
   color:white;
   font-size:12px;
-  box-shadow:0 15px 45px rgba(0,0,0,.45);
+  font-weight:700;
+  box-shadow:0 15px 45px rgba(0,0,0,.5);
   transition:.25s;
 }
-
-.toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
-}
-
-/* =========================================================
-   INSTALL
-========================================================= */
+.toast.show{ opacity:1; transform:translate(-50%,0); }
 
 .install-banner{
   display:none;
   margin-bottom:16px;
-  padding:14px 15px;
+  padding:14px 16px;
   border-radius:17px;
-  border:1px solid rgba(139,92,246,.2);
-  background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(255,255,255,.025));
+  border:1px solid rgba(139,92,246,.25);
+  background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(255,255,255,.03));
   align-items:center;
   gap:12px;
 }
+.install-banner.show{ display:flex; }
+.install-banner-content{ flex:1; }
+.install-banner strong{ font-size:13px; }
+.install-banner p{ color:var(--muted); font-size:11px; margin-top:3px; }
 
-.install-banner.show{
-  display:flex;
-}
-
-.install-banner-content{
-  flex:1;
-}
-
-.install-banner strong{
-  font-size:12px;
-}
-
-.install-banner p{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-}
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-.copyright{
-  text-align:center;
-  color:#655d7b;
-  font-size:10px;
-  margin-top:35px;
-  padding-bottom:20px;
-}
+.copyright{ text-align:center; color:#655d7b; font-size:11px; margin-top:35px; padding-bottom:20px; }
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
-
 @media(max-width:1050px){
-  .app-shell{
-    grid-template-columns:82px minmax(0,1fr);
-  }
-
-  .brand{
-    justify-content:center;
-  }
-
-  .brand-text,
-  .nav-label,
-  .mini-profile-name{
-    display:none;
-  }
-
-  .sidebar{
-    padding:18px 10px;
-  }
-
-  .nav-btn{
-    justify-content:center;
-    padding:0;
-  }
-
-  .sidebar-bottom{
-    left:10px;
-    right:10px;
-  }
-
-  .mini-profile{
-    justify-content:center;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
+  .app-shell{ grid-template-columns:82px minmax(0,1fr); }
+  .brand{ justify-content:center; }
+  .brand-text,.nav-label,.mini-profile-name{ display:none; }
+  .sidebar{ padding:18px 10px; }
+  .nav-btn{ justify-content:center; padding:0; }
+  .sidebar-bottom{ left:10px; right:10px; }
+  .mini-profile{ justify-content:center; }
+  .stats{ grid-template-columns:repeat(2,1fr); }
 }
 
 @media(max-width:820px){
-  .app-shell{
-    display:block;
-  }
-
-  .sidebar{
-    display:none;
-  }
-
-  .main{
-    padding:17px 13px 95px;
-  }
+  .app-shell{ display:block; }
+  .sidebar{ display:none; }
+  .main{ padding:17px 13px 100px; }
 
   .mobile-nav{
     position:fixed;
@@ -1647,7 +1063,7 @@ body{
     padding:6px;
     border:1px solid rgba(196,181,253,.14);
     border-radius:22px;
-    background:rgba(20,12,38,.9);
+    background:rgba(20,12,38,.92);
     backdrop-filter:blur(25px);
     box-shadow:0 18px 55px rgba(0,0,0,.5);
   }
@@ -1662,124 +1078,24 @@ body{
     align-items:center;
     justify-content:center;
     gap:4px;
-    font-size:9px;
+    font-size:10px;
     font-weight:800;
   }
 
-  .mobile-nav button.active{
-    color:var(--primary3);
-    background:rgba(139,92,246,.1);
-  }
+  .mobile-nav button.active{ color:var(--primary3); background:rgba(139,92,246,.12); }
+  .mobile-nav .mobile-icon{ font-size:18px; }
 
-  .mobile-nav .mobile-icon{
-    font-size:18px;
-  }
-
-  .calendar-layout,
-  .focus-layout,
-  .profile-layout{
-    grid-template-columns:1fr;
-  }
-
-  .plans-grid{
-    grid-template-columns:1fr;
-  }
+  .calendar-layout,.focus-layout,.profile-layout,.plans-grid{ grid-template-columns:1fr; }
 }
 
 @media(max-width:650px){
-  .verses{
-    grid-template-columns:1fr;
-  }
-
-  .verse.right{
-    text-align:left;
-  }
-
-  .quick-add-grid{
-    grid-template-columns:1fr;
-  }
-
-  .filters{
-    grid-template-columns:1fr;
-  }
-
-  .date-strip{
-    align-items:stretch;
-    flex-direction:column;
-  }
-
-  .date-control{
-    width:100%;
-  }
-
-  .date-control .input{
-    flex:1;
-    width:100%;
-  }
-
-  .spiritual-grid{
-    grid-template-columns:1fr;
-  }
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .topbar{
-    align-items:flex-start;
-  }
-
-  .top-actions .circle-btn:first-child{
-    display:none;
-  }
-
-  .timer-ring{
-    width:220px;
-    height:220px;
-  }
-}
-
-@media(max-width:430px){
-  .main{
-    padding-left:10px;
-    padding-right:10px;
-  }
-
-  .card-body{
-    padding:16px;
-  }
-
-  .hero{
-    padding:18px;
-  }
-
-  .stats{
-    gap:8px;
-  }
-
-  .stat{
-    padding:13px 8px;
-  }
-
-  .stat-number{
-    font-size:21px;
-  }
-
-  .task-card{
-    padding:10px;
-  }
-
-  .task-action{
-    width:28px;
-  }
-
-  .lock-card{
-    padding:25px 18px;
-  }
-
-  .lock-title{
-    font-size:23px;
-  }
+  .verses,.spiritual-grid,.form-grid,.quick-add-grid,.filters{ grid-template-columns:1fr; }
+  .verse.right{ text-align:left; }
+  .date-strip{ align-items:stretch; flex-direction:column; }
+  .date-control{ width:100%; }
+  .date-control .input{ flex:1; width:100%; }
+  .topbar{ align-items:flex-start; }
+  .timer-ring{ width:215px; height:215px; }
 }
 </style>
 </head>
@@ -1795,7 +1111,7 @@ body{
   <div class="splash-inner">
     <div class="splash-logo">T</div>
     <div class="splash-title">Tsega Habit Tracker</div>
-    <div class="splash-sub">Preparing your focus...</div>
+    <div class="splash-sub">Preparing your offline focus workspace...</div>
     <div class="loading-track">
       <div class="loading-fill" id="loadingFill"></div>
     </div>
@@ -1803,4821 +1119,1550 @@ body{
 </div>
 
 <!-- =======================================================
-     LOCK / ACCOUNT SCREEN
+     LOCK / ACCOUNT SCREEN (ALWAYS ENFORCED ON OPEN & RESUME)
 ======================================================= -->
 <div class="lock-screen" id="lockScreen">
-
   <div class="lock-card">
-
     <div class="lock-logo">T</div>
-
-    <div class="lock-title" id="lockTitle">
-      Secure your tracker
-    </div>
-
+    <div class="lock-title" id="lockTitle">Secure your tracker</div>
     <div class="lock-description" id="lockDescription">
-      Create a secure 4–12 digit PIN to protect access to your personal planner.
+      Create a 4–12 digit PIN to protect your personal planner every time it opens.
     </div>
 
+    <!-- FIRST TIME SETUP -->
     <div id="setupFields">
-
       <div class="form-group">
-        <input
-          class="lock-input"
-          id="setupName"
-          type="text"
-          maxlength="40"
-          placeholder="Your name"
-          style="letter-spacing:0;text-align:left;font-size:15px"
-        >
+        <input class="lock-input" id="setupName" type="text" maxlength="40" placeholder="Your name (e.g. Tsega)" style="letter-spacing:0;text-align:left;font-size:15px">
       </div>
-
       <div class="lock-input-wrap">
-        <input
-          class="lock-input"
-          id="setupPin"
-          type="password"
-          inputmode="numeric"
-          autocomplete="new-password"
-          maxlength="12"
-          placeholder="PIN"
-        >
-        <button class="password-eye" id="setupEye" type="button">◉</button>
+        <input class="lock-input" id="setupPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="Create PIN">
+        <button class="password-eye" type="button" onclick="togglePinEye('setupPin')">◉</button>
       </div>
-
       <div class="lock-input-wrap">
-        <input
-          class="lock-input"
-          id="setupPinConfirm"
-          type="password"
-          inputmode="numeric"
-          autocomplete="new-password"
-          maxlength="12"
-          placeholder="Confirm PIN"
-        >
-        <button class="password-eye" id="setupConfirmEye" type="button">◉</button>
+        <input class="lock-input" id="setupPinConfirm" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="Confirm PIN">
+        <button class="password-eye" type="button" onclick="togglePinEye('setupPinConfirm')">◉</button>
       </div>
-
-      <button class="lock-button" id="createAccountBtn">
-        Create Secure Access
+      <button class="lock-button" id="createAccountBtn">Create Secure Access</button>
+      <button class="biometric-button" id="setupBiometricBtn" type="button">
+        <span>👆</span> Enable Fingerprint / FaceID Unlock
       </button>
-
-      <button class="biometric-button" id="setupBiometricBtn" style="display:none">
-        ◉ Enable device / fingerprint unlock
-      </button>
-
     </div>
 
-    <div id="loginFields" style="display:none">
-
+    <!-- UNLOCK EXISTING ACCOUNT -->
+    <div id="unlockFields" style="display:none">
       <div class="lock-input-wrap">
-        <input
-          class="lock-input"
-          id="loginPin"
-          type="password"
-          inputmode="numeric"
-          autocomplete="current-password"
-          maxlength="12"
-          placeholder="Enter PIN"
-        >
-        <button class="password-eye" id="loginEye" type="button">◉</button>
+        <input class="lock-input" id="unlockPin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12" placeholder="••••">
+        <button class="password-eye" type="button" onclick="togglePinEye('unlockPin')">◉</button>
       </div>
-
-      <button class="lock-button" id="unlockBtn">
-        Unlock Tracker
+      <button class="lock-button" id="unlockBtn">Unlock Workspace</button>
+      <button class="biometric-button" id="unlockBiometricBtn" type="button" style="display:none">
+        <span>👆</span> Unlock with Biometrics
       </button>
-
-      <button class="biometric-button" id="loginBiometricBtn" style="display:none">
-        ◉ Unlock with device / fingerprint
-      </button>
-
-      <div class="lock-error" id="loginError"></div>
-
     </div>
+
+    <div class="lock-error" id="lockError"></div>
 
     <div class="lock-footnote">
-      Your access credentials are stored locally on this device.
-      This is a personal app lock, not banking-grade security.
+      100% Offline Encrypted Local Storage • Auto-locks on app switch for privacy
     </div>
-
   </div>
-
 </div>
 
 <!-- =======================================================
-     APPLICATION
+     MAIN APPLICATION
 ======================================================= -->
 <div class="app" id="app">
-
   <div class="app-shell">
 
     <!-- DESKTOP SIDEBAR -->
     <aside class="sidebar">
-
       <div class="brand">
         <div class="brand-logo">T</div>
         <div class="brand-text">
           <div class="brand-name">Tsega Tracker</div>
-          <div class="brand-sub">Daily Focus System</div>
+          <div class="brand-sub">OFFLINE FOCUS OS</div>
         </div>
       </div>
 
       <nav class="nav">
-
-        <button class="nav-btn active" data-page="home">
-          <span class="nav-icon">⌂</span>
-          <span class="nav-label">Home</span>
-        </button>
-
-        <button class="nav-btn" data-page="plans">
-          <span class="nav-icon">✓</span>
-          <span class="nav-label">Daily Plans</span>
-        </button>
-
-        <button class="nav-btn" data-page="calendar">
-          <span class="nav-icon">▣</span>
-          <span class="nav-label">Calendar</span>
-        </button>
-
-        <button class="nav-btn" data-page="focus">
-          <span class="nav-icon">◷</span>
-          <span class="nav-label">Focus</span>
-        </button>
-
-        <button class="nav-btn" data-page="profile">
-          <span class="nav-icon">◎</span>
-          <span class="nav-label">Profile</span>
-        </button>
-
+        <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span><span class="nav-label">Dashboard</span></button>
+        <button class="nav-btn" data-page="plans"><span class="nav-icon">☑</span><span class="nav-label">Daily Plans</span></button>
+        <button class="nav-btn" data-page="calendar"><span class="nav-icon">📅</span><span class="nav-label">Calendar</span></button>
+        <button class="nav-btn" data-page="focus"><span class="nav-icon">⏱</span><span class="nav-label">Deep Focus</span></button>
+        <button class="nav-btn" data-page="profile"><span class="nav-icon">⚙</span><span class="nav-label">Settings & Vault</span></button>
       </nav>
 
       <div class="sidebar-bottom">
-        <div class="mini-profile" id="sidebarProfileBtn">
-          <div class="avatar" id="sidebarAvatar">
-            T
-          </div>
+        <div class="mini-profile" onclick="switchPage('profile')">
+          <div class="avatar" id="sidebarAvatar">T</div>
           <div class="mini-profile-name">
             <strong id="sidebarName">Tsega</strong>
-            <span>Personal planner</span>
+            <span>Tap for settings</span>
           </div>
         </div>
       </div>
-
     </aside>
 
-    <!-- MAIN -->
+    <!-- CONTENT AREA -->
     <main class="main">
 
-      <!-- TOP BAR -->
-      <div class="topbar">
-
+      <!-- TOPBAR -->
+      <header class="topbar">
         <div class="topbar-left">
-          <h1 id="pageTitle">Hey there! It's about sticking to the plan</h1>
-          <p id="pageSubtitle"></p>
+          <h1 id="greetingTitle">Welcome back, Tsega</h1>
+          <p id="currentDateDisplay">Loading today's schedule...</p>
         </div>
-
         <div class="top-actions">
-
-          <button class="circle-btn" id="lockNowBtn" title="Lock app">
-            🔒
-          </button>
-
-          <button class="circle-btn" id="topProfileBtn" title="Profile">
-            <span id="topAvatar">T</span>
-          </button>
-
+          <div class="status-pill" id="offlinePill" title="Offline Ready">
+            <span class="status-dot" id="networkDot"></span>
+            <span id="networkText">Offline Ready</span>
+          </div>
+          <button class="circle-btn" title="Quick Command (Ctrl+K)" onclick="openCommandModal()">⌘</button>
+          <button class="circle-btn" title="Lock App Now" onclick="lockApp()">🔒</button>
         </div>
+      </header>
 
-      </div>
-
-      <!-- INSTALL BANNER -->
+      <!-- INSTALL PWA BANNER -->
       <div class="install-banner" id="installBanner">
-
         <div class="install-banner-content">
-          <strong>Install Tsega Tracker</strong>
-          <p>Keep your planner one tap away on your phone.</p>
+          <strong>Install Tsega Habit Tracker App</strong>
+          <p>Add to your Android home screen for full-screen offline access.</p>
         </div>
-
-        <button class="primary-btn" id="installBtn" style="min-height:40px">
-          Install
-        </button>
-
+        <button class="primary-btn" id="installPwaBtn" style="min-height:38px;padding:0 14px;font-size:12px">Install</button>
       </div>
 
-      <!-- =================================================
-           HOME PAGE
-      ================================================== -->
+      <!-- ===================================================
+           PAGE 1: HOME DASHBOARD
+      =================================================== -->
       <section class="page active" id="page-home">
 
+        <!-- SPIRITUAL ANCHOR VERSES -->
         <div class="verses">
-
           <div class="verse">
-            <span class="verse-ref">Proverbs 16:3</span>
-            <p>
-              Commit to the LORD whatever you do,
-              and he will establish your plans.
-            </p>
+            <div class="verse-ref" id="verse1Ref">PROVERBS 16:3</div>
+            <p id="verse1Text">“Commit to the Lord whatever you do, and he will establish your plans.”</p>
           </div>
-
           <div class="verse right">
-            <span class="verse-ref">Proverbs 12:24</span>
-            <p>
-              The diligent will rule,
-              but laziness ends in forced labor.
-            </p>
+            <div class="verse-ref" id="verse2Ref">COLOSSIANS 3:23</div>
+            <p id="verse2Text">“Whatever you do, work at it with all your heart, as working for the Lord.”</p>
           </div>
-
         </div>
 
+        <!-- DAILY FOCUS HERO -->
         <div class="card hero">
-
           <div class="hero-content">
-
-            <div class="hero-icon">
-              ✦
-            </div>
-
+            <div class="hero-icon">⚡</div>
             <div>
-              <div class="hero-label">
-                Today's Motivation
-              </div>
-
-              <div class="hero-text" id="quoteText">
-                Loading your motivation...
-              </div>
+              <div class="hero-label">TODAY'S PRIMARY INTENTION</div>
+              <div class="hero-text" id="heroIntention">Execute high-leverage creative work with unwavering discipline and zero distractions.</div>
             </div>
-
           </div>
-
         </div>
 
+        <!-- KPI STATS -->
         <div class="stats">
-
           <div class="stat">
-            <div class="stat-icon">✓</div>
-            <div class="stat-number" id="statCompleted">0</div>
-            <div class="stat-label">Completed</div>
+            <div class="stat-icon">🔥</div>
+            <div class="stat-number" id="statStreak">0</div>
+            <div class="stat-label">Day Streak</div>
           </div>
-
           <div class="stat">
-            <div class="stat-icon">◷</div>
-            <div class="stat-number" id="statProgress">0</div>
-            <div class="stat-label">In Progress</div>
+            <div class="stat-icon">✅</div>
+            <div class="stat-number" id="statCompleted">0/0</div>
+            <div class="stat-label">Today's Tasks</div>
           </div>
-
           <div class="stat">
-            <div class="stat-icon">☷</div>
-            <div class="stat-number" id="statPending">0</div>
-            <div class="stat-label">Pending</div>
+            <div class="stat-icon">⏱</div>
+            <div class="stat-number" id="statFocusMins">0m</div>
+            <div class="stat-label">Deep Focus</div>
           </div>
-
           <div class="stat">
-            <div class="stat-icon">◎</div>
+            <div class="stat-icon">📈</div>
             <div class="stat-number" id="statRate">0%</div>
-            <div class="stat-label">Completion</div>
+            <div class="stat-label">Execution Rate</div>
           </div>
-
         </div>
 
+        <!-- PROGRESS BAR -->
         <div class="card progress-card">
           <div class="card-body">
-
             <div class="progress-header">
-              <span>Today's focus</span>
-              <span id="progressText">0 of 0 completed</span>
+              <span>Daily Discipline Completion</span>
+              <span id="progressPercentText">0%</span>
             </div>
-
             <div class="progress-track">
-              <div class="progress-bar" id="progressBar"></div>
+              <div class="progress-bar" id="dailyProgressBar"></div>
             </div>
-
           </div>
         </div>
 
+        <!-- DAILY NON-NEGOTIABLE HABITS -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-body">
+            <div class="row-between">
+              <div>
+                <div class="section-title">Daily Non-Negotiable Habits</div>
+                <div class="section-subtitle">Tap to check off today's core habits and build your streak</div>
+              </div>
+              <button class="secondary-btn" style="min-height:36px;padding:0 12px;font-size:12px" onclick="openHabitModal()">+ Habit</button>
+            </div>
+            <div class="habit-strip" id="habitStrip"></div>
+          </div>
+        </div>
+
+        <!-- QUICK TASK CAPTURE -->
         <div class="card quick-add">
           <div class="card-body">
-
-            <div class="section-title">
-              Quick Add
-            </div>
-
-            <div class="section-subtitle">
-              Add a task without leaving the home screen.
-            </div>
-
-            <div class="quick-add-grid" style="margin-top:13px">
-
-              <input
-                class="input"
-                id="quickTaskInput"
-                type="text"
-                maxlength="180"
-                placeholder="What needs to get done?"
-              >
-
-              <select class="select" id="quickTaskType">
-                <option value="daily">📅 Daily</option>
-                <option value="monthly">🗓 Monthly</option>
-                <option value="yearly">📆 Yearly</option>
-                <option value="todo">✓ To-Do</option>
-                <option value="not-to-do">🚫 Not-To-Do</option>
+            <div class="section-title">Quick Action Capture</div>
+            <div class="section-subtitle">Add an actionable task directly to today's plan</div>
+            <div class="quick-add-grid">
+              <input class="input" id="quickTaskInput" type="text" placeholder="What needs to be accomplished today?">
+              <select class="select" id="quickTaskCategory">
+                <option value="deepwork">Deep Work</option>
+                <option value="morning">Morning Ritual</option>
+                <option value="growth">Skill & Growth</option>
+                <option value="evening">Evening Routine</option>
               </select>
-
-              <button class="primary-btn" id="quickAddBtn">
-                + Add task
-              </button>
-
+              <select class="select" id="quickTaskPriority">
+                <option value="high">High Priority</option>
+                <option value="medium" selected>Medium</option>
+                <option value="low">Low</option>
+              </select>
+              <button class="primary-btn" onclick="quickAddTask()">Add Task</button>
             </div>
-
-          </div>
-        </div>
-
-        <div class="card spiritual">
-
-          <div class="card-body">
-
-            <div class="section-title">
-              ♥ Daily Bible & Positive Words
-            </div>
-
-            <div class="section-subtitle">
-              Keep something meaningful in front of you.
-            </div>
-
-            <div class="spiritual-grid">
-
-              <div class="spiritual-field">
-
-                <label for="dailyBibleVerse">
-                  MY DAILY BIBLE VERSE
-                </label>
-
-                <textarea
-                  class="textarea"
-                  id="dailyBibleVerse"
-                  placeholder="Write today's verse, reference or reflection..."
-                ></textarea>
-
-              </div>
-
-              <div class="spiritual-field">
-
-                <label for="positiveWords">
-                  MY POSITIVE WORDS
-                </label>
-
-                <textarea
-                  class="textarea"
-                  id="positiveWords"
-                  placeholder="Write your affirmation, gratitude or encouragement..."
-                ></textarea>
-
-              </div>
-
-            </div>
-
-            <div class="spiritual-actions">
-              <span class="spiritual-status" id="spiritualStatus">
-                Saved automatically on this device.
-              </span>
-
-              <button class="secondary-btn" id="saveSpiritualBtn">
-                Save
-              </button>
-            </div>
-
           </div>
         </div>
 
       </section>
 
-      <!-- =================================================
-           PLANS PAGE
-      ================================================== -->
+      <!-- ===================================================
+           PAGE 2: DAILY PLANS
+      =================================================== -->
       <section class="page" id="page-plans">
-
         <div class="date-strip">
-
-          <div>
-            <div class="section-title">Your Plans</div>
-            <div class="section-subtitle">
-              Organize the exact day you want to execute your tasks.
-            </div>
-          </div>
-
           <div class="date-control">
-
-            <input
-              class="input"
-              id="selectedDate"
-              type="date"
-            >
-
-            <button class="today-btn" id="todayBtn">
-              Today
-            </button>
-
+            <input class="input" type="date" id="planDatePicker">
+            <button class="today-btn" onclick="setPlanDateToday()">Today</button>
           </div>
-
+          <button class="primary-btn" onclick="openTaskModal()">+ New Scheduled Task</button>
         </div>
 
-        <div class="card" style="margin-bottom:16px">
-
-          <div class="card-body">
-
-            <div class="filters">
-
-              <input
-                class="input"
-                id="searchInput"
-                type="search"
-                placeholder="Search tasks..."
-              >
-
-              <select class="select" id="statusFilter">
-                <option value="all">All statuses</option>
-                <option value="pending">Pending</option>
-                <option value="progress">In progress</option>
-                <option value="completed">Completed</option>
-              </select>
-
-              <select class="select" id="sortSelect">
-                <option value="priority">Priority first</option>
-                <option value="newest">Newest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="alphabetical">A–Z</option>
-              </select>
-
-            </div>
-
-          </div>
-
+        <div class="filters">
+          <input class="input" id="taskSearchInput" type="text" placeholder="Search tasks...">
+          <select class="select" id="filterStatus">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending Only</option>
+            <option value="completed">Completed Only</option>
+          </select>
+          <select class="select" id="filterPriority">
+            <option value="all">All Priorities</option>
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
         </div>
 
         <div class="plans-grid">
-
           <div class="card plan-card">
             <div class="plan-head">
-              <div class="plan-name">📅 Daily Plans</div>
-              <div class="plan-count" data-count="daily">0</div>
+              <span class="plan-name">🌅 Morning Rituals</span>
+              <span class="plan-count" id="count-morning">0</span>
             </div>
-            <div class="task-list" id="list-daily"></div>
+            <div class="task-list" id="list-morning"></div>
           </div>
 
           <div class="card plan-card">
             <div class="plan-head">
-              <div class="plan-name">🗓 Monthly Plans</div>
-              <div class="plan-count" data-count="monthly">0</div>
+              <span class="plan-name">🎯 Deep Work & Execution</span>
+              <span class="plan-count" id="count-deepwork">0</span>
             </div>
-            <div class="task-list" id="list-monthly"></div>
+            <div class="task-list" id="list-deepwork"></div>
           </div>
 
           <div class="card plan-card">
             <div class="plan-head">
-              <div class="plan-name">📆 Yearly Plans</div>
-              <div class="plan-count" data-count="yearly">0</div>
+              <span class="plan-name">📚 Skill & Personal Growth</span>
+              <span class="plan-count" id="count-growth">0</span>
             </div>
-            <div class="task-list" id="list-yearly"></div>
+            <div class="task-list" id="list-growth"></div>
           </div>
 
           <div class="card plan-card">
             <div class="plan-head">
-              <div class="plan-name">✓ To-Do</div>
-              <div class="plan-count" data-count="todo">0</div>
+              <span class="plan-name">🌙 Evening Wind-Down</span>
+              <span class="plan-count" id="count-evening">0</span>
             </div>
-            <div class="task-list" id="list-todo"></div>
+            <div class="task-list" id="list-evening"></div>
           </div>
-
-          <div class="card plan-card">
-            <div class="plan-head">
-              <div class="plan-name">🚫 Not-To-Do</div>
-              <div class="plan-count" data-count="not-to-do">0</div>
-            </div>
-            <div class="task-list" id="list-not-to-do"></div>
-          </div>
-
-          <div class="card plan-card">
-            <div class="plan-head">
-              <div class="plan-name">✓ Completed</div>
-              <div class="plan-count" id="count-completed">0</div>
-            </div>
-            <div class="task-list" id="list-completed"></div>
-          </div>
-
-          <div class="card plan-card">
-            <div class="plan-head">
-              <div class="plan-name">◷ In Progress</div>
-              <div class="plan-count" id="count-progress">0</div>
-            </div>
-            <div class="task-list" id="list-progress"></div>
-          </div>
-
         </div>
-
       </section>
 
-      <!-- =================================================
-           CALENDAR PAGE
-      ================================================== -->
+      <!-- ===================================================
+           PAGE 3: CALENDAR
+      =================================================== -->
       <section class="page" id="page-calendar">
-
         <div class="calendar-layout">
-
           <div class="card">
-
             <div class="calendar-head">
-
-              <div class="calendar-month" id="calendarTitle">
-                November 2026
-              </div>
-
+              <div class="calendar-month" id="calendarMonthLabel">November 2026</div>
               <div class="calendar-controls">
-                <button id="calendarPrev">‹</button>
-                <button id="calendarToday">•</button>
-                <button id="calendarNext">›</button>
+                <button onclick="changeCalendarMonth(-1)">‹</button>
+                <button onclick="jumpCalendarToday()">•</button>
+                <button onclick="changeCalendarMonth(1)">›</button>
               </div>
-
             </div>
-
             <div class="calendar-grid">
-
               <div class="weekdays">
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
+                <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
               </div>
-
-              <div class="days" id="calendarDays"></div>
-
+              <div class="days" id="calendarDaysGrid"></div>
             </div>
-
           </div>
 
           <div class="card selected-day">
-
             <div class="selected-day-body">
-
-              <div class="selected-date-title" id="calendarSelectedTitle">
-                Today
-              </div>
-
-              <div class="selected-date-sub">
-                Tasks scheduled for this day
-              </div>
-
-              <div id="calendarSelectedTasks"></div>
-
+              <div class="selected-date-title" id="calSelectedDateTitle">Selected Day</div>
+              <div class="selected-date-sub" id="calSelectedDateSub">0 tasks scheduled</div>
+              <div id="calSelectedTaskList" style="margin-top:14px"></div>
+              <button class="secondary-btn" style="width:100%;margin-top:14px" onclick="jumpToSelectedPlanDate()">Open in Daily Plans →</button>
             </div>
-
           </div>
-
         </div>
-
       </section>
 
-      <!-- =================================================
-           FOCUS PAGE
-      ================================================== -->
+      <!-- ===================================================
+           PAGE 4: DEEP FOCUS TIMER
+      =================================================== -->
       <section class="page" id="page-focus">
-
         <div class="focus-layout">
-
-          <div class="card">
-
-            <div class="timer-card">
-
-              <div class="timer-mode" id="timerMode">
-                Focus Session
-              </div>
-
-              <div class="timer-ring">
-
-                <div class="timer-display" id="timerDisplay">
-                  25:00
-                </div>
-
-              </div>
-
-              <div class="timer-controls">
-
-                <button
-                  class="primary-btn"
-                  id="timerStart"
-                >
-                  Start
-                </button>
-
-                <button
-                  class="secondary-btn"
-                  id="timerReset"
-                >
-                  Reset
-                </button>
-
-              </div>
-
-              <div class="focus-presets">
-
-                <button class="preset" data-minutes="25">
-                  <strong>25 min</strong>
-                  <span>Deep focus</span>
-                </button>
-
-                <button class="preset" data-minutes="50">
-                  <strong>50 min</strong>
-                  <span>Deep work</span>
-                </button>
-
-                <button class="preset" data-minutes="15">
-                  <strong>15 min</strong>
-                  <span>Quick focus</span>
-                </button>
-
-                <button class="preset" data-minutes="5">
-                  <strong>5 min</strong>
-                  <span>Mini session</span>
-                </button>
-
-              </div>
-
+          <div class="card timer-card">
+            <div class="timer-mode" id="timerModeLabel">DEEP FOCUS SESSION</div>
+            <div class="timer-ring">
+              <div class="timer-display" id="timerDisplay">25:00</div>
             </div>
-
+            <div class="timer-controls">
+              <button class="primary-btn" id="timerStartBtn" onclick="toggleTimer()">Start Focus</button>
+              <button class="secondary-btn" onclick="resetTimer()">Reset</button>
+              <button class="secondary-btn" id="brownNoiseBtn" onclick="toggleBrownNoise()">🎧 Ambient Sound: OFF</button>
+            </div>
           </div>
 
           <div class="card">
-
             <div class="card-body">
-
-              <div class="section-title">
-                Focus rules
+              <div class="section-title">Session Presets</div>
+              <div class="section-subtitle">Select an interval calibrated for flow state</div>
+              <div class="focus-presets">
+                <button class="preset active" onclick="setTimerPreset(25, 'DEEP FOCUS SESSION', this)">
+                  <strong>25 Min Pomodoro</strong>
+                  <span>Standard high-output sprint</span>
+                </button>
+                <button class="preset" onclick="setTimerPreset(50, 'EXTENDED FLOW STATE', this)">
+                  <strong>50 Min Deep Work</strong>
+                  <span>Complex creative & coding block</span>
+                </button>
+                <button class="preset" onclick="setTimerPreset(5, 'SHORT RECOVERY', this)">
+                  <strong>5 Min Rest</strong>
+                  <span>Step away and reset eyes</span>
+                </button>
+                <button class="preset" onclick="setTimerPreset(15, 'LONG RECHARGE', this)">
+                  <strong>15 Min Recharge</strong>
+                  <span>Walk, hydrate & reflect</span>
+                </button>
               </div>
 
-              <div class="section-subtitle">
-                Simple rules for getting the important work done.
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line2)">
+                <div class="section-title">Active Focus Target</div>
+                <div class="section-subtitle">Lock in one task to finish during this timer</div>
+                <select class="select" id="focusTaskSelect" style="margin-top:10px">
+                  <option value="">-- Free Focus Session --</option>
+                </select>
               </div>
-
-              <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
-
-                <div class="day-task">
-                  <strong>01 · One task</strong>
-                  <div style="color:var(--muted);margin-top:4px;font-size:10px">
-                    Pick one important task before starting.
-                  </div>
-                </div>
-
-                <div class="day-task">
-                  <strong>02 · Remove distractions</strong>
-                  <div style="color:var(--muted);margin-top:4px;font-size:10px">
-                    Put your phone and unnecessary tabs away.
-                  </div>
-                </div>
-
-                <div class="day-task">
-                  <strong>03 · Finish the session</strong>
-                  <div style="color:var(--muted);margin-top:4px;font-size:10px">
-                    Don't quit just because motivation disappears.
-                  </div>
-                </div>
-
-                <div class="day-task">
-                  <strong>04 · Record progress</strong>
-                  <div style="color:var(--muted);margin-top:4px;font-size:10px">
-                    Mark the task complete when the work is actually done.
-                  </div>
-                </div>
-
-              </div>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
-      <!-- =================================================
-           PROFILE PAGE
-      ================================================== -->
+      <!-- ===================================================
+           PAGE 5: PROFILE, SPIRITUAL & OFFLINE VAULT
+      =================================================== -->
       <section class="page" id="page-profile">
-
         <div class="profile-layout">
 
           <div class="card profile-card">
-
-            <div class="profile-avatar-large" id="profileAvatarLarge">
-              T
-            </div>
-
+            <div class="profile-avatar-large" id="profileAvatarLarge">T</div>
             <label class="upload-avatar">
-              📷 Upload profile picture
-              <input
-                id="profileImageInput"
-                type="file"
-                accept="image/*"
-                hidden
-              >
+              Change Photo
+              <input type="file" accept="image/*" id="avatarUploadInput" style="display:none">
             </label>
+            <div class="profile-name" id="profileDisplayName">Tsega</div>
+            <div class="profile-note">Local Offline Vault • Encrypted Access</div>
 
-            <div class="profile-name" id="profileNameDisplay">
-              Tsega
+            <div style="margin-top:20px;text-align:left">
+              <label class="form-label">Display Name</label>
+              <div style="display:flex;gap:8px">
+                <input class="input" id="profileNameInput" type="text" placeholder="Your name">
+                <button class="primary-btn" onclick="saveProfileName()">Save</button>
+              </div>
             </div>
-
-            <div class="profile-note">
-              Your personal productivity space
-            </div>
-
-            <button
-              class="secondary-btn"
-              id="editProfileBtn"
-              style="margin-top:16px"
-            >
-              Edit profile
-            </button>
-
           </div>
 
           <div class="card settings-section">
+            <div class="section-title">Security & Offline Data Vault</div>
+            <div class="section-subtitle">Manage biometrics, PIN lock, and offline device backups</div>
 
-            <div class="section-title">
-              Account & Security
-            </div>
-
-            <div class="section-subtitle">
-              Manage how your tracker is accessed on this device.
+            <div class="settings-item">
+              <div>
+                <strong>Auto-Lock on App Minimize</strong>
+                <p>Require PIN or Biometrics every time you switch away or reopen</p>
+              </div>
+              <div class="switch on" id="autoLockSwitch" onclick="toggleSetting('autoLock')"><span></span></div>
             </div>
 
             <div class="settings-item">
-
               <div>
-                <strong>Device / fingerprint unlock</strong>
-                <p>
-                  Use supported Android biometric/device authentication.
-                </p>
+                <strong>Biometric Authentication</strong>
+                <p>Use Android Fingerprint or Face Unlock on the lock screen</p>
               </div>
-
-              <button
-                class="switch"
-                id="biometricSwitch"
-                type="button"
-              >
-                <span></span>
-              </button>
-
+              <button class="secondary-btn" onclick="registerBiometrics()">Configure</button>
             </div>
 
             <div class="settings-item">
-
               <div>
-                <strong>Auto-lock</strong>
-                <p>
-                  Lock the app automatically after inactivity.
-                </p>
+                <strong>Change Security PIN</strong>
+                <p>Update your 4–12 digit access PIN</p>
               </div>
-
-              <select
-                class="select"
-                id="autoLockSelect"
-                style="width:110px;min-height:39px"
-              >
-                <option value="0">Never</option>
-                <option value="30">30 sec</option>
-                <option value="60">1 min</option>
-                <option value="300">5 min</option>
-              </select>
-
+              <button class="secondary-btn" onclick="openPinModal()">Update PIN</button>
             </div>
 
             <div class="settings-item">
-
               <div>
-                <strong>Change PIN</strong>
-                <p>
-                  Update your local access PIN.
-                </p>
+                <strong>Offline Backup & Restore</strong>
+                <p>Export all habits, tasks & reflections as an offline JSON file</p>
               </div>
-
-              <button class="secondary-btn" id="changePinBtn">
-                Change
-              </button>
-
-            </div>
-
-            <div class="settings-item">
-
-              <div>
-                <strong>Lock now</strong>
-                <p>
-                  Immediately protect the application.
-                </p>
+              <div style="display:flex;gap:6px">
+                <button class="secondary-btn" onclick="exportBackup()">Export</button>
+                <label class="secondary-btn" style="display:inline-flex;align-items:center;cursor:pointer">
+                  Import
+                  <input type="file" accept=".json" onchange="importBackup(event)" style="display:none">
+                </label>
               </div>
-
-              <button class="secondary-btn" id="profileLockBtn">
-                Lock
-              </button>
-
             </div>
-
           </div>
 
-          <div class="card settings-section">
+        </div>
 
-            <div class="section-title">
-              Data & Backup
-            </div>
-
-            <div class="section-subtitle">
-              Your tasks remain on this device. Regular backups are recommended.
-            </div>
-
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
-
-              <button class="primary-btn" id="exportBtn">
-                ↓ Export backup
-              </button>
-
-              <button class="secondary-btn" id="importBtn">
-                ↑ Import backup
-              </button>
-
-              <input
-                type="file"
-                id="importFile"
-                accept=".json,application/json"
-                hidden
-              >
-
-              <button class="danger-btn" id="clearBtn">
-                Clear tasks
-              </button>
-
-            </div>
-
-          </div>
-
-          <div class="card settings-section">
-
-            <div class="section-title">
-              App
-            </div>
-
-            <div class="settings-item">
-
-              <div>
-                <strong>Install application</strong>
-                <p>
-                  Install the tracker as a standalone mobile app.
-                </p>
+        <!-- SPIRITUAL & INTENTION CUSTOMIZER -->
+        <div class="card spiritual">
+          <div class="card-body">
+            <div class="section-title">Daily Scripture & Primary Intention</div>
+            <div class="section-subtitle">Customize the verses and daily mission displayed on your dashboard</div>
+            <div class="spiritual-grid">
+              <div class="spiritual-field">
+                <label>LEFT SCRIPTURE REFERENCE</label>
+                <input class="input" id="editVerse1Ref" type="text">
               </div>
-
-              <button class="secondary-btn" id="profileInstallBtn">
-                Install
-              </button>
-
-            </div>
-
-            <div class="settings-item">
-
-              <div>
-                <strong>Storage status</strong>
-                <p id="storageStatus">
-                  Local storage is active.
-                </p>
+              <div class="spiritual-field">
+                <label>RIGHT SCRIPTURE REFERENCE</label>
+                <input class="input" id="editVerse2Ref" type="text">
               </div>
-
-              <span style="color:var(--success);font-size:12px">
-                ●
-              </span>
-
+              <div class="spiritual-field">
+                <label>LEFT SCRIPTURE TEXT</label>
+                <textarea class="textarea" id="editVerse1Text" style="min-height:74px"></textarea>
+              </div>
+              <div class="spiritual-field">
+                <label>RIGHT SCRIPTURE TEXT</label>
+                <textarea class="textarea" id="editVerse2Text" style="min-height:74px"></textarea>
+              </div>
             </div>
-
+            <div class="spiritual-field" style="margin-top:12px">
+              <label>TODAY'S PRIMARY INTENTION</label>
+              <input class="input" id="editHeroIntention" type="text">
+            </div>
+            <div class="spiritual-actions">
+              <span class="spiritual-status">Saved locally on this device</span>
+              <button class="primary-btn" onclick="saveSpiritualSettings()">Save Reflections</button>
+            </div>
           </div>
-
         </div>
 
       </section>
 
-      <div class="copyright">
-        © 2026 Tsega. All rights are reserved.
-      </div>
+      <div class="copyright">Tsega Habit Tracker • Offline-First Secure Productivity PWA</div>
 
     </main>
-
   </div>
 
-  <!-- MOBILE NAV -->
+  <!-- MOBILE BOTTOM NAVIGATION -->
   <nav class="mobile-nav">
-
-    <button class="active" data-page="home">
-      <span class="mobile-icon">⌂</span>
-      Home
-    </button>
-
-    <button data-page="plans">
-      <span class="mobile-icon">✓</span>
-      Plans
-    </button>
-
-    <button data-page="calendar">
-      <span class="mobile-icon">▣</span>
-      Calendar
-    </button>
-
-    <button data-page="focus">
-      <span class="mobile-icon">◷</span>
-      Focus
-    </button>
-
-    <button data-page="profile">
-      <span class="mobile-icon">◎</span>
-      Profile
-    </button>
-
+    <button class="active" data-page="home"><span class="mobile-icon">⌂</span><span>Home</span></button>
+    <button data-page="plans"><span class="mobile-icon">☑</span><span>Plans</span></button>
+    <button data-page="calendar"><span class="mobile-icon">📅</span><span>Calendar</span></button>
+    <button data-page="focus"><span class="mobile-icon">⏱</span><span>Focus</span></button>
+    <button data-page="profile"><span class="mobile-icon">⚙</span><span>Vault</span></button>
   </nav>
-
 </div>
 
 <!-- =======================================================
-     TASK MODAL
+     MODALS
 ======================================================= -->
+<!-- ADD / EDIT TASK MODAL -->
 <div class="modal-backdrop" id="taskModal">
-
   <div class="modal">
-
     <div class="modal-head">
-      <div class="modal-title" id="taskModalTitle">
-        Edit task
-      </div>
-
-      <button class="modal-close" data-close="taskModal">
-        ×
-      </button>
+      <div class="modal-title" id="taskModalTitle">Schedule New Task</div>
+      <button class="modal-close" onclick="closeModal('taskModal')">✕</button>
     </div>
-
     <div class="modal-body">
-
+      <input type="hidden" id="editTaskId">
       <div class="form-group">
-
-        <label class="form-label">
-          Task
-        </label>
-
-        <input
-          class="input"
-          id="editTaskText"
-          maxlength="180"
-        >
-
+        <label class="form-label">Task Description</label>
+        <input class="input" id="modalTaskTitle" type="text" placeholder="e.g. Finish motion graphics sequence">
       </div>
-
       <div class="form-grid">
-
         <div class="form-group">
-
-          <label class="form-label">
-            Category
-          </label>
-
-          <select class="select" id="editTaskType">
-            <option value="daily">📅 Daily</option>
-            <option value="monthly">🗓 Monthly</option>
-            <option value="yearly">📆 Yearly</option>
-            <option value="todo">✓ To-Do</option>
-            <option value="not-to-do">🚫 Not-To-Do</option>
+          <label class="form-label">Category Block</label>
+          <select class="select" id="modalTaskCategory">
+            <option value="morning">🌅 Morning Rituals</option>
+            <option value="deepwork">🎯 Deep Work</option>
+            <option value="growth">📚 Skill & Growth</option>
+            <option value="evening">🌙 Evening Wind-Down</option>
           </select>
-
         </div>
-
         <div class="form-group">
-
-          <label class="form-label">
-            Priority
-          </label>
-
-          <select class="select" id="editTaskPriority">
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
+          <label class="form-label">Priority Level</label>
+          <select class="select" id="modalTaskPriority">
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
           </select>
-
         </div>
-
       </div>
-
-      <div class="form-grid">
-
-        <div class="form-group">
-
-          <label class="form-label">
-            Planned date
-          </label>
-
-          <input
-            class="input"
-            id="editTaskDate"
-            type="date"
-          >
-
-        </div>
-
-        <div class="form-group">
-
-          <label class="form-label">
-            Due time
-          </label>
-
-          <input
-            class="input"
-            id="editTaskTime"
-            type="time"
-          >
-
-        </div>
-
-      </div>
-
       <div class="form-group">
-
-        <label class="form-label">
-          Notes
-        </label>
-
-        <textarea
-          class="textarea"
-          id="editTaskNotes"
-          placeholder="Optional notes..."
-        ></textarea>
-
+        <label class="form-label">Scheduled Date</label>
+        <input class="input" id="modalTaskDate" type="date">
       </div>
-
     </div>
-
     <div class="modal-footer">
-
-      <button
-        class="secondary-btn"
-        data-close="taskModal"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        id="saveTaskBtn"
-      >
-        Save changes
-      </button>
-
+      <button class="secondary-btn" onclick="closeModal('taskModal')">Cancel</button>
+      <button class="primary-btn" onclick="saveTaskFromModal()">Save Task</button>
     </div>
-
   </div>
-
 </div>
 
-<!-- =======================================================
-     PROFILE MODAL
-======================================================= -->
-<div class="modal-backdrop" id="profileModal">
-
+<!-- ADD HABIT MODAL -->
+<div class="modal-backdrop" id="habitModal">
   <div class="modal">
-
     <div class="modal-head">
-
-      <div class="modal-title">
-        Edit profile
-      </div>
-
-      <button class="modal-close" data-close="profileModal">
-        ×
-      </button>
-
+      <div class="modal-title">Add Daily Non-Negotiable Habit</div>
+      <button class="modal-close" onclick="closeModal('habitModal')">✕</button>
     </div>
-
     <div class="modal-body">
-
       <div class="form-group">
-
-        <label class="form-label">
-          Display name
-        </label>
-
-        <input
-          class="input"
-          id="profileNameInput"
-          maxlength="40"
-          placeholder="Your name"
-        >
-
+        <label class="form-label">Habit Name</label>
+        <input class="input" id="newHabitName" type="text" placeholder="e.g. Morning Prayer & Scripture, 2h Deep Editing">
       </div>
-
-      <div class="form-group">
-
-        <label class="form-label">
-          Short description
-        </label>
-
-        <input
-          class="input"
-          id="profileBioInput"
-          maxlength="80"
-          placeholder="Personal productivity space"
-        >
-
-      </div>
-
     </div>
-
     <div class="modal-footer">
-
-      <button
-        class="secondary-btn"
-        data-close="profileModal"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        id="saveProfileBtn"
-      >
-        Save profile
-      </button>
-
+      <button class="secondary-btn" onclick="closeModal('habitModal')">Cancel</button>
+      <button class="primary-btn" onclick="addNewHabit()">Create Habit</button>
     </div>
-
   </div>
-
 </div>
 
-<!-- =======================================================
-     PIN CHANGE MODAL
-======================================================= -->
+<!-- UPDATE PIN MODAL -->
 <div class="modal-backdrop" id="pinModal">
-
   <div class="modal">
-
     <div class="modal-head">
-
-      <div class="modal-title">
-        Change secure PIN
-      </div>
-
-      <button class="modal-close" data-close="pinModal">
-        ×
-      </button>
-
+      <div class="modal-title">Update Security PIN</div>
+      <button class="modal-close" onclick="closeModal('pinModal')">✕</button>
     </div>
-
     <div class="modal-body">
-
       <div class="form-group">
-        <label class="form-label">
-          Current PIN
-        </label>
-
-        <input
-          class="input"
-          id="currentPin"
-          type="password"
-          inputmode="numeric"
-          maxlength="12"
-        >
+        <label class="form-label">New PIN (4–12 digits)</label>
+        <input class="input" id="newPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Enter new PIN">
       </div>
-
       <div class="form-group">
-        <label class="form-label">
-          New PIN
-        </label>
-
-        <input
-          class="input"
-          id="newPin"
-          type="password"
-          inputmode="numeric"
-          maxlength="12"
-        >
+        <label class="form-label">Confirm New PIN</label>
+        <input class="input" id="confirmNewPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Confirm new PIN">
       </div>
-
-      <div class="form-group">
-        <label class="form-label">
-          Confirm new PIN
-        </label>
-
-        <input
-          class="input"
-          id="confirmNewPin"
-          type="password"
-          inputmode="numeric"
-          maxlength="12"
-        >
-      </div>
-
-      <div
-        id="pinChangeError"
-        style="min-height:20px;color:var(--danger);font-size:11px"
-      ></div>
-
     </div>
-
     <div class="modal-footer">
-
-      <button
-        class="secondary-btn"
-        data-close="pinModal"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="primary-btn"
-        id="saveNewPinBtn"
-      >
-        Update PIN
-      </button>
-
+      <button class="secondary-btn" onclick="closeModal('pinModal')">Cancel</button>
+      <button class="primary-btn" onclick="updateSecurityPin()">Save PIN</button>
     </div>
-
   </div>
+</div>
 
+<!-- COMMAND PALETTE MODAL -->
+<div class="modal-backdrop" id="commandModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Quick Command Palette</div>
+      <button class="modal-close" onclick="closeModal('commandModal')">✕</button>
+    </div>
+    <div class="modal-body" style="display:grid;gap:8px">
+      <button class="secondary-btn" style="text-align:left" onclick="closeModal('commandModal');openTaskModal()">➕ Create New Scheduled Task</button>
+      <button class="secondary-btn" style="text-align:left" onclick="closeModal('commandModal');openHabitModal()">🔥 Add Daily Habit</button>
+      <button class="secondary-btn" style="text-align:left" onclick="closeModal('commandModal');switchPage('focus');toggleTimer()">⏱ Start 25m Deep Focus Timer</button>
+      <button class="secondary-btn" style="text-align:left" onclick="closeModal('commandModal');exportBackup()">💾 Download Offline Backup (.JSON)</button>
+      <button class="danger-btn" style="text-align:left" onclick="closeModal('commandModal');lockApp()">🔒 Lock Workspace Immediately</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 /* =========================================================
-   CONSTANTS
+   1. OFFLINE PWA MANIFEST & SERVICE WORKER REGISTRATION
 ========================================================= */
-
-const TASKS_KEY = "habit-tracker-tasks-v2";
-const OLD_TASKS_KEY = "habit-tracker-tasks-v1";
-const SPIRITUAL_KEY = "habit-tracker-spiritual-v1";
-const PROFILE_KEY = "tsega-tracker-profile-v3";
-const AUTH_KEY = "tsega-tracker-auth-v3";
-const SETTINGS_KEY = "tsega-tracker-settings-v3";
-
-const QUOTES = [
-  "Small steps every day lead to big changes every year.",
-  "You don't have to be extreme, just consistent.",
-  "Discipline is choosing between what you want now and what you want most.",
-  "Progress, not perfection.",
-  "Your future is created by what you do today.",
-  "One task at a time. One day at a time.",
-  "Success is the sum of small efforts repeated daily.",
-  "Focus on the step in front of you, not the whole staircase.",
-  "The secret of getting ahead is getting started.",
-  "Consistency beats intensity.",
-  "You are what you repeatedly do.",
-  "Every action is a vote for the person you want to become.",
-  "Don't break the chain.",
-  "Do it now. Sometimes later becomes never.",
-  "Great things never come from comfort zones."
-];
-
-const TYPE_NAMES = {
-  daily:"Daily",
-  monthly:"Monthly",
-  yearly:"Yearly",
-  todo:"To-Do",
-  "not-to-do":"Not-To-Do"
-};
-
-let tasks = [];
-let profile = {
-  name:"Tsega",
-  bio:"Personal productivity space",
-  image:""
-};
-
-let settings = {
-  autoLock:0,
-  biometric:false
-};
-
-let auth = null;
-
-let currentPage = "home";
-let selectedDate = new Date();
-let calendarDate = new Date();
-let editingTaskId = null;
-
-let installPrompt = null;
-
-let timerSeconds = 1500;
-let timerDefault = 1500;
-let timerRunning = false;
-let timerInterval = null;
-
-
-/* =========================================================
-   BASIC HELPERS
-========================================================= */
-
-function todayKey(){
-  return dateKey(new Date());
-}
-
-function dateKey(date){
-  const d = new Date(date);
-  return [
-    d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,"0"),
-    String(d.getDate()).padStart(2,"0")
-  ].join("-");
-}
-
-function safeDate(value){
-  const d = new Date(value);
-  return isNaN(d.getTime()) ? new Date() : d;
-}
-
-function formatDate(date, options){
-  return new Date(date).toLocaleDateString("en-US", options);
-}
-
-function escapeHtml(value){
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[char]));
-}
-
-function uid(){
-  return Date.now().toString(36) +
-    Math.random().toString(36).slice(2,9);
-}
-
-function showToast(message){
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  clearTimeout(showToast.timer);
-
-  showToast.timer = setTimeout(() => {
-    toast.classList.remove("show");
-  },2400);
-}
-
-function isSameDay(a,b){
-  return dateKey(a) === dateKey(b);
-}
-
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
-function loadTasks(){
-
-  try{
-
-    let raw = localStorage.getItem(TASKS_KEY);
-
-    if(!raw){
-      raw = localStorage.getItem(OLD_TASKS_KEY);
-    }
-
-    if(!raw){
-      return [];
-    }
-
-    const data = JSON.parse(raw);
-
-    if(!Array.isArray(data)){
-      return [];
-    }
-
-    return data.map(item => {
-
-      const createdAt =
-        item.createdAt ||
-        item.created ||
-        new Date().toISOString();
-
-      let type =
-        item.type ||
-        item.category ||
-        "daily";
-
-      if(type === "Daily") type = "daily";
-      if(type === "Monthly") type = "monthly";
-      if(type === "Yearly") type = "yearly";
-      if(type === "To-Do") type = "todo";
-      if(type === "Not-To-Do") type = "not-to-do";
-
-      const text =
-        item.text ||
-        item.title ||
-        item.name ||
-        item.task ||
-        "";
-
-      let plannedDate =
-        item.scheduledDate ||
-        item.plannedDate ||
-        item.date ||
-        "";
-
-      if(
-        !plannedDate &&
-        type === "daily"
-      ){
-        /*
-          Old daily tasks did not have a planned date.
-          Treat them as today's daily tasks so they do not disappear.
-        */
-        plannedDate = dateKey(new Date());
-      }
-
-      return {
-        ...item,
-        id:String(item.id || uid()),
-        text:String(text),
-        type,
-        completed:!!item.completed,
-        inProgress:!!item.inProgress,
-        priority:item.priority || "medium",
-        scheduledDate:plannedDate,
-        dueTime:item.dueTime || "",
-        notes:item.notes || "",
-        createdAt
-      };
-
-    }).filter(item => item.text);
-
-  }catch(error){
-
-    console.error(error);
-
-    return [];
-  }
-}
-
-function saveTasks(){
-
-  try{
-
-    localStorage.setItem(
-      TASKS_KEY,
-      JSON.stringify(tasks)
-    );
-
-  }catch(error){
-
-    showToast("Storage is full. Export a backup.");
-  }
-}
-
-function loadProfile(){
-
-  try{
-
-    const data = JSON.parse(
-      localStorage.getItem(PROFILE_KEY) || "{}"
-    );
-
-    profile = {
-      name:data.name || "Tsega",
-      bio:data.bio || "Personal productivity space",
-      image:data.image || ""
-    };
-
-  }catch(error){}
-}
-
-function saveProfile(){
-
-  try{
-
-    localStorage.setItem(
-      PROFILE_KEY,
-      JSON.stringify(profile)
-    );
-
-  }catch(error){
-
-    showToast("Profile picture is too large.");
-  }
-
-}
-
-function loadSettings(){
-
-  try{
-
-    const data = JSON.parse(
-      localStorage.getItem(SETTINGS_KEY) || "{}"
-    );
-
-    settings = {
-      autoLock:Number(data.autoLock || 0),
-      biometric:!!data.biometric
-    };
-
-  }catch(error){}
-
-}
-
-function saveSettings(){
-
-  localStorage.setItem(
-    SETTINGS_KEY,
-    JSON.stringify(settings)
-  );
-
-}
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-function updateProfileUI(){
-
-  const name = profile.name || "Tsega";
-  const firstLetter =
-    name.trim().charAt(0).toUpperCase() || "T";
-
-  document.getElementById("profileNameDisplay").textContent = name;
-  document.getElementById("sidebarName").textContent = name;
-
-  const large = document.getElementById("profileAvatarLarge");
-  const side = document.getElementById("sidebarAvatar");
-  const top = document.getElementById("topAvatar");
-
-  if(profile.image){
-
-    large.innerHTML =
-      `<img src="${profile.image}" alt="Profile picture">`;
-
-    side.innerHTML =
-      `<img src="${profile.image}" alt="Profile picture">`;
-
-    top.innerHTML =
-      `<img src="${profile.image}" alt="Profile picture" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
-
-  }else{
-
-    large.textContent = firstLetter;
-    side.textContent = firstLetter;
-    top.textContent = firstLetter;
-  }
-
-  document.getElementById("profileNameInput").value = profile.name;
-  document.getElementById("profileBioInput").value = profile.bio;
-
-}
-
-async function compressProfileImage(file){
-
-  return new Promise((resolve,reject) => {
-
-    const reader = new FileReader();
-
-    reader.onload = event => {
-
-      const image = new Image();
-
-      image.onload = () => {
-
-        const max = 400;
-
-        let width = image.width;
-        let height = image.height;
-
-        if(width > height){
-
-          if(width > max){
-            height = Math.round(height * max / width);
-            width = max;
-          }
-
-        }else{
-
-          if(height > max){
-            width = Math.round(width * max / height);
-            height = max;
-          }
-
-        }
-
-        const canvas = document.createElement("canvas");
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext("2d");
-
-        ctx.drawImage(
-          image,
-          0,
-          0,
-          width,
-          height
-        );
-
-        resolve(
-          canvas.toDataURL("image/jpeg",.82)
-        );
-
-      };
-
-      image.onerror = reject;
-
-      image.src = event.target.result;
-    };
-
-    reader.onerror = reject;
-
-    reader.readAsDataURL(file);
-
-  });
-}
-
-
-/* =========================================================
-   SPIRITUAL NOTES
-========================================================= */
-
-function loadSpiritual(){
-
-  try{
-
-    const data = JSON.parse(
-      localStorage.getItem(SPIRITUAL_KEY) || "{}"
-    );
-
-    document.getElementById("dailyBibleVerse").value =
-      data.bibleVerse || "";
-
-    document.getElementById("positiveWords").value =
-      data.positiveWords || "";
-
-  }catch(error){}
-
-}
-
-function saveSpiritual(){
-
-  localStorage.setItem(
-    SPIRITUAL_KEY,
-    JSON.stringify({
-      bibleVerse:
-        document.getElementById("dailyBibleVerse").value,
-
-      positiveWords:
-        document.getElementById("positiveWords").value,
-
-      updatedAt:
-        new Date().toISOString()
-    })
-  );
-
-  document.getElementById("spiritualStatus").textContent =
-    "Saved just now.";
-
-  showToast("Reflection saved");
-}
-
-
-/* =========================================================
-   AUTHENTICATION
-========================================================= */
-
-function randomSalt(){
-
-  const array = new Uint8Array(16);
-
-  crypto.getRandomValues(array);
-
-  return Array.from(array)
-    .map(x => x.toString(16).padStart(2,"0"))
-    .join("");
-}
-
-async function hashPin(pin,salt){
-
-  if(
-    window.crypto &&
-    crypto.subtle
-  ){
-
-    const data = new TextEncoder().encode(
-      salt + "::" + pin
-    );
-
-    const hash =
-      await crypto.subtle.digest(
-        "SHA-256",
-        data
-      );
-
-    return Array.from(
-      new Uint8Array(hash)
-    )
-    .map(x => x.toString(16).padStart(2,"0"))
-    .join("");
-  }
-
-  /*
-    Fallback for unusual browsers.
-    Still keeps the PIN out of the normal auth object.
-  */
-
-  let h = 2166136261;
-
-  const value = salt + "::" + pin;
-
-  for(let i=0;i<value.length;i++){
-
-    h ^= value.charCodeAt(i);
-    h +=
-      (h << 1) +
-      (h << 4) +
-      (h << 7) +
-      (h << 8) +
-      (h << 24);
-
-  }
-
-  return (h >>> 0).toString(16);
-}
-
-function validPin(pin){
-
-  return /^\d{4,12}$/.test(pin);
-}
-
-function loadAuth(){
-
-  try{
-
-    const data = JSON.parse(
-      localStorage.getItem(AUTH_KEY) || "null"
-    );
-
-    if(data && data.pinHash && data.salt){
-
-      auth = data;
-
-      return true;
-    }
-
-  }catch(error){}
-
-  /*
-    Small compatibility migration for possible
-    earlier local auth implementations.
-  */
-
-  try{
-
-    for(const key of Object.keys(localStorage)){
-
-      if(
-        !/auth|lock|pin/i.test(key) ||
-        key === AUTH_KEY
-      ){
-        continue;
-      }
-
-      const value =
-        JSON.parse(
-          localStorage.getItem(key)
-        );
-
-      if(value && value.pinHash){
-
-        auth = {
-          ...value,
-          migratedFrom:key
-        };
-
-        localStorage.setItem(
-          AUTH_KEY,
-          JSON.stringify(auth)
-        );
-
-        return true;
-      }
-
-      if(
-        value &&
-        typeof value.pin === "string" &&
-        validPin(value.pin)
-      ){
-
-        return migratePlainPin(value.pin);
-      }
-
-    }
-
-  }catch(error){}
-
-  return false;
-}
-
-async function migratePlainPin(pin){
-
-  const salt = randomSalt();
-
-  const pinHash =
-    await hashPin(pin,salt);
-
-  auth = {
-    salt,
-    pinHash,
-    biometricId:"",
-    createdAt:new Date().toISOString()
+(function initOfflinePWA() {
+  const manifestObj = {
+    name: "Tsega Habit Tracker",
+    short_name: "Tsega Tracker",
+    description: "Offline-first personal habit tracker, planner, and focus system.",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#0b0716",
+    theme_color: "#120C25",
+    icons: [{
+      src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='44' fill='%237c4dff'/><text x='96' y='132' font-family='Arial' font-size='110' font-weight='900' fill='white' text-anchor='middle'>T</text></svg>",
+      sizes: "192x192",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }]
   };
 
-  localStorage.setItem(
-    AUTH_KEY,
-    JSON.stringify(auth)
-  );
-
-  return true;
-}
-
-function showSetup(){
-
-  document.getElementById("lockScreen")
-    .classList.add("show");
-
-  document.getElementById("setupFields")
-    .style.display = "block";
-
-  document.getElementById("loginFields")
-    .style.display = "none";
-
-  document.getElementById("lockTitle")
-    .textContent = "Secure your tracker";
-
-  document.getElementById("lockDescription")
-    .textContent =
-      "Create a secure 4–12 digit PIN to protect access to your personal planner.";
-
-}
-
-function showLogin(){
-
-  document.getElementById("lockScreen")
-    .classList.add("show");
-
-  document.getElementById("setupFields")
-    .style.display = "none";
-
-  document.getElementById("loginFields")
-    .style.display = "block";
-
-  document.getElementById("lockTitle")
-    .textContent = "Welcome back";
-
-  document.getElementById("lockDescription")
-    .textContent =
-      "Enter your PIN or use supported device authentication to access your tracker.";
-
-  setTimeout(() => {
-    document.getElementById("loginPin").focus();
-  },100);
-
-  updateBiometricButtons();
-
-}
-
-function hideLock(){
-
-  document.getElementById("lockScreen")
-    .classList.remove("show");
-
-  document.getElementById("app")
-    .classList.add("ready");
-
-}
-
-async function createAccount(){
-
-  const name =
-    document.getElementById("setupName")
-      .value.trim() || "Tsega";
-
-  const pin =
-    document.getElementById("setupPin")
-      .value.trim();
-
-  const confirm =
-    document.getElementById("setupPinConfirm")
-      .value.trim();
-
-  if(!validPin(pin)){
-
-    showToast("PIN must contain 4–12 digits.");
-
-    return;
-  }
-
-  if(pin !== confirm){
-
-    showToast("PINs do not match.");
-
-    return;
-  }
-
-  const salt = randomSalt();
-
-  const pinHash =
-    await hashPin(pin,salt);
-
-  auth = {
-    salt,
-    pinHash,
-    biometricId:"",
-    createdAt:new Date().toISOString()
-  };
-
-  localStorage.setItem(
-    AUTH_KEY,
-    JSON.stringify(auth)
-  );
-
-  profile.name = name;
-
-  saveProfile();
-
-  updateProfileUI();
-
-  showToast("Secure access created");
-
-  hideLock();
-
-  await offerBiometricSetup();
-
-}
-
-async function unlockWithPin(){
-
-  const pin =
-    document.getElementById("loginPin")
-      .value.trim();
-
-  if(!validPin(pin)){
-
-    document.getElementById("loginError")
-      .textContent =
-        "Enter your 4–12 digit PIN.";
-
-    return;
-  }
-
-  const hash =
-    await hashPin(
-      pin,
-      auth.salt
-    );
-
-  if(hash !== auth.pinHash){
-
-    document.getElementById("loginError")
-      .textContent =
-        "Incorrect PIN. Please try again.";
-
-    document.getElementById("loginPin").value = "";
-
-    return;
-  }
-
-  document.getElementById("loginError")
-    .textContent = "";
-
-  document.getElementById("loginPin").value = "";
-
-  hideLock();
-
-}
-
-function lockApp(){
-
-  document.getElementById("app")
-    .classList.remove("ready");
-
-  document.getElementById("loginError")
-    .textContent = "";
-
-  showLogin();
-
-}
-
-
-/* =========================================================
-   BIOMETRIC / DEVICE AUTH
-========================================================= */
-
-function biometricSupported(){
-
-  return !!(
-    window.PublicKeyCredential &&
-    window.isSecureContext
-  );
-
-}
-
-async function deviceAuthenticatorAvailable(){
-
-  try{
-
-    if(
-      !biometricSupported() ||
-      !PublicKeyCredential
-        .isUserVerifyingPlatformAuthenticatorAvailable
-    ){
-      return false;
-    }
-
-    return await
-      PublicKeyCredential
-        .isUserVerifyingPlatformAuthenticatorAvailable();
-
-  }catch(error){
-
-    return false;
-  }
-
-}
-
-function randomBuffer(length=32){
-
-  const buffer =
-    new Uint8Array(length);
-
-  crypto.getRandomValues(buffer);
-
-  return buffer;
-}
-
-function bufferToBase64(buffer){
-
-  return btoa(
-    String.fromCharCode(
-      ...new Uint8Array(buffer)
-    )
-  )
-  .replace(/\+/g,"-")
-  .replace(/\//g,"_")
-  .replace(/=/g,"");
-
-}
-
-function base64ToBuffer(base64){
-
-  base64 =
-    base64
-      .replace(/-/g,"+")
-      .replace(/_/g,"/");
-
-  while(base64.length % 4){
-    base64 += "=";
-  }
-
-  const binary = atob(base64);
-
-  return Uint8Array.from(
-    binary,
-    char => char.charCodeAt(0)
-  );
-}
-
-async function registerBiometric(){
-
-  try{
-
-    if(!await deviceAuthenticatorAvailable()){
-
-      showToast(
-        "Device biometric unlock is not available here."
-      );
-
-      return false;
-    }
-
-    const credential =
-      await navigator.credentials.create({
-
-        publicKey:{
-
-          challenge:randomBuffer(32),
-
-          rp:{
-            name:"Tsega Habit Tracker"
-          },
-
-          user:{
-            id:randomBuffer(16),
-            name:profile.name || "Tsega",
-            displayName:profile.name || "Tsega"
-          },
-
-          pubKeyCredParams:[
-            {
-              type:"public-key",
-              alg:-7
-            },
-            {
-              type:"public-key",
-              alg:-257
-            }
-          ],
-
-          authenticatorSelection:{
-            authenticatorAttachment:"platform",
-            userVerification:"required"
-          },
-
-          timeout:60000,
-
-          attestation:"none"
-        }
-
+  const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
+  document.getElementById('dynamicManifest').href = URL.createObjectURL(manifestBlob);
+
+  // Register inline Service Worker for 100% Offline Caching
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    const swCode = `
+      const CACHE_NAME = 'tsega-tracker-offline-v2';
+      self.addEventListener('install', event => {
+        event.waitUntil(
+          caches.open(CACHE_NAME).then(cache => cache.addAll([self.location.href, './']))
+        );
+        self.skipWaiting();
       });
-
-    if(!credential){
-
-      return false;
-    }
-
-    auth.biometricId =
-      bufferToBase64(
-        credential.rawId
-      );
-
-    settings.biometric = true;
-
-    localStorage.setItem(
-      AUTH_KEY,
-      JSON.stringify(auth)
-    );
-
-    saveSettings();
-
-    updateBiometricUI();
-
-    showToast("Device unlock enabled");
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    showToast(
-      "Device unlock could not be enabled."
-    );
-
-    return false;
-  }
-
-}
-
-async function authenticateBiometric(){
-
-  try{
-
-    if(
-      !auth ||
-      !auth.biometricId
-    ){
-
-      showToast(
-        "Device unlock has not been enabled."
-      );
-
-      return;
-    }
-
-    const credential =
-      await navigator.credentials.get({
-
-        publicKey:{
-
-          challenge:randomBuffer(32),
-
-          allowCredentials:[
-            {
-              type:"public-key",
-              id:base64ToBuffer(
-                auth.biometricId
-              )
-            }
-          ],
-
-          userVerification:"required",
-
-          timeout:60000
-        }
-
+      self.addEventListener('activate', event => {
+        event.waitUntil(
+          caches.keys().then(keys => Promise.all(
+            keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+          ))
+        );
+        self.clients.claim();
       });
-
-    if(credential){
-
-      hideLock();
-
-      showToast("Welcome back");
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-    document.getElementById("loginError")
-      .textContent =
-        "Device authentication was cancelled or unavailable.";
-  }
-
-}
-
-async function offerBiometricSetup(){
-
-  if(
-    await deviceAuthenticatorAvailable()
-  ){
-
-    const button =
-      document.getElementById(
-        "setupBiometricBtn"
-      );
-
-    button.style.display = "block";
-
-  }
-
-}
-
-async function updateBiometricButtons(){
-
-  const available =
-    await deviceAuthenticatorAvailable();
-
-  const hasBiometric =
-    !!(
-      auth &&
-      auth.biometricId &&
-      settings.biometric
-    );
-
-  document.getElementById(
-    "loginBiometricBtn"
-  ).style.display =
-    available && hasBiometric
-      ? "block"
-      : "none";
-
-  document.getElementById(
-    "setupBiometricBtn"
-  ).style.display =
-    available && !hasBiometric
-      ? "block"
-      : "none";
-
-}
-
-async function toggleBiometric(){
-
-  if(settings.biometric){
-
-    settings.biometric = false;
-    auth.biometricId = "";
-
-    localStorage.setItem(
-      AUTH_KEY,
-      JSON.stringify(auth)
-    );
-
-    saveSettings();
-
-    updateBiometricUI();
-
-    showToast("Device unlock disabled");
-
-  }else{
-
-    await registerBiometric();
-
-  }
-
-}
-
-function updateBiometricUI(){
-
-  const button =
-    document.getElementById(
-      "biometricSwitch"
-    );
-
-  button.classList.toggle(
-    "on",
-    !!settings.biometric
-  );
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-const PAGE_TITLES = {
-
-  home:{
-    title:"Hey there! It's about sticking to the plan",
-    subtitle:"Build consistency. Protect your focus. Execute the important work."
-  },
-
-  plans:{
-    title:"Your Daily Plans",
-    subtitle:"Turn your intentions into scheduled actions."
-  },
-
-  calendar:{
-    title:"Your Calendar",
-    subtitle:"See your plans across the month."
-  },
-
-  focus:{
-    title:"Focus Mode",
-    subtitle:"One task. One session. Full attention."
-  },
-
-  profile:{
-    title:"Your Profile",
-    subtitle:"Personalize your tracker and manage access."
-  }
-
-};
-
-function navigate(page){
-
-  currentPage = page;
-
-  document.querySelectorAll(".page")
-    .forEach(element => {
-
-      element.classList.toggle(
-        "active",
-        element.id === "page-" + page
-      );
-
-    });
-
-  document.querySelectorAll(
-    ".nav-btn,.mobile-nav button"
-  ).forEach(button => {
-
-    button.classList.toggle(
-      "active",
-      button.dataset.page === page
-    );
-
-  });
-
-  document.getElementById("pageTitle")
-    .textContent =
-      PAGE_TITLES[page].title;
-
-  document.getElementById("pageSubtitle")
-    .textContent =
-      PAGE_TITLES[page].subtitle;
-
-  if(page === "plans"){
-    renderPlans();
-  }
-
-  if(page === "calendar"){
-    renderCalendar();
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-/* =========================================================
-   TASK FILTERING
-========================================================= */
-
-function matchesSelectedDate(task){
-
-  if(task.type === "daily"){
-
-    if(!task.scheduledDate){
-
-      return true;
-    }
-
-    return task.scheduledDate ===
-      dateKey(selectedDate);
-  }
-
-  return true;
-}
-
-function getFilteredTasks(){
-
-  const query =
-    (
-      document.getElementById("searchInput")
-        ?.value || ""
-    )
-    .trim()
-    .toLowerCase();
-
-  const status =
-    document.getElementById("statusFilter")
-      ?.value || "all";
-
-  const sort =
-    document.getElementById("sortSelect")
-      ?.value || "priority";
-
-  let output =
-    tasks.filter(task => {
-
-      if(!matchesSelectedDate(task)){
-        return false;
-      }
-
-      if(
-        query &&
-        !task.text.toLowerCase().includes(query) &&
-        !String(task.notes || "")
-          .toLowerCase()
-          .includes(query)
-      ){
-        return false;
-      }
-
-      if(status === "completed" && !task.completed){
-        return false;
-      }
-
-      if(
-        status === "progress" &&
-        (!task.inProgress || task.completed)
-      ){
-        return false;
-      }
-
-      if(
-        status === "pending" &&
-        (task.completed || task.inProgress)
-      ){
-        return false;
-      }
-
-      return true;
-
-    });
-
-  const priorityWeight = {
-    high:3,
-    medium:2,
-    low:1
-  };
-
-  if(sort === "priority"){
-
-    output.sort(
-      (a,b) =>
-        (priorityWeight[b.priority] || 0) -
-        (priorityWeight[a.priority] || 0)
-    );
-
-  }else if(sort === "newest"){
-
-    output.sort(
-      (a,b) =>
-        new Date(b.createdAt) -
-        new Date(a.createdAt)
-    );
-
-  }else if(sort === "oldest"){
-
-    output.sort(
-      (a,b) =>
-        new Date(a.createdAt) -
-        new Date(b.createdAt)
-    );
-
-  }else{
-
-    output.sort(
-      (a,b) =>
-        a.text.localeCompare(b.text)
-    );
-
-  }
-
-  return output;
-}
-
-
-/* =========================================================
-   TASK RENDERING
-========================================================= */
-
-function priorityBadge(priority){
-
-  const label =
-    priority === "high"
-      ? "High"
-      : priority === "low"
-        ? "Low"
-        : "Medium";
-
-  return `
-    <span class="badge ${priority}">
-      ${label}
-    </span>
-  `;
-}
-
-function taskCard(task){
-
-  const dateText =
-    task.scheduledDate
-      ? formatDate(
-          new Date(
-            task.scheduledDate + "T12:00:00"
-          ),
-          {
-            month:"short",
-            day:"numeric"
-          }
-        )
-      : "";
-
-  return `
-    <div
-      class="task-card ${task.completed ? "completed" : ""}"
-      data-task-id="${escapeHtml(task.id)}"
-    >
-
-      <button
-        class="task-check ${task.completed ? "checked" : ""}"
-        data-task-action="complete"
-        data-id="${escapeHtml(task.id)}"
-        title="Complete task"
-      >
-        ${task.completed ? "✓" : ""}
-      </button>
-
-      <div class="task-main">
-
-        <div class="task-title">
-          ${escapeHtml(task.text)}
-        </div>
-
-        <div class="task-meta">
-
-          ${priorityBadge(task.priority)}
-
-          ${
-            task.inProgress && !task.completed
-              ? `<span class="badge active">Active</span>`
-              : ""
-          }
-
-          ${
-            dateText
-              ? `<span class="meta-date">📅 ${dateText}</span>`
-              : ""
-          }
-
-          ${
-            task.dueTime
-              ? `<span class="meta-date">◷ ${escapeHtml(task.dueTime)}</span>`
-              : ""
-          }
-
-        </div>
-
-      </div>
-
-      <div class="task-actions">
-
-        <button
-          class="task-action"
-          data-task-action="progress"
-          data-id="${escapeHtml(task.id)}"
-          title="Toggle in progress"
-        >
-          ◷
-        </button>
-
-        <button
-          class="task-action"
-          data-task-action="edit"
-          data-id="${escapeHtml(task.id)}"
-          title="Edit"
-        >
-          ✎
-        </button>
-
-        <button
-          class="task-action delete"
-          data-task-action="delete"
-          data-id="${escapeHtml(task.id)}"
-          title="Delete"
-        >
-          ×
-        </button>
-
-      </div>
-
-    </div>
-  `;
-}
-
-function renderList(elementId,items,emptyMessage){
-
-  const element =
-    document.getElementById(elementId);
-
-  if(!element) return;
-
-  if(!items.length){
-
-    element.innerHTML =
-      `<div class="empty">${emptyMessage}</div>`;
-
-    return;
-  }
-
-  element.innerHTML =
-    items.map(taskCard).join("");
-}
-
-function renderPlans(){
-
-  const visible =
-    getFilteredTasks();
-
-  const byType =
-    type =>
-      visible.filter(
-        task => task.type === type
-      );
-
-  renderList(
-    "list-daily",
-    byType("daily"),
-    "No daily plans for this date."
-  );
-
-  renderList(
-    "list-monthly",
-    byType("monthly"),
-    "No monthly plans yet."
-  );
-
-  renderList(
-    "list-yearly",
-    byType("yearly"),
-    "No yearly plans yet."
-  );
-
-  renderList(
-    "list-todo",
-    byType("todo"),
-    "No To-Do tasks yet."
-  );
-
-  renderList(
-    "list-not-to-do",
-    byType("not-to-do"),
-    "No things to avoid."
-  );
-
-  renderList(
-    "list-completed",
-    visible.filter(
-      task => task.completed
-    ),
-    "Nothing completed yet."
-  );
-
-  renderList(
-    "list-progress",
-    visible.filter(
-      task =>
-        task.inProgress &&
-        !task.completed
-    ),
-    "Nothing is currently in progress."
-  );
-
-  [
-    "daily",
-    "monthly",
-    "yearly",
-    "todo",
-    "not-to-do"
-  ].forEach(type => {
-
-    const counter =
-      document.querySelector(
-        `[data-count="${type}"]`
-      );
-
-    if(counter){
-
-      counter.textContent =
-        byType(type).length;
-
-    }
-
-  });
-
-}
-
-
-/* =========================================================
-   TASK ACTIONS
-========================================================= */
-
-function addTaskFromQuick(){
-
-  const input =
-    document.getElementById(
-      "quickTaskInput"
-    );
-
-  const type =
-    document.getElementById(
-      "quickTaskType"
-    ).value;
-
-  const text =
-    input.value.trim();
-
-  if(!text){
-
-    showToast("Write a task first.");
-
-    input.focus();
-
-    return;
-  }
-
-  const newTask = {
-
-    id:uid(),
-
-    text,
-
-    type,
-
-    completed:false,
-
-    inProgress:false,
-
-    priority:"medium",
-
-    scheduledDate:
-      type === "daily"
-        ? dateKey(selectedDate)
-        : dateKey(new Date()),
-
-    dueTime:"",
-
-    notes:"",
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-  tasks.unshift(newTask);
-
-  saveTasks();
-
-  input.value = "";
-
-  renderAll();
-
-  showToast("Task added");
-
-  navigate("plans");
-
-}
-
-function toggleComplete(id){
-
-  tasks =
-    tasks.map(task => {
-
-      if(task.id !== id){
-        return task;
-      }
-
-      return {
-        ...task,
-        completed:!task.completed,
-        inProgress:false
-      };
-
-    });
-
-  saveTasks();
-
-  renderAll();
-
-  showToast("Task updated");
-
-}
-
-function toggleProgress(id){
-
-  tasks =
-    tasks.map(task => {
-
-      if(task.id !== id){
-        return task;
-      }
-
-      if(task.completed){
-        return task;
-      }
-
-      return {
-        ...task,
-        inProgress:!task.inProgress
-      };
-
-    });
-
-  saveTasks();
-
-  renderAll();
-
-}
-
-function deleteTask(id){
-
-  const task =
-    tasks.find(
-      item => item.id === id
-    );
-
-  if(!task) return;
-
-  if(
-    !confirm(
-      `Delete "${task.text}"?`
-    )
-  ){
-    return;
-  }
-
-  tasks =
-    tasks.filter(
-      item => item.id !== id
-    );
-
-  saveTasks();
-
-  renderAll();
-
-  showToast("Task deleted");
-
-}
-
-function openEditTask(id){
-
-  const task =
-    tasks.find(
-      item => item.id === id
-    );
-
-  if(!task) return;
-
-  editingTaskId = id;
-
-  document.getElementById(
-    "editTaskText"
-  ).value = task.text;
-
-  document.getElementById(
-    "editTaskType"
-  ).value = task.type;
-
-  document.getElementById(
-    "editTaskPriority"
-  ).value = task.priority || "medium";
-
-  document.getElementById(
-    "editTaskDate"
-  ).value =
-    task.scheduledDate || dateKey(new Date());
-
-  document.getElementById(
-    "editTaskTime"
-  ).value =
-    task.dueTime || "";
-
-  document.getElementById(
-    "editTaskNotes"
-  ).value =
-    task.notes || "";
-
-  document.getElementById(
-    "taskModal"
-  ).classList.add("open");
-
-}
-
-function saveEditedTask(){
-
-  if(!editingTaskId) return;
-
-  const text =
-    document.getElementById(
-      "editTaskText"
-    ).value.trim();
-
-  if(!text){
-
-    showToast("Task cannot be empty.");
-
-    return;
-  }
-
-  tasks =
-    tasks.map(task => {
-
-      if(task.id !== editingTaskId){
-        return task;
-      }
-
-      return {
-        ...task,
-
-        text,
-
-        type:
-          document.getElementById(
-            "editTaskType"
-          ).value,
-
-        priority:
-          document.getElementById(
-            "editTaskPriority"
-          ).value,
-
-        scheduledDate:
-          document.getElementById(
-            "editTaskDate"
-          ).value,
-
-        dueTime:
-          document.getElementById(
-            "editTaskTime"
-          ).value,
-
-        notes:
-          document.getElementById(
-            "editTaskNotes"
-          ).value.trim()
-
-      };
-
-    });
-
-  saveTasks();
-
-  closeModal("taskModal");
-
-  renderAll();
-
-  showToast("Task updated");
-
-  editingTaskId = null;
-
-}
-
-
-/* =========================================================
-   GENERAL TASK EVENT HANDLER
-========================================================= */
-
-document.addEventListener("click",event => {
-
-  const button =
-    event.target.closest(
-      "[data-task-action]"
-    );
-
-  if(!button) return;
-
-  const action =
-    button.dataset.taskAction;
-
-  const id =
-    button.dataset.id;
-
-  if(action === "complete"){
-    toggleComplete(id);
-  }
-
-  if(action === "progress"){
-    toggleProgress(id);
-  }
-
-  if(action === "delete"){
-    deleteTask(id);
-  }
-
-  if(action === "edit"){
-    openEditTask(id);
-  }
-
-});
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function updateStats(){
-
-  const total = tasks.length;
-
-  const completed =
-    tasks.filter(
-      task => task.completed
-    ).length;
-
-  const progress =
-    tasks.filter(
-      task =>
-        task.inProgress &&
-        !task.completed
-    ).length;
-
-  const pending =
-    tasks.filter(
-      task =>
-        !task.completed &&
-        !task.inProgress
-    ).length;
-
-  const todayTasks =
-    tasks.filter(task => {
-
-      if(task.type !== "daily"){
-        return false;
-      }
-
-      if(!task.scheduledDate){
-        return true;
-      }
-
-      return task.scheduledDate ===
-        todayKey();
-
-    });
-
-  const todayCompleted =
-    todayTasks.filter(
-      task => task.completed
-    ).length;
-
-  const rate =
-    total
-      ? Math.round(
-          completed / total * 100
-        )
-      : 0;
-
-  const todayRate =
-    todayTasks.length
-      ? Math.round(
-          todayCompleted /
-          todayTasks.length *
-          100
-        )
-      : 0;
-
-  document.getElementById(
-    "statCompleted"
-  ).textContent = completed;
-
-  document.getElementById(
-    "statProgress"
-  ).textContent = progress;
-
-  document.getElementById(
-    "statPending"
-  ).textContent = pending;
-
-  document.getElementById(
-    "statRate"
-  ).textContent = rate + "%";
-
-  document.getElementById(
-    "progressText"
-  ).textContent =
-    `${todayCompleted} of ${todayTasks.length} completed`;
-
-  document.getElementById(
-    "progressBar"
-  ).style.width =
-    todayRate + "%";
-
-}
-
-
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-function tasksForDate(date){
-
-  const key =
-    dateKey(date);
-
-  return tasks.filter(task => {
-
-    if(task.scheduledDate){
-      return task.scheduledDate === key;
-    }
-
-    return dateKey(
-      safeDate(task.createdAt)
-    ) === key;
-
-  });
-
-}
-
-function renderCalendar(){
-
-  const year =
-    calendarDate.getFullYear();
-
-  const month =
-    calendarDate.getMonth();
-
-  document.getElementById(
-    "calendarTitle"
-  ).textContent =
-    formatDate(
-      calendarDate,
-      {
-        month:"long",
-        year:"numeric"
-      }
-    );
-
-  const firstDay =
-    new Date(
-      year,
-      month,
-      1
-    ).getDay();
-
-  const daysInMonth =
-    new Date(
-      year,
-      month + 1,
-      0
-    ).getDate();
-
-  const previousMonthDays =
-    new Date(
-      year,
-      month,
-      0
-    ).getDate();
-
-  const container =
-    document.getElementById(
-      "calendarDays"
-    );
-
-  let html = "";
-
-  for(
-    let i = firstDay - 1;
-    i >= 0;
-    i--
-  ){
-
-    const day =
-      previousMonthDays - i;
-
-    html += `
-      <button class="day other" disabled>
-        ${day}
-      </button>
-    `;
-  }
-
-  for(
-    let day = 1;
-    day <= daysInMonth;
-    day++
-  ){
-
-    const date =
-      new Date(
-        year,
-        month,
-        day
-      );
-
-    const selected =
-      isSameDay(
-        date,
-        selectedDate
-      );
-
-    const today =
-      isSameDay(
-        date,
-        new Date()
-      );
-
-    const hasTasks =
-      tasksForDate(date).length > 0;
-
-    html += `
-      <button
-        class="
-          day
-          ${today ? "today" : ""}
-          ${selected ? "selected" : ""}
-          ${hasTasks ? "has-tasks" : ""}
-        "
-        data-calendar-date="${dateKey(date)}"
-      >
-        ${day}
-      </button>
-    `;
-  }
-
-  const total =
-    firstDay + daysInMonth;
-
-  const remaining =
-    (7 - (total % 7)) % 7;
-
-  for(
-    let day = 1;
-    day <= remaining;
-    day++
-  ){
-
-    html += `
-      <button class="day other" disabled>
-        ${day}
-      </button>
-    `;
-
-  }
-
-  container.innerHTML = html;
-
-  renderCalendarSelected();
-
-}
-
-function renderCalendarSelected(){
-
-  document.getElementById(
-    "calendarSelectedTitle"
-  ).textContent =
-    formatDate(
-      selectedDate,
-      {
-        weekday:"long",
-        month:"long",
-        day:"numeric",
-        year:"numeric"
-      }
-    );
-
-  const selectedTasks =
-    tasksForDate(selectedDate);
-
-  const container =
-    document.getElementById(
-      "calendarSelectedTasks"
-    );
-
-  if(!selectedTasks.length){
-
-    container.innerHTML =
-      `<div class="empty">
-        No tasks scheduled for this day.
-      </div>`;
-
-    return;
-  }
-
-  container.innerHTML =
-    selectedTasks.map(task => `
-      <div
-        class="day-task ${task.completed ? "done" : ""}"
-      >
-        <strong>
-          ${task.completed ? "✓ " : "• "}
-          ${escapeHtml(task.text)}
-        </strong>
-
-        <div
-          style="
-            color:var(--soft);
-            font-size:9px;
-            margin-top:4px
-          "
-        >
-          ${TYPE_NAMES[task.type] || "Task"}
-          ${task.dueTime ? " · " + escapeHtml(task.dueTime) : ""}
-        </div>
-      </div>
-    `).join("");
-
-}
-
-
-/* =========================================================
-   RENDER EVERYTHING
-========================================================= */
-
-function renderAll(){
-
-  updateStats();
-
-  renderPlans();
-
-  renderCalendar();
-
-  updateProfileUI();
-
-}
-
-
-/* =========================================================
-   QUICK DATE
-========================================================= */
-
-function updateSelectedDate(){
-
-  const value =
-    document.getElementById(
-      "selectedDate"
-    ).value;
-
-  if(!value) return;
-
-  selectedDate =
-    new Date(
-      value + "T12:00:00"
-    );
-
-  renderPlans();
-
-}
-
-
-/* =========================================================
-   FOCUS TIMER
-========================================================= */
-
-function updateTimerDisplay(){
-
-  const minutes =
-    Math.floor(
-      timerSeconds / 60
-    );
-
-  const seconds =
-    timerSeconds % 60;
-
-  document.getElementById(
-    "timerDisplay"
-  ).textContent =
-    `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
-
-}
-
-function setTimer(minutes){
-
-  clearInterval(timerInterval);
-
-  timerRunning = false;
-
-  timerSeconds =
-    minutes * 60;
-
-  timerDefault =
-    timerSeconds;
-
-  document.getElementById(
-    "timerStart"
-  ).textContent = "Start";
-
-  document.getElementById(
-    "timerMode"
-  ).textContent =
-    minutes >= 20
-      ? "Focus Session"
-      : "Quick Focus";
-
-  updateTimerDisplay();
-
-}
-
-function startTimer(){
-
-  if(timerRunning){
-
-    clearInterval(
-      timerInterval
-    );
-
-    timerRunning = false;
-
-    document.getElementById(
-      "timerStart"
-    ).textContent = "Resume";
-
-    return;
-  }
-
-  timerRunning = true;
-
-  document.getElementById(
-    "timerStart"
-  ).textContent = "Pause";
-
-  timerInterval =
-    setInterval(() => {
-
-      timerSeconds--;
-
-      updateTimerDisplay();
-
-      if(timerSeconds <= 0){
-
-        clearInterval(
-          timerInterval
-        );
-
-        timerRunning = false;
-
-        document.getElementById(
-          "timerStart"
-        ).textContent = "Start";
-
-        timerSeconds =
-          timerDefault;
-
-        updateTimerDisplay();
-
-        showToast(
-          "Focus session complete. Great work."
-        );
-
-        try{
-
-          if(
-            navigator.vibrate
-          ){
-            navigator.vibrate(
-              [200,100,200]
-            );
-          }
-
-        }catch(error){}
-
-      }
-
-    },1000);
-
-}
-
-function resetTimer(){
-
-  clearInterval(
-    timerInterval
-  );
-
-  timerRunning = false;
-
-  timerSeconds =
-    timerDefault;
-
-  document.getElementById(
-    "timerStart"
-  ).textContent = "Start";
-
-  updateTimerDisplay();
-
-}
-
-
-/* =========================================================
-   MODALS
-========================================================= */
-
-function closeModal(id){
-
-  const modal =
-    document.getElementById(id);
-
-  if(modal){
-
-    modal.classList.remove(
-      "open"
-    );
-
-  }
-
-}
-
-function openModal(id){
-
-  document.getElementById(id)
-    .classList.add("open");
-
-}
-
-
-/* =========================================================
-   BACKUP
-========================================================= */
-
-function exportBackup(){
-
-  const payload = {
-
-    app:"Tsega Habit Tracker",
-
-    version:4,
-
-    exportedAt:
-      new Date().toISOString(),
-
-    tasks,
-
-    profile,
-
-    spiritual:{
-      bibleVerse:
-        document.getElementById(
-          "dailyBibleVerse"
-        ).value,
-
-      positiveWords:
-        document.getElementById(
-          "positiveWords"
-        ).value
-    }
-
-  };
-
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          payload,
-          null,
-          2
-        )
-      ],
-      {
-        type:"application/json"
-      }
-    );
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const link =
-    document.createElement("a");
-
-  link.href = url;
-
-  link.download =
-    `tsega-tracker-backup-${todayKey()}.json`;
-
-  link.click();
-
-  URL.revokeObjectURL(url);
-
-  showToast(
-    "Backup exported successfully"
-  );
-
-}
-
-function importBackup(file){
-
-  const reader =
-    new FileReader();
-
-  reader.onload = () => {
-
-    try{
-
-      const data =
-        JSON.parse(
-          reader.result
-        );
-
-      const incoming =
-        Array.isArray(data)
-          ? data
-          : data.tasks;
-
-      if(!Array.isArray(incoming)){
-
-        throw new Error(
-          "Invalid backup"
-        );
-
-      }
-
-      if(
-        !confirm(
-          "Import this backup? Your current tasks will be replaced by the backup."
-        )
-      ){
-
-        return;
-
-      }
-
-      tasks =
-        incoming.map(task => ({
-
-          ...task,
-
-          id:String(
-            task.id || uid()
-          ),
-
-          text:
-            task.text ||
-            task.title ||
-            task.name ||
-            "Untitled task",
-
-          type:
-            task.type ||
-            task.category ||
-            "daily",
-
-          completed:
-            !!task.completed,
-
-          inProgress:
-            !!task.inProgress,
-
-          priority:
-            task.priority ||
-            "medium",
-
-          scheduledDate:
-            task.scheduledDate ||
-            task.plannedDate ||
-            (
-              task.type === "daily"
-                ? dateKey(new Date())
-                : ""
-            ),
-
-          dueTime:
-            task.dueTime || "",
-
-          notes:
-            task.notes || "",
-
-          createdAt:
-            task.createdAt ||
-            new Date().toISOString()
-
-        }));
-
-      if(data.profile){
-
-        profile = {
-          ...profile,
-          ...data.profile
-        };
-
-        saveProfile();
-
-      }
-
-      if(data.spiritual){
-
-        localStorage.setItem(
-          SPIRITUAL_KEY,
-          JSON.stringify({
-            bibleVerse:
-              data.spiritual.bibleVerse || "",
-
-            positiveWords:
-              data.spiritual.positiveWords || "",
-
-            updatedAt:
-              new Date().toISOString()
+      self.addEventListener('fetch', event => {
+        event.respondWith(
+          caches.match(event.request).then(cached => {
+            return cached || fetch(event.request).then(response => {
+              const clone = response.clone();
+              caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+              return response;
+            }).catch(() => caches.match('./'));
           })
         );
-
-        loadSpiritual();
-
-      }
-
-      saveTasks();
-
-      renderAll();
-
-      showToast(
-        "Backup imported successfully"
-      );
-
-    }catch(error){
-
-      console.error(error);
-
-      showToast(
-        "Invalid backup file"
-      );
-
-    }
-
-  };
-
-  reader.readAsText(file);
-
-}
-
+      });
+    `;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+  }
+})();
 
 /* =========================================================
-   AUTO LOCK
+   2. STATE MANAGEMENT & LOCAL STORAGE
 ========================================================= */
+const STORAGE_KEY = 'tsega_tracker_v2_data';
 
-let autoLockTimer = null;
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
-function resetAutoLockTimer(){
+const defaultState = {
+  user: {
+    name: 'Tsega',
+    pinHash: null,
+    biometricId: null,
+    avatar: null,
+    autoLock: true
+  },
+  spiritual: {
+    v1Ref: 'PROVERBS 16:3',
+    v1Text: '“Commit to the Lord whatever you do, and he will establish your plans.”',
+    v2Ref: 'COLOSSIANS 3:23',
+    v2Text: '“Whatever you do, work at it with all your heart, as working for the Lord.”',
+    intention: 'Execute high-leverage creative work with unwavering discipline and zero distractions.'
+  },
+  habits: [
+    { id: 'h1', name: 'Morning Prayer & Scripture', completedDates: [] },
+    { id: 'h2', name: '2 Hours Deep Focused Work', completedDates: [] },
+    { id: 'h3', name: 'Skill Mastery & Learning', completedDates: [] }
+  ],
+  tasks: [
+    { id: 't1', title: 'Review top 3 priorities for today', category: 'morning', priority: 'high', date: getTodayStr(), completed: false },
+    { id: 't2', title: 'Complete core creative client deliverable', category: 'deepwork', priority: 'high', date: getTodayStr(), completed: false }
+  ],
+  focusMinutesByDate: {}
+};
 
-  clearTimeout(
-    autoLockTimer
-  );
+let state = loadState();
+let isUnlocked = false;
+let selectedPlanDate = getTodayStr();
+let calendarViewDate = new Date();
+let calendarSelectedDate = getTodayStr();
 
-  if(
-    !settings.autoLock ||
-    !document
-      .getElementById("app")
-      .classList.contains("ready")
-  ){
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return structuredClone(defaultState);
+    const parsed = JSON.parse(raw);
+    return {
+      ...structuredClone(defaultState),
+      ...parsed,
+      user: { ...defaultState.user, ...(parsed.user || {}) },
+      spiritual: { ...defaultState.spiritual, ...(parsed.spiritual || {}) }
+    };
+  } catch (e) {
+    return structuredClone(defaultState);
+  }
+}
 
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  renderAll();
+}
+
+/* =========================================================
+   3. CRYPTOGRAPHIC PIN & BIOMETRIC SECURITY ENGINE
+========================================================= */
+async function hashPin(pin) {
+  const enc = new TextEncoder().encode(pin + '_tsega_salt_2026');
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function togglePinEye(inputId) {
+  const el = document.getElementById(inputId);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function showLockScreen() {
+  isUnlocked = false;
+  document.getElementById('app').classList.remove('ready');
+  const lockScreen = document.getElementById('lockScreen');
+  lockScreen.classList.add('show');
+  document.getElementById('lockError').textContent = '';
+
+  if (!state.user.pinHash) {
+    document.getElementById('lockTitle').textContent = 'Secure your tracker';
+    document.getElementById('lockDescription').textContent = 'Create a 4–12 digit PIN to protect your personal planner every time it opens.';
+    document.getElementById('setupFields').style.display = 'block';
+    document.getElementById('unlockFields').style.display = 'none';
+  } else {
+    document.getElementById('lockTitle').textContent = `Welcome back, ${state.user.name}`;
+    document.getElementById('lockDescription').textContent = 'Verify your PIN or Biometrics to unlock your workspace.';
+    document.getElementById('setupFields').style.display = 'none';
+    document.getElementById('unlockFields').style.display = 'block';
+    document.getElementById('unlockPin').value = '';
+
+    const bioBtn = document.getElementById('unlockBiometricBtn');
+    if (state.user.biometricId && window.PublicKeyCredential) {
+      bioBtn.style.display = 'flex';
+      // Automatically prompt biometrics on open if enabled
+      setTimeout(() => verifyBiometrics(true), 350);
+    } else {
+      bioBtn.style.display = 'none';
+      setTimeout(() => document.getElementById('unlockPin').focus(), 200);
+    }
+  }
+}
+
+function lockApp() {
+  if (!state.user.pinHash) return;
+  showLockScreen();
+  showToast('Workspace locked');
+}
+
+function unlockSuccess() {
+  isUnlocked = true;
+  document.getElementById('lockScreen').classList.remove('show');
+  document.getElementById('app').classList.add('ready');
+  renderAll();
+}
+
+// Create New Account PIN
+document.getElementById('createAccountBtn').addEventListener('click', async () => {
+  const name = document.getElementById('setupName').value.trim() || 'Tsega';
+  const pin = document.getElementById('setupPin').value.trim();
+  const confirm = document.getElementById('setupPinConfirm').value.trim();
+  const err = document.getElementById('lockError');
+
+  if (!/^\d{4,12}$/.test(pin)) {
+    err.textContent = 'PIN must be 4 to 12 numbers.';
+    return;
+  }
+  if (pin !== confirm) {
+    err.textContent = 'PINs do not match.';
     return;
   }
 
-  autoLockTimer =
-    setTimeout(
-      () => {
-        lockApp();
-      },
-      settings.autoLock * 1000
-    );
+  state.user.name = name;
+  state.user.pinHash = await hashPin(pin);
+  saveState();
+  unlockSuccess();
+  showToast('Security vault initialized');
+});
 
+// Unlock with Existing PIN
+document.getElementById('unlockBtn').addEventListener('click', async () => {
+  const pin = document.getElementById('unlockPin').value.trim();
+  const err = document.getElementById('lockError');
+  const hashed = await hashPin(pin);
+
+  if (hashed === state.user.pinHash) {
+    unlockSuccess();
+  } else {
+    err.textContent = 'Incorrect PIN. Please try again.';
+    document.getElementById('unlockPin').value = '';
+  }
+});
+
+document.getElementById('unlockPin').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('unlockBtn').click();
+});
+
+// WebAuthn Biometric Setup & Verification (Works offline via Platform Authenticator)
+async function registerBiometrics() {
+  if (!window.PublicKeyCredential) {
+    showToast('Biometrics not supported in this browser');
+    return;
+  }
+  try {
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const userId = crypto.getRandomValues(new Uint8Array(16));
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge,
+        rp: { name: 'Tsega Habit Tracker' },
+        user: { id: userId, name: state.user.name, displayName: state.user.name },
+        pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' },
+        timeout: 60000
+      }
+    });
+    if (cred) {
+      state.user.biometricId = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
+      saveState();
+      showToast('Fingerprint / FaceID enabled!');
+    }
+  } catch (e) {
+    showToast('Biometric setup cancelled or unavailable on HTTP');
+  }
 }
 
-function setupActivityTracking(){
+document.getElementById('setupBiometricBtn').addEventListener('click', async () => {
+  const pin = document.getElementById('setupPin').value.trim();
+  if (!/^\d{4,12}$/.test(pin)) {
+    document.getElementById('lockError').textContent = 'Enter a valid 4–12 digit PIN first.';
+    return;
+  }
+  await registerBiometrics();
+});
 
-  [
-    "click",
-    "touchstart",
-    "keydown",
-    "mousemove",
-    "scroll"
-  ].forEach(eventName => {
-
-    document.addEventListener(
-      eventName,
-      resetAutoLockTimer,
-      {
-        passive:true
+async function verifyBiometrics(silent = false) {
+  if (!state.user.biometricId || !window.PublicKeyCredential) return;
+  try {
+    const rawId = Uint8Array.from(atob(state.user.biometricId), c => c.charCodeAt(0));
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        allowCredentials: [{ type: 'public-key', id: rawId }],
+        userVerification: 'required',
+        timeout: 60000
       }
-    );
+    });
+    if (assertion) unlockSuccess();
+  } catch (e) {
+    if (!silent) document.getElementById('lockError').textContent = 'Biometric check failed. Use your PIN.';
+  }
+}
 
+document.getElementById('unlockBiometricBtn').addEventListener('click', () => verifyBiometrics(false));
+
+// STRICT AUTO-LOCK EVERY TIME APP IS MINIMIZED OR HIDDEN
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && isUnlocked && state.user.autoLock && state.user.pinHash) {
+    showLockScreen();
+  }
+});
+
+/* =========================================================
+   4. SPLASH & INITIALIZATION
+========================================================= */
+window.addEventListener('DOMContentLoaded', () => {
+  const fill = document.getElementById('loadingFill');
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct += 25;
+    fill.style.width = Math.min(pct, 100) + '%';
+    if (pct >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('splash').classList.add('hidden');
+        showLockScreen();
+      }, 220);
+    }
+  }, 80);
+
+  document.getElementById('planDatePicker').value = selectedPlanDate;
+  updateNetworkStatus();
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
+});
+
+function updateNetworkStatus() {
+  const dot = document.getElementById('networkDot');
+  const text = document.getElementById('networkText');
+  if (navigator.onLine) {
+    dot.classList.remove('offline');
+    text.textContent = 'Synced & Offline Ready';
+  } else {
+    dot.classList.add('offline');
+    text.textContent = 'Offline Mode Active';
+  }
+}
+
+// PWA Install Prompt Handler
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+
+document.getElementById('installPwaBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner').classList.remove('show');
+});
+
+/* =========================================================
+   5. NAVIGATION & UI RENDERING
+========================================================= */
+function switchPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${pageId}`).classList.add('active');
+
+  document.querySelectorAll('.nav-btn, .mobile-nav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === pageId);
   });
 
+  if (pageId === 'calendar') renderCalendar();
+  if (pageId === 'focus') populateFocusTaskDropdown();
 }
 
+document.querySelectorAll('.nav-btn, .mobile-nav button').forEach(btn => {
+  btn.addEventListener('click', () => switchPage(btn.dataset.page));
+});
+
+function renderAll() {
+  const today = getTodayStr();
+  const now = new Date();
+  const hour = now.getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
+  document.getElementById('greetingTitle').textContent = `${greet}, ${state.user.name}`;
+  document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+  });
+
+  // Profile & Avatars
+  document.getElementById('sidebarName').textContent = state.user.name;
+  document.getElementById('profileDisplayName').textContent = state.user.name;
+  document.getElementById('profileNameInput').value = state.user.name;
+
+  const initial = (state.user.name[0] || 'T').toUpperCase();
+  ['sidebarAvatar', 'profileAvatarLarge'].forEach(id => {
+    const el = document.getElementById(id);
+    el.innerHTML = state.user.avatar ? `<img src="${state.user.avatar}" alt="Avatar">` : initial;
+  });
+
+  document.getElementById('autoLockSwitch').classList.toggle('on', state.user.autoLock);
+
+  // Spiritual & Intention
+  document.getElementById('verse1Ref').textContent = state.spiritual.v1Ref;
+  document.getElementById('verse1Text').textContent = state.spiritual.v1Text;
+  document.getElementById('verse2Ref').textContent = state.spiritual.v2Ref;
+  document.getElementById('verse2Text').textContent = state.spiritual.v2Text;
+  document.getElementById('heroIntention').textContent = state.spiritual.intention;
+
+  document.getElementById('editVerse1Ref').value = state.spiritual.v1Ref;
+  document.getElementById('editVerse1Text').value = state.spiritual.v1Text;
+  document.getElementById('editVerse2Ref').value = state.spiritual.v2Ref;
+  document.getElementById('editVerse2Text').value = state.spiritual.v2Text;
+  document.getElementById('editHeroIntention').value = state.spiritual.intention;
+
+  // Stats & Progress
+  const todaysTasks = state.tasks.filter(t => t.date === today);
+  const doneTasks = todaysTasks.filter(t => t.completed);
+  const pct = todaysTasks.length ? Math.round((doneTasks.length / todaysTasks.length) * 100) : 0;
+
+  document.getElementById('statCompleted').textContent = `${doneTasks.length}/${todaysTasks.length}`;
+  document.getElementById('statRate').textContent = `${pct}%`;
+  document.getElementById('progressPercentText').textContent = `${pct}%`;
+  document.getElementById('dailyProgressBar').style.width = `${pct}%`;
+
+  const focusToday = state.focusMinutesByDate[today] || 0;
+  document.getElementById('statFocusMins').textContent = `${focusToday}m`;
+  document.getElementById('statStreak').textContent = calculateOverallStreak();
+
+  renderHabits();
+  renderPlans();
+  renderCalendar();
+}
 
 /* =========================================================
-   INSTALL PWA
+   6. HABIT TRACKER & STREAKS
 ========================================================= */
-
-window.addEventListener(
-  "beforeinstallprompt",
-  event => {
-
-    event.preventDefault();
-
-    installPrompt = event;
-
-    document.getElementById(
-      "installBanner"
-    ).classList.add("show");
-
+function calculateHabitStreak(habit) {
+  let streak = 0;
+  const d = new Date();
+  while (true) {
+    const str = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    if (habit.completedDates.includes(str)) {
+      streak++;
+      d.setDate(d.getDate() - 1);
+    } else if (str === getTodayStr()) {
+      d.setDate(d.getDate() - 1);
+    } else {
+      break;
+    }
   }
-);
+  return streak;
+}
 
-async function installApp(){
+function calculateOverallStreak() {
+  if (!state.habits.length) return 0;
+  return Math.max(...state.habits.map(calculateHabitStreak));
+}
 
-  if(!installPrompt){
-
-    showToast(
-      "If already installed, use your app icon. Otherwise Chrome may offer installation from its menu."
-    );
-
+function renderHabits() {
+  const today = getTodayStr();
+  const container = document.getElementById('habitStrip');
+  if (!state.habits.length) {
+    container.innerHTML = `<div class="empty">No daily habits yet. Click "+ Habit" to create one.</div>`;
     return;
   }
 
-  installPrompt.prompt();
-
-  const result =
-    await installPrompt.userChoice;
-
-  if(
-    result.outcome === "accepted"
-  ){
-
-    showToast(
-      "Installation started"
-    );
-
-  }
-
-  installPrompt = null;
-
-  document.getElementById(
-    "installBanner"
-  ).classList.remove("show");
-
+  container.innerHTML = state.habits.map(h => {
+    const isDone = h.completedDates.includes(today);
+    const streak = calculateHabitStreak(h);
+    return `
+      <div class="habit-chip ${isDone ? 'done' : ''}">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <button class="task-check ${isDone ? 'checked' : ''}" onclick="toggleHabitToday('${h.id}')">${isDone ? '✓' : ''}</button>
+          <div class="habit-info">
+            <strong>${escapeHtml(h.name)}</strong>
+            <span>🔥 ${streak} day streak</span>
+          </div>
+        </div>
+        <button class="task-action delete" title="Delete Habit" onclick="deleteHabit('${h.id}')">✕</button>
+      </div>
+    `;
+  }).join('');
 }
 
+function toggleHabitToday(habitId) {
+  const today = getTodayStr();
+  const habit = state.habits.find(h => h.id === habitId);
+  if (!habit) return;
+  const idx = habit.completedDates.indexOf(today);
+  if (idx > -1) habit.completedDates.splice(idx, 1);
+  else habit.completedDates.push(today);
+  saveState();
+}
+
+function openHabitModal() {
+  document.getElementById('newHabitName').value = '';
+  document.getElementById('habitModal').classList.add('open');
+}
+
+function addNewHabit() {
+  const name = document.getElementById('newHabitName').value.trim();
+  if (!name) return;
+  state.habits.push({ id: 'h_' + Date.now(), name, completedDates: [] });
+  closeModal('habitModal');
+  saveState();
+  showToast('Habit added');
+}
+
+function deleteHabit(id) {
+  state.habits = state.habits.filter(h => h.id !== id);
+  saveState();
+}
 
 /* =========================================================
-   PROFILE IMAGE
+   7. TASKS & DAILY PLANS
 ========================================================= */
+function quickAddTask() {
+  const input = document.getElementById('quickTaskInput');
+  const title = input.value.trim();
+  if (!title) return;
 
-document.getElementById(
-  "profileImageInput"
-).addEventListener(
-  "change",
-  async event => {
+  state.tasks.push({
+    id: 't_' + Date.now(),
+    title,
+    category: document.getElementById('quickTaskCategory').value,
+    priority: document.getElementById('quickTaskPriority').value,
+    date: getTodayStr(),
+    completed: false
+  });
+  input.value = '';
+  saveState();
+  showToast('Added to today’s plan');
+}
 
-    const file =
-      event.target.files[0];
+document.getElementById('quickTaskInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') quickAddTask();
+});
 
-    if(!file) return;
+document.getElementById('planDatePicker').addEventListener('change', e => {
+  selectedPlanDate = e.target.value || getTodayStr();
+  renderPlans();
+});
 
-    try{
+function setPlanDateToday() {
+  selectedPlanDate = getTodayStr();
+  document.getElementById('planDatePicker').value = selectedPlanDate;
+  renderPlans();
+}
 
-      profile.image =
-        await compressProfileImage(
-          file
-        );
+['taskSearchInput', 'filterStatus', 'filterPriority'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderPlans);
+});
 
-      saveProfile();
+function renderPlans() {
+  const query = document.getElementById('taskSearchInput').value.toLowerCase();
+  const statusFilter = document.getElementById('filterStatus').value;
+  const prioFilter = document.getElementById('filterPriority').value;
 
-      updateProfileUI();
+  const categories = ['morning', 'deepwork', 'growth', 'evening'];
+  categories.forEach(cat => {
+    const listEl = document.getElementById(`list-${cat}`);
+    const countEl = document.getElementById(`count-${cat}`);
 
-      showToast(
-        "Profile picture updated"
-      );
+    const filtered = state.tasks.filter(t => {
+      if (t.date !== selectedPlanDate || t.category !== cat) return false;
+      if (query && !t.title.toLowerCase().includes(query)) return false;
+      if (statusFilter === 'completed' && !t.completed) return false;
+      if (statusFilter === 'pending' && t.completed) return false;
+      if (prioFilter !== 'all' && t.priority !== prioFilter) return false;
+      return true;
+    });
 
-    }catch(error){
+    countEl.textContent = filtered.length;
 
-      showToast(
-        "Could not use this image."
-      );
-
+    if (!filtered.length) {
+      listEl.innerHTML = `<div class="empty">No tasks in this block</div>`;
+      return;
     }
 
-    event.target.value = "";
+    listEl.innerHTML = filtered.map(t => `
+      <div class="task-card ${t.completed ? 'completed' : ''}">
+        <button class="task-check ${t.completed ? 'checked' : ''}" onclick="toggleTask('${t.id}')">${t.completed ? '✓' : ''}</button>
+        <div class="task-main">
+          <div class="task-title">${escapeHtml(t.title)}</div>
+          <div class="task-meta">
+            <span class="badge ${t.priority}">${t.priority}</span>
+            <span class="meta-date">${t.date}</span>
+          </div>
+        </div>
+        <div class="task-actions">
+          <button class="task-action" title="Edit" onclick="openTaskModal('${t.id}')">✎</button>
+          <button class="task-action delete" title="Delete" onclick="deleteTask('${t.id}')">✕</button>
+        </div>
+      </div>
+    `).join('');
+  });
+}
 
+function toggleTask(id) {
+  const task = state.tasks.find(t => t.id === id);
+  if (task) {
+    task.completed = !task.completed;
+    saveState();
   }
-);
+}
 
+function deleteTask(id) {
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  saveState();
+  showToast('Task removed');
+}
+
+function openTaskModal(taskId = null) {
+  const modal = document.getElementById('taskModal');
+  if (taskId) {
+    const t = state.tasks.find(x => x.id === taskId);
+    document.getElementById('taskModalTitle').textContent = 'Edit Task';
+    document.getElementById('editTaskId').value = t.id;
+    document.getElementById('modalTaskTitle').value = t.title;
+    document.getElementById('modalTaskCategory').value = t.category;
+    document.getElementById('modalTaskPriority').value = t.priority;
+    document.getElementById('modalTaskDate').value = t.date;
+  } else {
+    document.getElementById('taskModalTitle').textContent = 'Schedule New Task';
+    document.getElementById('editTaskId').value = '';
+    document.getElementById('modalTaskTitle').value = '';
+    document.getElementById('modalTaskCategory').value = 'deepwork';
+    document.getElementById('modalTaskPriority').value = 'high';
+    document.getElementById('modalTaskDate').value = selectedPlanDate;
+  }
+  modal.classList.add('open');
+}
+
+function saveTaskFromModal() {
+  const id = document.getElementById('editTaskId').value;
+  const title = document.getElementById('modalTaskTitle').value.trim();
+  const category = document.getElementById('modalTaskCategory').value;
+  const priority = document.getElementById('modalTaskPriority').value;
+  const date = document.getElementById('modalTaskDate').value || getTodayStr();
+
+  if (!title) return;
+
+  if (id) {
+    const t = state.tasks.find(x => x.id === id);
+    if (t) Object.assign(t, { title, category, priority, date });
+  } else {
+    state.tasks.push({ id: 't_' + Date.now(), title, category, priority, date, completed: false });
+  }
+
+  closeModal('taskModal');
+  saveState();
+  showToast('Task saved');
+}
 
 /* =========================================================
-   EVENT LISTENERS
+   8. INTERACTIVE CALENDAR
 ========================================================= */
+function renderCalendar() {
+  const year = calendarViewDate.getFullYear();
+  const month = calendarViewDate.getMonth();
+  document.getElementById('calendarMonthLabel').textContent = new Date(year, month, 1).toLocaleDateString('en-US', {
+    month: 'long', year: 'numeric'
+  });
 
-document.querySelectorAll(
-  ".nav-btn,.mobile-nav button"
-).forEach(button => {
+  const firstDayIdx = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevMonthDays = new Date(year, month, 0).getDate();
+  const todayStr = getTodayStr();
 
-  button.addEventListener(
-    "click",
-    () => {
-      navigate(
-        button.dataset.page
-      );
+  let html = '';
+  for (let i = firstDayIdx - 1; i >= 0; i--) {
+    html += `<button class="day other" disabled>${prevMonthDays - i}</button>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const hasTasks = state.tasks.some(t => t.date === dateStr);
+    const isToday = dateStr === todayStr;
+    const isSelected = dateStr === calendarSelectedDate;
+
+    html += `<button class="day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${hasTasks ? 'has-tasks' : ''}" onclick="selectCalendarDate('${dateStr}')">${d}</button>`;
+  }
+
+  document.getElementById('calendarDaysGrid').innerHTML = html;
+  renderCalendarDayDetails();
+}
+
+function selectCalendarDate(dateStr) {
+  calendarSelectedDate = dateStr;
+  renderCalendar();
+}
+
+function changeCalendarMonth(delta) {
+  calendarViewDate.setMonth(calendarViewDate.getMonth() + delta);
+  renderCalendar();
+}
+
+function jumpCalendarToday() {
+  calendarViewDate = new Date();
+  calendarSelectedDate = getTodayStr();
+  renderCalendar();
+}
+
+function renderCalendarDayDetails() {
+  const tasks = state.tasks.filter(t => t.date === calendarSelectedDate);
+  document.getElementById('calSelectedDateTitle').textContent = new Date(calendarSelectedDate + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', month: 'short', day: 'numeric'
+  });
+  document.getElementById('calSelectedDateSub').textContent = `${tasks.length} scheduled task${tasks.length === 1 ? '' : 's'}`;
+
+  const container = document.getElementById('calSelectedTaskList');
+  if (!tasks.length) {
+    container.innerHTML = `<div class="empty">No tasks scheduled for this date.</div>`;
+    return;
+  }
+
+  container.innerHTML = tasks.map(t => `
+    <div class="day-task ${t.completed ? 'done' : ''}">
+      <span>${escapeHtml(t.title)}</span>
+      <span class="badge ${t.priority}">${t.priority}</span>
+    </div>
+  `).join('');
+}
+
+function jumpToSelectedPlanDate() {
+  selectedPlanDate = calendarSelectedDate;
+  document.getElementById('planDatePicker').value = selectedPlanDate;
+  switchPage('plans');
+  renderPlans();
+}
+
+/* =========================================================
+   9. FOCUS TIMER & OFFLINE WEB AUDIO BROWN NOISE
+========================================================= */
+let timerSeconds = 25 * 60;
+let timerTotalSeconds = 25 * 60;
+let timerInterval = null;
+let audioCtx = null;
+let noiseNode = null;
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function setTimerPreset(mins, label, btnEl) {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  document.getElementById('timerStartBtn').textContent = 'Start Focus';
+  timerSeconds = mins * 60;
+  timerTotalSeconds = mins * 60;
+  document.getElementById('timerModeLabel').textContent = label;
+  document.getElementById('timerDisplay').textContent = formatTime(timerSeconds);
+  document.querySelectorAll('.preset').forEach(p => p.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timerStartBtn');
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    btn.textContent = 'Resume Focus';
+    return;
+  }
+
+  btn.textContent = 'Pause';
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    document.getElementById('timerDisplay').textContent = formatTime(timerSeconds);
+
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      btn.textContent = 'Start Focus';
+      playCompletionChime();
+
+      const completedMins = Math.round(timerTotalSeconds / 60);
+      const today = getTodayStr();
+      state.focusMinutesByDate[today] = (state.focusMinutesByDate[today] || 0) + completedMins;
+      saveState();
+      showToast(`Session complete! +${completedMins}m logged.`);
+      timerSeconds = timerTotalSeconds;
+      document.getElementById('timerDisplay').textContent = formatTime(timerSeconds);
     }
-  );
+  }, 1000);
+}
 
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  timerSeconds = timerTotalSeconds;
+  document.getElementById('timerDisplay').textContent = formatTime(timerSeconds);
+  document.getElementById('timerStartBtn').textContent = 'Start Focus';
+}
+
+function populateFocusTaskDropdown() {
+  const today = getTodayStr();
+  const select = document.getElementById('focusTaskSelect');
+  const pending = state.tasks.filter(t => t.date === today && !t.completed);
+  select.innerHTML = `<option value="">-- Free Focus Session --</option>` +
+    pending.map(t => `<option value="${t.id}">${escapeHtml(t.title)}</option>`).join('');
+}
+
+// Offline Web Audio Brown Noise Generator (Zero external MP3s needed)
+function toggleBrownNoise() {
+  const btn = document.getElementById('brownNoiseBtn');
+  if (noiseNode) {
+    noiseNode.disconnect();
+    noiseNode = null;
+    btn.textContent = '🎧 Ambient Sound: OFF';
+    return;
+  }
+  audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+  const bufferSize = 4096;
+  let lastOut = 0.0;
+  noiseNode = audioCtx.createScriptProcessor(bufferSize, 1, 1);
+  noiseNode.onaudioprocess = function(e) {
+    const output = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      output[i] = (lastOut + (0.02 * white)) / 1.02;
+      lastOut = output[i];
+      output[i] *= 0.14; // Gentle volume
+    }
+  };
+  noiseNode.connect(audioCtx.destination);
+  btn.textContent = '🎧 Ambient Sound: ON';
+}
+
+function playCompletionChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(528, ctx.currentTime);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.5);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 1.5);
+  } catch (e) {}
+}
+
+/* =========================================================
+   10. PROFILE, SPIRITUAL & OFFLINE BACKUPS
+========================================================= */
+function saveProfileName() {
+  const val = document.getElementById('profileNameInput').value.trim();
+  if (!val) return;
+  state.user.name = val;
+  saveState();
+  showToast('Name updated');
+}
+
+document.getElementById('avatarUploadInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    state.user.avatar = ev.target.result;
+    saveState();
+    showToast('Profile photo saved offline');
+  };
+  reader.readAsDataURL(file);
 });
 
-document.getElementById(
-  "sidebarProfileBtn"
-).addEventListener(
-  "click",
-  () => navigate("profile")
-);
+function toggleSetting(key) {
+  state.user[key] = !state.user[key];
+  saveState();
+}
 
-document.getElementById(
-  "topProfileBtn"
-).addEventListener(
-  "click",
-  () => navigate("profile")
-);
+function saveSpiritualSettings() {
+  state.spiritual.v1Ref = document.getElementById('editVerse1Ref').value.trim();
+  state.spiritual.v1Text = document.getElementById('editVerse1Text').value.trim();
+  state.spiritual.v2Ref = document.getElementById('editVerse2Ref').value.trim();
+  state.spiritual.v2Text = document.getElementById('editVerse2Text').value.trim();
+  state.spiritual.intention = document.getElementById('editHeroIntention').value.trim();
+  saveState();
+  showToast('Scriptures & intention saved');
+}
 
-document.getElementById(
-  "quickAddBtn"
-).addEventListener(
-  "click",
-  addTaskFromQuick
-);
+function openPinModal() {
+  document.getElementById('newPinInput').value = '';
+  document.getElementById('confirmNewPinInput').value = '';
+  document.getElementById('pinModal').classList.add('open');
+}
 
-document.getElementById(
-  "quickTaskInput"
-).addEventListener(
-  "keydown",
-  event => {
-
-    if(event.key === "Enter"){
-
-      addTaskFromQuick();
-
-    }
-
+async function updateSecurityPin() {
+  const p1 = document.getElementById('newPinInput').value.trim();
+  const p2 = document.getElementById('confirmNewPinInput').value.trim();
+  if (!/^\d{4,12}$/.test(p1)) {
+    showToast('PIN must be 4–12 digits');
+    return;
   }
-);
-
-document.getElementById(
-  "selectedDate"
-).addEventListener(
-  "change",
-  updateSelectedDate
-);
-
-document.getElementById(
-  "todayBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    selectedDate =
-      new Date();
-
-    document.getElementById(
-      "selectedDate"
-    ).value =
-      dateKey(selectedDate);
-
-    renderPlans();
-
+  if (p1 !== p2) {
+    showToast('PINs do not match');
+    return;
   }
-);
-
-[
-  "searchInput",
-  "statusFilter",
-  "sortSelect"
-].forEach(id => {
-
-  document.getElementById(id)
-    .addEventListener(
-      "input",
-      renderPlans
-    );
-
-});
-
-
-/* Calendar buttons */
-
-document.getElementById(
-  "calendarPrev"
-).addEventListener(
-  "click",
-  () => {
-
-    calendarDate =
-      new Date(
-        calendarDate.getFullYear(),
-        calendarDate.getMonth() - 1,
-        1
-      );
-
-    renderCalendar();
-
-  }
-);
-
-document.getElementById(
-  "calendarNext"
-).addEventListener(
-  "click",
-  () => {
-
-    calendarDate =
-      new Date(
-        calendarDate.getFullYear(),
-        calendarDate.getMonth() + 1,
-        1
-      );
-
-    renderCalendar();
-
-  }
-);
-
-document.getElementById(
-  "calendarToday"
-).addEventListener(
-  "click",
-  () => {
-
-    calendarDate =
-      new Date();
-
-    selectedDate =
-      new Date();
-
-    renderCalendar();
-
-  }
-);
-
-document.getElementById(
-  "calendarDays"
-).addEventListener(
-  "click",
-  event => {
-
-    const day =
-      event.target.closest(
-        "[data-calendar-date]"
-      );
-
-    if(!day) return;
-
-    const value =
-      day.dataset.calendarDate;
-
-    selectedDate =
-      new Date(
-        value + "T12:00:00"
-      );
-
-    renderCalendar();
-
-    document.getElementById(
-      "selectedDate"
-    ).value =
-      value;
-
-  }
-);
-
-
-/* Focus */
-
-document.getElementById(
-  "timerStart"
-).addEventListener(
-  "click",
-  startTimer
-);
-
-document.getElementById(
-  "timerReset"
-).addEventListener(
-  "click",
-  resetTimer
-);
-
-document.querySelectorAll(
-  ".preset"
-).forEach(button => {
-
-  button.addEventListener(
-    "click",
-    () => {
-
-      setTimer(
-        Number(
-          button.dataset.minutes
-        )
-      );
-
-    }
-  );
-
-});
-
-
-/* Spiritual */
-
-document.getElementById(
-  "saveSpiritualBtn"
-).addEventListener(
-  "click",
-  saveSpiritual
-);
-
-
-/* Edit task */
-
-document.getElementById(
-  "saveTaskBtn"
-).addEventListener(
-  "click",
-  saveEditedTask
-);
-
-
-/* Profile */
-
-document.getElementById(
-  "editProfileBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    document.getElementById(
-      "profileNameInput"
-    ).value = profile.name;
-
-    document.getElementById(
-      "profileBioInput"
-    ).value = profile.bio;
-
-    openModal("profileModal");
-
-  }
-);
-
-document.getElementById(
-  "saveProfileBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    const name =
-      document.getElementById(
-        "profileNameInput"
-      ).value.trim();
-
-    const bio =
-      document.getElementById(
-        "profileBioInput"
-      ).value.trim();
-
-    profile.name =
-      name || "Tsega";
-
-    profile.bio =
-      bio || "Personal productivity space";
-
-    saveProfile();
-
-    updateProfileUI();
-
-    closeModal(
-      "profileModal"
-    );
-
-    showToast(
-      "Profile updated"
-    );
-
-  }
-);
-
-
-/* Security */
-
-document.getElementById(
-  "biometricSwitch"
-).addEventListener(
-  "click",
-  toggleBiometric
-);
-
-document.getElementById(
-  "autoLockSelect"
-).addEventListener(
-  "change",
-  event => {
-
-    settings.autoLock =
-      Number(event.target.value);
-
-    saveSettings();
-
-    resetAutoLockTimer();
-
-    showToast(
-      settings.autoLock
-        ? "Auto-lock updated"
-        : "Auto-lock disabled"
-    );
-
-  }
-);
-
-document.getElementById(
-  "changePinBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    document.getElementById(
-      "currentPin"
-    ).value = "";
-
-    document.getElementById(
-      "newPin"
-    ).value = "";
-
-    document.getElementById(
-      "confirmNewPin"
-    ).value = "";
-
-    document.getElementById(
-      "pinChangeError"
-    ).textContent = "";
-
-    openModal("pinModal");
-
-  }
-);
-
-document.getElementById(
-  "saveNewPinBtn"
-).addEventListener(
-  "click",
-  async () => {
-
-    const current =
-      document.getElementById(
-        "currentPin"
-      ).value.trim();
-
-    const newPin =
-      document.getElementById(
-        "newPin"
-      ).value.trim();
-
-    const confirm =
-      document.getElementById(
-        "confirmNewPin"
-      ).value.trim();
-
-    const error =
-      document.getElementById(
-        "pinChangeError"
-      );
-
-    error.textContent = "";
-
-    if(!validPin(current)){
-
-      error.textContent =
-        "Current PIN is invalid.";
-
-      return;
-
-    }
-
-    const currentHash =
-      await hashPin(
-        current,
-        auth.salt
-      );
-
-    if(
-      currentHash !==
-      auth.pinHash
-    ){
-
-      error.textContent =
-        "Current PIN is incorrect.";
-
-      return;
-
-    }
-
-    if(!validPin(newPin)){
-
-      error.textContent =
-        "New PIN must contain 4–12 digits.";
-
-      return;
-
-    }
-
-    if(newPin !== confirm){
-
-      error.textContent =
-        "New PINs do not match.";
-
-      return;
-
-    }
-
-    const salt =
-      randomSalt();
-
-    const pinHash =
-      await hashPin(
-        newPin,
-        salt
-      );
-
-    auth.salt = salt;
-    auth.pinHash = pinHash;
-
-    localStorage.setItem(
-      AUTH_KEY,
-      JSON.stringify(auth)
-    );
-
-    closeModal(
-      "pinModal"
-    );
-
-    showToast(
-      "PIN changed successfully"
-    );
-
-  }
-);
-
-
-/* Lock buttons */
-
-document.getElementById(
-  "lockNowBtn"
-).addEventListener(
-  "click",
-  lockApp
-);
-
-document.getElementById(
-  "profileLockBtn"
-).addEventListener(
-  "click",
-  lockApp
-);
-
-
-/* Backup */
-
-document.getElementById(
-  "exportBtn"
-).addEventListener(
-  "click",
-  exportBackup
-);
-
-document.getElementById(
-  "importBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    document.getElementById(
-      "importFile"
-    ).click();
-
-  }
-);
-
-document.getElementById(
-  "importFile"
-).addEventListener(
-  "change",
-  event => {
-
-    const file =
-      event.target.files[0];
-
-    if(file){
-      importBackup(file);
-    }
-
-    event.target.value = "";
-
-  }
-);
-
-document.getElementById(
-  "clearBtn"
-).addEventListener(
-  "click",
-  () => {
-
-    if(
-      !confirm(
-        "Delete ALL tasks? This cannot be undone unless you have a backup."
-      )
-    ){
-
-      return;
-
-    }
-
-    tasks = [];
-
-    saveTasks();
-
-    renderAll();
-
-    showToast(
-      "All tasks cleared"
-    );
-
-  }
-);
-
-
-/* Install */
-
-document.getElementById(
-  "installBtn"
-).addEventListener(
-  "click",
-  installApp
-);
-
-document.getElementById(
-  "profileInstallBtn"
-).addEventListener(
-  "click",
-  installApp
-);
-
-
-/* Modals */
-
-document.querySelectorAll(
-  "[data-close]"
-).forEach(button => {
-
-  button.addEventListener(
-    "click",
-    () => {
-
-      closeModal(
-        button.dataset.close
-      );
-
-    }
-  );
-
-});
-
-document.querySelectorAll(
-  ".modal-backdrop"
-).forEach(modal => {
-
-  modal.addEventListener(
-    "click",
-    event => {
-
-      if(
-        event.target === modal
-      ){
-
-        modal.classList.remove(
-          "open"
-        );
-
+  state.user.pinHash = await hashPin(p1);
+  saveState();
+  closeModal('pinModal');
+  showToast('Security PIN updated');
+}
+
+function exportBackup() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tsega-tracker-backup-${getTodayStr()}.json`;
+  a.click();
+  showToast('Backup downloaded');
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (imported && imported.user && imported.tasks) {
+        state = imported;
+        saveState();
+        showToast('Backup restored successfully');
+      } else {
+        showToast('Invalid backup file');
       }
-
+    } catch (err) {
+      showToast('Failed to read backup file');
     }
-  );
+  };
+  reader.readAsText(file);
+}
 
+/* =========================================================
+   11. UTILITIES & KEYBOARD SHORTCUTS
+========================================================= */
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function openCommandModal() {
+  document.getElementById('commandModal').classList.add('open');
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    if (isUnlocked) openCommandModal();
+  }
 });
 
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if(event.key === "Escape"){
-
-      document.querySelectorAll(
-        ".modal-backdrop.open"
-      ).forEach(modal => {
-
-        modal.classList.remove(
-          "open"
-        );
-
-      });
-
-    }
-
-  }
-);
-
-
-/* PIN eyes */
-
-function togglePassword(id){
-
-  const input =
-    document.getElementById(id);
-
-  input.type =
-    input.type === "password"
-      ? "text"
-      : "password";
-
+let toastTimeout;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-document.getElementById(
-  "setupEye"
-).addEventListener(
-  "click",
-  () => togglePassword("setupPin")
-);
-
-document.getElementById(
-  "setupConfirmEye"
-).addEventListener(
-  "click",
-  () => togglePassword("setupPinConfirm")
-);
-
-document.getElementById(
-  "loginEye"
-).addEventListener(
-  "click",
-  () => togglePassword("loginPin")
-);
-
-
-/* Account */
-
-document.getElementById(
-  "createAccountBtn"
-).addEventListener(
-  "click",
-  createAccount
-);
-
-document.getElementById(
-  "unlockBtn"
-).addEventListener(
-  "click",
-  unlockWithPin
-);
-
-document.getElementById(
-  "loginPin"
-).addEventListener(
-  "keydown",
-  event => {
-
-    if(event.key === "Enter"){
-      unlockWithPin();
-    }
-
-  }
-);
-
-document.getElementById(
-  "setupBiometricBtn"
-).addEventListener(
-  "click",
-  async () => {
-
-    await registerBiometric();
-
-    document.getElementById(
-      "setupBiometricBtn"
-    ).style.display = "none";
-
-  }
-);
-
-document.getElementById(
-  "loginBiometricBtn"
-).addEventListener(
-  "click",
-  authenticateBiometric
-);
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-async function initializeApp(){
-
-  loadProfile();
-
-  loadSettings();
-
-  tasks =
-    loadTasks();
-
-  loadSpiritual();
-
-  selectedDate =
-    new Date();
-
-  document.getElementById(
-    "selectedDate"
-  ).value =
-    dateKey(selectedDate);
-
-  const start =
-    new Date(
-      new Date().getFullYear(),
-      0,
-      0
-    );
-
-  const dayOfYear =
-    Math.floor(
-      (
-        Date.now() -
-        start.getTime()
-      ) /
-      86400000
-    );
-
-  document.getElementById(
-    "quoteText"
-  ).textContent =
-    `"${QUOTES[
-      dayOfYear %
-      QUOTES.length
-    ]}"`;
-
-  updateProfileUI();
-
-  updateBiometricUI();
-
-  document.getElementById(
-    "autoLockSelect"
-  ).value =
-    String(settings.autoLock);
-
-  renderAll();
-
-  updateTimerDisplay();
-
-  setupActivityTracking();
-
-  const hasAuth =
-    loadAuth();
-
-  if(hasAuth){
-
-    showLogin();
-
-  }else{
-
-    showSetup();
-
-  }
-
-  await updateBiometricButtons();
-
-  resetAutoLockTimer();
-
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
 }
-
-
-/* =========================================================
-   LOADING SCREEN
-========================================================= */
-
-function startLoading(){
-
-  const fill =
-    document.getElementById(
-      "loadingFill"
-    );
-
-  let progress = 0;
-
-  const interval =
-    setInterval(
-      () => {
-
-        progress +=
-          Math.random() * 13 + 6;
-
-        if(progress >= 100){
-
-          progress = 100;
-
-          clearInterval(
-            interval
-          );
-
-          setTimeout(
-            () => {
-
-              document.getElementById(
-                "splash"
-              ).classList.add(
-                "hidden"
-              );
-
-            },
-            250
-          );
-
-        }
-
-        fill.style.width =
-          progress + "%";
-
-      },
-      80
-    );
-
-}
-
-
-/* =========================================================
-   SERVICE WORKER
-========================================================= */
-
-if("serviceWorker" in navigator){
-
-  window.addEventListener(
-    "load",
-    () => {
-
-      navigator.serviceWorker
-        .register(
-          "./sw.js"
-        )
-        .catch(
-          () => {}
-        );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   START
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    startLoading();
-
-    await initializeApp();
-
-  }
-);
-
 </script>
-
 </body>
-      </html>
+</html>
