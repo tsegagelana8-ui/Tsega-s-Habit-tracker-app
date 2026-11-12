@@ -1,11 +1,10 @@
-const CACHE_NAME = 'tsega-habit-tracker-v5';
+const CACHE_NAME = 'tsega-tracker-v6';
 const ASSETS = [
-  './',
-  './index.html',
-  './index.html?v=3',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,7 +30,7 @@ self.addEventListener('fetch', (event) => {
         const clone = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         return response;
-      }).catch(() => caches.match('./index.html'));
+      }).catch(() => caches.match('/index.html'));
     })
   );
 });
