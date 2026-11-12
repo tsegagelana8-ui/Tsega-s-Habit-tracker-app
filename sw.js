@@ -1,57 +1,87 @@
-const CACHE_NAME = "tsega-habit-tracker-v4";
+const CACHE = 'tsega-habit-tracker-v20261112-2';
 
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
-self.addEventListener("install", event => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
+    caches
+      .open(CACHE)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
-
-  self.skipWaiting();
 });
 
-self.addEventListener("activate", event => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+    caches
+      .keys()
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => key !== CACHE)
+            .map(key => caches.delete(key))
+        )
       )
-    )
+      .then(() => self.clients.claim())
   );
-
-  self.clients.claim();
 });
 
-self.addEventListener("fetch", event => {
+self.addEventListener('fetch', event => {
 
-  if(event.request.method !== "GET"){
+  if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+
+  if (url.origin !== location.origin) return;
+
+  if (event.request.mode === 'navigate') {
+
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+
+          const copy = response.clone();
+
+          caches.open(CACHE).then(cache => {
+            cache.put('./index.html', copy);
+          });
+
+          return response;
+        })
+        .catch(() => {
+          return caches.match('./index.html');
+        })
+    );
+
     return;
   }
 
   event.respondWith(
-    fetch(event.request)
-      .then(response => {
+    caches.match(event.request)
+      .then(cached => {
 
-        const copy = response.clone();
+        if (cached) return cached;
 
-        caches.open(CACHE_NAME)
-          .then(cache => {
-            cache.put(event.request, copy);
-          });
+        return fetch(event.request)
+          .then(response => {
 
-        return response;
+            const copy = response.clone();
+
+            caches.open(CACHE).then(cache => {
+              cache.put(event.request, copy);
+            });
+
+            return response;
+          })
+          .catch(() => caches.match('./index.html'));
+
       })
-      .catch(() =>
-        caches.match(event.request)
-      )
   );
+
 });
