@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#120C25">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Tsega Habit Tracker</title>
 <style>
 :root{
   --bg:#0b0716;
+  --bg2:#120c25;
   --panel:#18102f;
   --primary:#8b5cf6;
   --primary2:#a78bfa;
   --primary3:#c4b5fd;
   --text:#f8f7ff;
   --muted:#aaa2c2;
+  --soft:#756d91;
   --success:#48d597;
   --danger:#ff6678;
   --line:rgba(196,181,253,.15);
+  --shadow:0 20px 60px rgba(0,0,0,.38);
   --radius:22px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -38,9 +39,10 @@ body{
   border-radius:var(--radius);
   padding:20px;
   margin-bottom:16px;
-  box-shadow:0 20px 60px rgba(0,0,0,.38);
+  box-shadow:var(--shadow);
 }
 .section-title{font-size:16px;font-weight:800;margin-bottom:12px;color:var(--primary3);}
+.section-subtitle{color:var(--muted);font-size:12px;margin-bottom:14px;}
 .input, .select, .textarea{
   width:100%;
   min-height:48px;
@@ -61,6 +63,17 @@ body{
   font-weight:800;
   background:linear-gradient(135deg,#8b5cf6,#7041dc);
   cursor:pointer;
+}
+.secondary-btn{
+  width:100%;
+  min-height:45px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  color:var(--primary3);
+  font-weight:750;
+  background:rgba(255,255,255,.035);
+  cursor:pointer;
+  margin-top:8px;
 }
 .task-item{
   display:flex;
@@ -116,7 +129,7 @@ body{
 
 <div class="app-shell">
 
-  <!-- HOME PAGE -->
+  <!-- 1. HOME PAGE -->
   <section class="page active" id="page-home">
     <div class="top-greeting">Good evening, Tsega</div>
     <div class="top-date">Sunday, November 15, 2026</div>
@@ -133,8 +146,8 @@ body{
 
     <div class="card" style="text-align:center;">
       <div class="section-title">DEEP FOCUS SESSION</div>
-      <div style="font-size:48px;font-weight:900;margin:15px 0;" id="timerDisplay">25:00</div>
-      <button class="primary-btn" onclick="startTimer()">Start Focus</button>
+      <div style="font-size:48px;font-weight:900;margin:15px 0;">25:00</div>
+      <button class="primary-btn" onclick="alert('Focus session started!')">Start Focus</button>
     </div>
 
     <div class="card">
@@ -145,42 +158,67 @@ body{
     </div>
   </section>
 
-  <!-- PLANS PAGE -->
+  <!-- 2. PLANS & TASKS PAGE -->
   <section class="page" id="page-plans">
     <div class="top-greeting">Your Plans</div>
+    <div class="section-subtitle">Organize your daily, monthly, and yearly tasks.</div>
     <div class="card">
-      <div class="section-title">Manage Tasks</div>
-      <input class="input" id="newInputTask" type="text" placeholder="Add new habit or task...">
-      <button class="primary-btn" onclick="addNewTask()">Add Task</button>
-      <div id="taskListContainer" style="margin-top:15px;"></div>
+      <div class="section-title">Add New Task</div>
+      <input class="input" id="taskInput" type="text" placeholder="What needs to get done?">
+      <button class="primary-btn" onclick="addTask()">Add Task</button>
+    </div>
+    <div class="card">
+      <div class="section-title">Active Task List</div>
+      <div id="taskList">
+        <div class="task-item"><span>Complete video editing project</span></div>
+        <div class="task-item"><span>Update portfolio website</span></div>
+      </div>
     </div>
   </section>
 
-  <!-- CALENDAR PAGE -->
+  <!-- 3. CALENDAR PAGE -->
   <section class="page" id="page-calendar">
-    <div class="top-greeting">Calendar View</div>
-    <div class="card" style="text-align:center;padding:30px;">
-      <p style="color:var(--muted);">November 2026 Schedule & Active Dates</p>
+    <div class="top-greeting">Calendar</div>
+    <div class="section-subtitle">November 2026 schedule overview</div>
+    <div class="card" style="text-align:center;padding:30px 20px;">
+      <div class="section-title">Active Schedule</div>
+      <p style="color:var(--muted);margin-top:10px;">Your monthly milestone dates and planned schedules are tracked here.</p>
     </div>
   </section>
 
-  <!-- FOCUS PAGE -->
+  <!-- 4. FOCUS PAGE -->
   <section class="page" id="page-focus">
     <div class="top-greeting">Focus Mode</div>
+    <div class="section-subtitle">Eliminate distractions and execute deep work.</div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:60px;font-weight:900;margin:20px 0;">25:00</div>
-      <button class="primary-btn">Begin Deep Work Session</button>
+      <div style="font-size:64px;font-weight:900;margin:25px 0;" id="focusTimerDisplay">25:00</div>
+      <button class="primary-btn" onclick="alert('Timer running!')">Start Timer</button>
     </div>
   </section>
 
-  <!-- PROFILE PAGE -->
+  <!-- 5. PROFILE & SETTINGS PAGE -->
   <section class="page" id="page-profile">
     <div class="top-greeting">Profile & Settings</div>
+    <div class="section-subtitle">Manage your personal app space and security.</div>
+    
     <div class="card">
+      <div class="section-title">User Profile</div>
       <p><strong>Name:</strong> Tsega</p>
-      <p style="color:var(--muted);margin-top:4px;">Personal productivity space</p>
-      <hr style="border:0;border-top:1px solid var(--line);margin:15px 0;">
-      <button class="primary-btn" style="background:rgba(255,102,120,.2);color:var(--danger);" onclick="alert('App locked securely.')">Lock Application</button>
+      <p style="color:var(--muted);margin-top:4px;">Video Editor & Motion Designer</p>
+    </div>
+
+    <div class="card">
+      <div class="section-title">App Settings</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span>Auto-lock Protection</span>
+        <select class="select" style="width:110px;margin-bottom:0;">
+          <option>Never</option>
+          <option>30 sec</option>
+          <option>1 min</option>
+        </select>
+      </div>
+      <button class="secondary-btn" onclick="alert('PIN change window opened.')">Change PIN Code</button>
+      <button class="secondary-btn" style="color:var(--danger);border-color:rgba(255,102,120,.3);" onclick="alert('App locked.')">Lock Application Now</button>
     </div>
   </section>
 
@@ -214,15 +252,15 @@ function switchPage(pageId, btn){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function startTimer(){
-  alert("Focus timer started!");
-}
-
-function addNewTask(){
-  const val = document.getElementById('newInputTask').value;
-  if(val) {
-    alert("Added task: " + val);
-    document.getElementById('newInputTask').value = '';
+function addTask(){
+  const input = document.getElementById('taskInput');
+  if(input.value.trim() !== ''){
+    const list = document.getElementById('taskList');
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerHTML = `<span>${input.value}</span>`;
+    list.appendChild(div);
+    input.value = '';
   }
 }
 </script>
